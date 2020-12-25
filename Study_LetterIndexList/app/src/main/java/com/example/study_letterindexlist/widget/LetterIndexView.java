@@ -35,10 +35,6 @@ public class LetterIndexView extends View {
 
     private int touchColor;
 
-    private Drawable hintDrawable;
-
-//    private int stringArrayId = R.array.letter_list;
-
     private int charHeight;
     private int charMargin;
     //一个字母占用的宽高
@@ -65,9 +61,6 @@ public class LetterIndexView extends View {
         this.normalColor = Color.GRAY;
         this.touchColor = Color.WHITE;
 
-//        hintDrawable = paramContext.getResources().getDrawable(R.drawable.contact_letter_view_hit_point);
-//        hintDrawable.setBounds(0, 0, hintDrawable.getIntrinsicWidth(), hintDrawable.getIntrinsicHeight());
-
         mPaint.setAntiAlias(true);
         mPaint.setTextAlign(Paint.Align.LEFT);
         mPaint.setFakeBoldText(true);
@@ -88,6 +81,7 @@ public class LetterIndexView extends View {
 
     public void setLetters(String[] letters) {
         this.letters = letters;
+        invalidate();
     }
 
     public void setNormalColor(int color) {
@@ -127,26 +121,6 @@ public class LetterIndexView extends View {
         return true;
     }
 
-    /*public boolean dispatchTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-        case MotionEvent.ACTION_DOWN:
-            hit = true;
-            setBackgroundColor(getResources().getColor(R.color.contact_letter_idx_bg));
-            mPaint.setColor(touchColor);
-            onHit(event.getY());
-            break;
-        case MotionEvent.ACTION_MOVE:
-            onHit(event.getY());
-            break;
-        case MotionEvent.ACTION_UP:
-        case MotionEvent.ACTION_CANCEL:
-            onCancel();
-            break;
-        }
-        invalidate();
-        return true;
-    }*/
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 //        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -156,32 +130,6 @@ public class LetterIndexView extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        /*super.onDraw(canvas);
-        float startY = 0;
-        //计算所有字母索引占用的高度
-        float lettersLength = letters.length * charHeight + (letters.length - 1) * charMargin;
-        //绘制字母的起始y坐标
-        if (lettersLength <= getHeight()) {
-            startY = (getHeight() - lettersLength) / 2;
-        }
-    
-        float letterPosY;
-        float halfWidth = getWidth() / 2;
-        for (int i = 0; i < letters.length; ++i) {
-            letterPosY = charHeight * (i+1) + charMargin*i;
-            canvas.drawText(letters[i], halfWidth, startY + letterPosY, mPaint);
-        }
-        if (hit) {
-            int halfDrawWidth = hintDrawable.getIntrinsicWidth() / 2;
-            float translateX = halfWidth - halfDrawWidth;
-            float halfDrawHeight = hintDrawable.getIntrinsicHeight() / 2;
-            float translateY = offset - halfDrawHeight;
-            canvas.save();
-            canvas.translate(translateX, translateY);
-            hintDrawable.draw(canvas);
-            canvas.restore();
-        }*/
-
         for (int i = 0; i < letters.length; i++) {
             String text = letters[i];
             //计算坐标

@@ -13,7 +13,7 @@ public class UIContact {
     private String category;
     //排序的拼音
     private String sortName;
-    private boolean showCategory = true;
+    private boolean showCategory = false;
     private MobileContact mobileContact;
 
     public UIContact(MobileContact mobileContact) {
@@ -76,7 +76,7 @@ public class UIContact {
 
     public static List<UIContact> wraps(List<MobileContact> contacts) {
         ArrayList<UIContact> list = new ArrayList<>();
-        if (contacts == null || list.size() == 0) {
+        if (contacts == null || contacts.size() == 0) {
             return list;
         }
         for (MobileContact contact : contacts) {
@@ -123,6 +123,58 @@ public class UIContact {
         MobileContact mobileContact6 = new MobileContact();
         mobileContact6.setName("长夜余火");
         contacts.add(mobileContact6);
+
+        MobileContact mobileContact7 = new MobileContact();
+        mobileContact7.setName("从姑获鸟开始");
+        contacts.add(mobileContact7);
+
+        MobileContact mobileContact8 = new MobileContact();
+        mobileContact8.setName("我真没想重生啊");
+        contacts.add(mobileContact8);
+
+        MobileContact mobileContact9 = new MobileContact();
+        mobileContact9.setName("重生之出人头地");
+        contacts.add(mobileContact9);
+
+        MobileContact mobileContact10 = new MobileContact();
+        mobileContact10.setName("明天下");
+        contacts.add(mobileContact10);
+
+        MobileContact mobileContact11 = new MobileContact();
+        mobileContact11.setName("一世之尊");
+        contacts.add(mobileContact11);
+
+        MobileContact mobileContact12 = new MobileContact();
+        mobileContact12.setName("非洲酋长");
+        contacts.add(mobileContact12);
+
+        MobileContact mobileContact13 = new MobileContact();
+        mobileContact13.setName("我有一座恐怖屋");
+        contacts.add(mobileContact13);
+
+        MobileContact mobileContact14 = new MobileContact();
+        mobileContact14.setName("重生之官路商途");
+        contacts.add(mobileContact14);
+
+        MobileContact mobileContact15 = new MobileContact();
+        mobileContact15.setName("狩魔手记");
+        contacts.add(mobileContact15);
+
+        MobileContact mobileContact16 = new MobileContact();
+        mobileContact16.setName("惊悚乐园");
+        contacts.add(mobileContact16);
+
+        MobileContact mobileContact17 = new MobileContact();
+        mobileContact17.setName("大圣传");
+        contacts.add(mobileContact17);
+
+        MobileContact mobileContact18 = new MobileContact();
+        mobileContact18.setName("放开那个女巫");
+        contacts.add(mobileContact18);
+
+        MobileContact mobileContact19 = new MobileContact();
+        mobileContact19.setName("地煞七十二变");
+        contacts.add(mobileContact19);
         return contacts;
     }
 

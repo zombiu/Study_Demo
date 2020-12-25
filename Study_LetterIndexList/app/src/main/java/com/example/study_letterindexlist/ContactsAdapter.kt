@@ -28,12 +28,14 @@ class ContactsAdapter(var context: Context, var datas: List<UIContact>) : BaseAd
         var uiContact = datas.get(position)
         var itemView: View = inflater.inflate(R.layout.contact_item_contact, null)
         var categoryTextView: TextView = itemView.findViewById(R.id.categoryTextView)
+        var nameTextView:TextView = itemView.findViewById(R.id.nameTextView)
         if (uiContact.isShowCategory) {
             categoryTextView.visibility = View.VISIBLE;
         }else{
             categoryTextView.visibility = View.GONE;
         }
         categoryTextView.text = uiContact.category
+        nameTextView.text = uiContact.mobileContact.name
         return itemView
     }
 
