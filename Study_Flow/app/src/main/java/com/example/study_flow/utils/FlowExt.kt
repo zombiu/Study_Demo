@@ -19,7 +19,9 @@ internal class ObserverImpl<T> (
     private var job: Job? = null
 
     override fun onStart(owner: LifecycleOwner) {
+        //onStart时，开启job
         job = owner.lifecycleScope.launch {
+            //onStart时，进行collect
             flow.collect {
                 collector(it)
             }
@@ -27,6 +29,7 @@ internal class ObserverImpl<T> (
     }
 
     override fun onStop(owner: LifecycleOwner) {
+        //onStop时，取消该job
         job?.cancel()
         job = null
     }
