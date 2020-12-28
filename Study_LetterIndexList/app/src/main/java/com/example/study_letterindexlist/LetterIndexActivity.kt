@@ -11,6 +11,7 @@ import com.example.study_letterindexlist.bean.UIContact
 import com.example.study_letterindexlist.databinding.ActivityLetterIndexBinding
 import com.example.study_letterindexlist.widget.LetterIndexView
 
+
 class LetterIndexActivity : AppCompatActivity() {
     lateinit var activityLetterIndexBinding: ActivityLetterIndexBinding
     private lateinit var contactsAdapter: ContactsAdapter
