@@ -86,6 +86,9 @@ class MainActivity : AppCompatActivity() {
             measureItem2()
         }
 
+        /**
+         * 手动测量，有padding/margin时，会有几像素的误差
+         */
         private fun measureItem1() {
             var rect = Rect()
             binding.tvMetaMembers.apply {
@@ -101,6 +104,9 @@ class MainActivity : AppCompatActivity() {
             LogUtils.e("-->>手动测量的宽度为 ${binding.members.measuredWidth - ConvertUtils.dp2px(10f)}")
         }
 
+        /**
+         * 手动计算
+         */
         private fun measureItem2() {
             var rect = Rect()
             binding.tvMetaMembers.apply {
