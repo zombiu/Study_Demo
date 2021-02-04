@@ -33,12 +33,21 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         setContentView(R.layout.activity_main)
 
         lifecycleScope.launchWhenStarted {
-            /*roomViewModel.getFlow2().collect {
-                Log.e("-->>","接收到的数据 ${it}")
-            }*/
+            roomViewModel.getFlow2().collect {
+                Log.e("-->>","接收到的数据1 ${it}")
+            }
             roomViewModel.getFlow2().onEach {
                 Log.e("-->>observeIn","接收到的数据 ${it}")
             }.observeIn(this@MainActivity)
+        }
+
+        lifecycleScope.launchWhenStarted {
+            roomViewModel.getFlow2().collect {
+                Log.e("-->>","接收到的数据2 ${it}")
+            }
+            /*roomViewModel.getFlow2().onEach {
+                Log.e("-->>observeIn","接收到的数据 ${it}")
+            }.observeIn(this@MainActivity)*/
         }
     }
 }
