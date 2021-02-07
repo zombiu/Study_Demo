@@ -79,7 +79,25 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 })
+
+                binding.root.addOnLayoutChangeListener(object :View.OnLayoutChangeListener{
+                    override fun onLayoutChange(
+                        v: View,
+                        left: Int,
+                        top: Int,
+                        right: Int,
+                        bottom: Int,
+                        oldLeft: Int,
+                        oldTop: Int,
+                        oldRight: Int,
+                        oldBottom: Int
+                    ) {
+                        LogUtils.e("-->>addOnLayoutChangeListener item测量的高度度为 ${v!!.measuredHeight}")
+                    }
+
+                })
             }
+
 
             measureItem1()
 
