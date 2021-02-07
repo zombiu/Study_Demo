@@ -10,12 +10,16 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        Log.e("-->>","SplashActivity.onCreate")
+        if (!this.isTaskRoot()) {//解决按home，再次点击图标重新启动的问题
+            finish();
+            return;
+        }
 
         UIKit.getUIHandler().postDelayed({
             var intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             onBackPressed()
         }, 2000)
-        Log.e("-->>","SplashActivity.onCreate")
     }
 }
