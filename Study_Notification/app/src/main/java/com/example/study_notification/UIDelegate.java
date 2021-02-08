@@ -32,6 +32,8 @@ import static androidx.core.app.NotificationCompat.DEFAULT_ALL;
 public class UIDelegate {
 
     private volatile static UIDelegate uiDelegate;
+    private Application application;
+
     private ViewModelStore viewModelStore;
     private ViewModelProvider viewModelProvider;
     private boolean isBackground = true;
@@ -50,6 +52,8 @@ public class UIDelegate {
     }
 
     public void init(Application application) {
+        this.application = application;
+
         viewModelStore = new ViewModelStore();
         ViewModelProvider.Factory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(application);
         viewModelProvider = new ViewModelProvider(viewModelStore, factory);
@@ -77,9 +81,9 @@ public class UIDelegate {
                         fullScreenIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(application, 0,
                                 fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        showNotification(application,"tag",1009,"标题","内容",fullScreenPendingIntent);
+                        showNotification(application, "tag", 1009, "标题", "内容", fullScreenPendingIntent);
                     }
-                },5000);
+                }, 5000);
             }
         });
 
@@ -112,6 +116,7 @@ public class UIDelegate {
 
     /**
      * 渠道创建之后不能修改，所以通知修改了之后，需要卸载重装才能生效
+     *
      * @param context
      * @param tag
      * @param id
@@ -195,4 +200,7 @@ public class UIDelegate {
         return false;
     }
 
+    public Application getApplication() {
+        return application;
+    }
 }

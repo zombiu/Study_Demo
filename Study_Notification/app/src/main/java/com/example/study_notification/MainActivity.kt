@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.hjq.toast.ToastUtils
 
 class MainActivity : AppCompatActivity() {
     private var BACKGROUND_WINDOWS_PERMISS_CODE = 1009
@@ -18,6 +19,8 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         var canBackgroundStart = UIDelegate.canBackgroundStart(this)
         Log.e("-->>", "是否可以后台启动 $canBackgroundStart")
+        ToastBox.show("toast一下")
+        ToastUtils.show("我是吐司")
     }
 
     fun clickView(view: View) {
