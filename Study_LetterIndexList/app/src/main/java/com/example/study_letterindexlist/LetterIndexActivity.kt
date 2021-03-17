@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.AbsListView
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import com.blankj.utilcode.util.LogUtils
 import com.example.study_letterindexlist.bean.UIContact
 import com.example.study_letterindexlist.databinding.ActivityLetterIndexBinding
 import com.example.study_letterindexlist.widget.LetterIndexView
@@ -25,6 +26,11 @@ class LetterIndexActivity : AppCompatActivity() {
         initView();
         initData()
         initListener()
+
+        var newInstance = TipFragment.newInstance()
+        newInstance.isCancelable = false
+        newInstance.dialog?.setCanceledOnTouchOutside(true)
+        newInstance.show(supportFragmentManager,"123")
     }
 
     private fun initListener() {
