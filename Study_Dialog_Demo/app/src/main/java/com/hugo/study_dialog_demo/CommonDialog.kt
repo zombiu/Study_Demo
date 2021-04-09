@@ -13,7 +13,7 @@ import com.hugo.study_dialog_demo.R
 
 
 /**
- * 他人说吧主页 用来展示 关注引导弹框
+ *
  */
 class CommonDialog : DialogFragment() {
     lateinit var rootView: View

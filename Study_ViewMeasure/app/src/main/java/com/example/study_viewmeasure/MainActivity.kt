@@ -22,6 +22,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = NotifyAdapter()
+
+        NumUtils.convert(100000)
+        NumUtils.convert(100001)
+        NumUtils.convert(100011)
+        NumUtils.convert(100111)
+        NumUtils.convert(101111)
+        NumUtils.convert(1101111)
+        NumUtils.convert(105111)
+        NumUtils.convert(105511)
+        NumUtils.convert(105551)
     }
 
     fun getNames(): List<String> {

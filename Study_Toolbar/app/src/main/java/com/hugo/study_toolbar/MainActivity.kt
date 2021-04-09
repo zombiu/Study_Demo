@@ -13,7 +13,7 @@ import com.hugo.study_toolbar.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-     lateinit var centeredTitleTextView: TextView
+    lateinit var centeredTitleTextView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
@@ -33,6 +33,9 @@ class MainActivity : AppCompatActivity() {
 
         centeredTitleTextView.setText("我是标题我是标题我是标题我是标题我是标题我是标题我是标题")
 
+        binding.toolbar.setContentInsetStartWithNavigation(0)
+        binding.toolbar.setContentInsetsRelative(0, 0);
+
         // app:contentInsetStartWithNavigation="0dp"
         // 解决标题和返回icon之间padding的问题
     }
@@ -43,17 +46,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     // 代码对标题进行居中
-     fun getCenteredTitleTextView3(): TextView {
-            centeredTitleTextView =  TextView (this)
+    fun getCenteredTitleTextView3(): TextView {
+        centeredTitleTextView = TextView(this)
 //            centeredTitleTextView.setTypeface(...);
-            centeredTitleTextView!!.setSingleLine();
-            centeredTitleTextView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
-            centeredTitleTextView.setGravity(Gravity.CENTER);
-//            centeredTitleTextView.setTextAppearance(this, R.style.TextAppearance_AppCompat_Widget_ActionBar_Title)
+        centeredTitleTextView!!.setSingleLine();
+        centeredTitleTextView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+        centeredTitleTextView.setGravity(Gravity.CENTER)
+        // 标题字体风格
+        centeredTitleTextView.setTextAppearance(
+            this,
+            R.style.TextAppearance_AppCompat_Widget_ActionBar_Title
+        )
 
-            var lp =  Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.gravity = Gravity.CENTER;
-            centeredTitleTextView.setLayoutParams(lp);
+        var lp = Toolbar.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        lp.gravity = Gravity.CENTER;
+        centeredTitleTextView.setLayoutParams(lp);
         return centeredTitleTextView;
     }
 
