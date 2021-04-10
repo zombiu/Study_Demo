@@ -6,6 +6,10 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
+    viewBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.hugo.study_dialog_demo"
         minSdkVersion 21

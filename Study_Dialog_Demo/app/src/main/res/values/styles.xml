@@ -25,4 +25,5 @@
         <!--显示区域以外是否使用黑色半透明背景-->
         <item name="android:backgroundDimEnabled">false</item>
     </style>
+
 </resources>
