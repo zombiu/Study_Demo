@@ -38,4 +38,12 @@ dependencies {
 
     implementation 'com.blankj:utilcodex:1.30.6'
 
+    // 基础依赖包，必须要依赖
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+// fragment快速实现（可选）
+    implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0'
+// kotlin扩展（可选）
+    implementation 'com.gyf.immersionbar:immersionbar-ktx:3.0.0'
+
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
 }
