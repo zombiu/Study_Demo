@@ -8,6 +8,10 @@ import androidx.appcompat.widget.SearchView;
 
 public class SearchViewUtils {
 
+    /**
+     * 去除默认padding
+     * @param searchView
+     */
     public static void setSearchViewStyle(SearchView searchView) {
         //去除margin
         LinearLayout searchEditFrame = (LinearLayout) searchView.findViewById(R.id.search_edit_frame); // Get the Linear Layout
@@ -27,6 +31,10 @@ public class SearchViewUtils {
         ((ImageView) (searchView.findViewById(R.id.search_close_btn))).setImageResource(R.mipmap.ic_launcher_round);
     }
 
+    public static void setSearchHintNoIcon(SearchView searchView,String hint) {
+        SearchView.SearchAutoComplete textView = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
+        textView.setHint(hint);
+    }
     /*public static void changeSearchCursor(SearchView searchView) {
         AutoCompleteTextView searchTextView = (AutoCompleteTextView) searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         try {

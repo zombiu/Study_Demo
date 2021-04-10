@@ -5,7 +5,8 @@
     <item android:id="@+id/action_search"
         android:title="Search"
         android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="ifRoom"/>
+        app:actionLayout="@layout/search_layout"
+        app:showAsAction="always"/>
     <!--<item android:id="@+id/action_notifications"
         android:title="notifications"
         android:icon="@mipmap/ic_notifications"
