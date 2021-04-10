@@ -10,7 +10,8 @@
     <Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"/>
+        android:layout_height="@dimen/dp_50"
+        android:background="@android:color/white"/>
 
     <TextView
         android:layout_width="wrap_content"

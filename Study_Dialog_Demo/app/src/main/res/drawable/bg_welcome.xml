@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+https://developer.android.com/guide/topics/resources/drawable-resource?hl=zh-cn
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:drawable="@[package:]drawable/drawable_resource"
+        android:id="@[+][package:]id/resource_name"
+        android:top="dimension"
+        android:right="dimension"
+        android:bottom="dimension"
+        android:left="dimension" />
+</layer-list>
+
+在 <item> 元素内使用 <bitmap> 元素指定可绘制对象，并且对某些不缩放的项目（例如 "center"）定义重力
+android:top=10dp，表示在当前gravity下顶部偏移10dp
+-->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item>
@@ -10,13 +29,15 @@
                 android:type="linear"/>
         </shape>
     </item>
-
-    <!--
-    android:top="50dp"
-        android:left="@dimen/dp_50"
-        android:right="@dimen/dp_50"-->
+    <!--表示整体居中-->
     <item>
         <bitmap android:src="@drawable/logo"
             android:gravity="center_vertical|center_horizontal" />
+    </item>
+    <!--表示底部横向居中，并向上偏移10dp-->
+    <item
+        android:bottom="10dp">
+        <bitmap android:src="@drawable/logo"
+            android:gravity="bottom|center_horizontal" />
     </item>
 </layer-list>

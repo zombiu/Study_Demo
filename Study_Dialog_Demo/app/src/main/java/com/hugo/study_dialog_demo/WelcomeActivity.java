@@ -24,12 +24,14 @@ public class WelcomeActivity extends AppCompatActivity {
         LogUtils.e("-->>onCreate");
 
 
-        ImmersionBar.with(this)
-                .transparentStatusBar()
-                .init();
-
         // 闪屏页防止背景被拉伸的处理
         getWindow().setBackgroundDrawableResource(R.drawable.bg_welcome);
 //        getWindow().setBackgroundDrawableResource(android.R.color.darker_gray);
+
+        //配合沉浸式 可以达到与getWindow().setBackgroundDrawableResource(R.drawable.bg_welcome);相同的效果，
+        /*ImmersionBar.with(this)
+                .transparentStatusBar()
+                .init();
+        binding.getRoot().setBackgroundResource(R.drawable.bg_welcome);*/
     }
 }
