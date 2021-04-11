@@ -40,4 +40,9 @@ android:top=10dp，表示在当前gravity下顶部偏移10dp
         <bitmap android:src="@drawable/logo"
             android:gravity="bottom|center_horizontal" />
     </item>
+    <!--<item
+        android:gravity="center"
+        android:width="48dp"
+        android:height="48dp"
+        android:drawable="@drawable/logo"/>-->
 </layer-list>

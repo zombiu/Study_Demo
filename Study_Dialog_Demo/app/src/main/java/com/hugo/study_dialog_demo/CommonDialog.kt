@@ -1,5 +1,6 @@
 package im.yixin.ui.dialog
 
+import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -111,7 +112,7 @@ class CommonDialog : DialogFragment() {
         var attributes = window!!.attributes
         attributes.width = ScreenUtils.getScreenWidth()
 
-        provider!!.provideDialogPosition(window!!)
+        provider!!.provideDialogPosition(dialog!!)
     }
 
     interface IDialogElementProvider {
@@ -120,6 +121,6 @@ class CommonDialog : DialogFragment() {
 
         fun onViewCreated(dialogFragment: DialogFragment)
 
-        fun provideDialogPosition(window: Window)
+        fun provideDialogPosition(dialog: Dialog)
     }
 }
