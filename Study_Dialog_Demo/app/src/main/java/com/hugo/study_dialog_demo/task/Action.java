@@ -1,6 +1,6 @@
 package com.hugo.study_dialog_demo.task;
 
-public interface IAction extends Runnable,Comparable{
+public interface Action extends Runnable, Comparable<Action>{
 
     /**
      * 绑定到要执行的chain上

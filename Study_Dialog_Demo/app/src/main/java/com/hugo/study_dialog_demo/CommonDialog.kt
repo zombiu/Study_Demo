@@ -1,6 +1,7 @@
 package im.yixin.ui.dialog
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -84,6 +85,11 @@ class CommonDialog : DialogFragment() {
         Handler(Looper.getMainLooper()).postDelayed(runnable, 5000)
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        provider?.onDismiss(dialog)
+    }
+
     override fun onDestroyView() {
         Handler(Looper.getMainLooper()).removeCallbacks(runnable)
         super.onDestroyView()
@@ -122,5 +128,7 @@ class CommonDialog : DialogFragment() {
         fun onViewCreated(dialogFragment: DialogFragment)
 
         fun provideDialogPosition(dialog: Dialog)
+
+        fun onDismiss(dialog: DialogInterface)
     }
 }

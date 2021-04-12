@@ -23,7 +23,6 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityWelcomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        LogUtils.e("-->>onCreate");
 
 
         binding.goMain.setOnClickListener(new View.OnClickListener() {

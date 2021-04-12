@@ -1,7 +1,7 @@
 package com.hugo.study_dialog_demo
 
-import android.app.Activity
 import android.app.Dialog
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -38,53 +38,71 @@ class MainActivity : AppCompatActivity() {
             ToastUtils.showShort("点击了")
         }
         findViewById<View>(R.id.show_tv).setOnClickListener {
-            showTipDialog()
+//            showTipDialog()
         }
 
 
-         actionChain = ActionChain()
+        actionChain = ActionChain()
         var realAction1 = RealAction("1")
         realAction1.setPriority(1)
         realAction1.setConsumer {
-            showTipDialog()
+            showTipDialog("任务1")
             Thread {
                 Thread.sleep(1000)
                 LogUtils.e("-->>任务1执行完了")
-                it.next()
-            }
+//                it.next()
+            }.start()
         }
         var realAction2 = RealAction("5")
         realAction2.setPriority(5)
         realAction2.setConsumer {
-            showTipDialog()
+            showTipDialog("任务5")
             Thread {
                 Thread.sleep(1000)
                 LogUtils.e("-->>任务5执行完了")
-                it.next()
-            }
+//                it.next()
+            }.start()
         }
 
         var realAction3 = RealAction("2")
         realAction3.setPriority(2)
         realAction3.setConsumer {
-            showTipDialog()
+            showTipDialog("任务2")
             Thread {
                 Thread.sleep(3000)
                 LogUtils.e("-->>任务2执行完了")
-                it.next()
-            }
+//                it.next()
+            }.start()
         }
+
+        var realAction4 = RealAction("3")
+        realAction4.setConsumer {
+            showTipDialog("任务3")
+            Thread {
+                Thread.sleep(5000)
+                LogUtils.e("-->>任务3执行完了")
+//                it.next()
+            }.start()
+        }
+
         actionChain.register(realAction3)
         actionChain.register(realAction1)
         actionChain.register(realAction2)
+        actionChain.register(realAction4)
 
+        // iterator() 遍历并不保证队列内顺序
+        actionChain.queue.forEach {
+            var action = it as RealAction
+            LogUtils.e("-->> head  ${action.tag()} ${action.priority()}")
+        }
         actionChain.notifyAction()
+        LogUtils.e("-->>任务链开始 ")
     }
 
-    private fun showTipDialog() {
+    private fun showTipDialog(title: String) {
         var dialog = CommonDialog.show(
             this,
-            "123",
+            title,
             object : CommonDialog.IDialogElementProvider {
                 override fun bindLayoutId(): Int {
                     return R.layout.layout_dialog
@@ -92,6 +110,7 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onViewCreated(dialogFragment: DialogFragment) {
                     var view = dialogFragment.view!!
+                    var nickname_tv = view.findViewById<TextView>(R.id.nickname_tv)
                     var avatar = view.findViewById<ImageView>(R.id.avatar)
                     var close_iv = view.findViewById<ImageView>(R.id.close_iv)
                     var follow_btn: TextView = view.findViewById(R.id.follow_btn)
@@ -100,6 +119,7 @@ class MainActivity : AppCompatActivity() {
                         dialogFragment.dismiss()
 
                     }
+                    nickname_tv.setText(title)
                 }
 
                 override fun provideDialogPosition(dialog: Dialog) {
@@ -110,13 +130,20 @@ class MainActivity : AppCompatActivity() {
                     var params = window.attributes
                     params.gravity = Gravity.TOP or Gravity.LEFT
 
-
+                    // 设置setOnDismissListener 无效
                     dialog!!.setOnDismissListener {
+                        LogUtils.e("-->> dismiss")
                         actionChain.notifyAction()
                     }
                 }
 
+                override fun onDismiss(dialog: DialogInterface) {
+//                    LogUtils.e("-->>on dismiss")
+                    actionChain.notifyAction()
+                }
+
             })
+
     }
 
     private fun transparentStatusBar(window: Window) {
