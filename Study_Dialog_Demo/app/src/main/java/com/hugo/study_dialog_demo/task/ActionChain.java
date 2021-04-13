@@ -14,9 +14,9 @@ public class ActionChain {
     /**
      * 线程安全的优先级队列
      */
-    private PriorityBlockingQueue<Action> queue = new PriorityBlockingQueue<>();
+    private PriorityBlockingQueue<Action> queue;
 
-    public ActionChain(){
+    public ActionChain() {
 
     }
 
@@ -39,9 +39,9 @@ public class ActionChain {
             return;
         }
         LogUtils.e("-->>" + poll.toString());
-        if (poll.isReady()){
+        if (poll.isReady()) {
             poll.run();
-        }else {
+        } else {
             queue.put(poll);
         }
     }
@@ -56,10 +56,33 @@ public class ActionChain {
 
     public void clear(String tag) {
         RealAction realAction = new RealAction(tag);
-       clear(realAction);
+        clear(realAction);
     }
 
     public void clear(RealAction action) {
         queue.remove(action);
+    }
+
+    class Builder {
+        String tag;
+        private PriorityBlockingQueue<Action> queue = new PriorityBlockingQueue<>();
+
+        public Builder(String tag) {
+            this.tag = tag;
+        }
+
+        public Builder with(Action action) {
+            queue.add(action);
+            return this;
+        }
+
+
+        public ActionChain create() {
+            ActionChain actionChain = ActionManager.getInstance().create(tag);
+            actionChain.queue = this.queue;
+            // 开始执行
+            actionChain.notifyAction();
+            return actionChain;
+        }
     }
 }

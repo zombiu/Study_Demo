@@ -28,7 +28,6 @@ public class ActionManager {
         return actionChain;
     }
 
-
     public void notifyAction(String chainTag) {
         ActionChain actionChain = chainMap.get(chainTag);
         if (actionChain != null) {

@@ -13,6 +13,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
+import com.bearever.async.chain.AsyncChain
+import com.bearever.async.chain.core.AsyncChainRunnable
+import com.bearever.async.chain.core.AsyncChainTask
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.gyf.immersionbar.ImmersionBar
@@ -69,6 +72,18 @@ class MainActivity : AppCompatActivity() {
         realAction3.setConsumer {
             showTipDialog("任务2")
             Thread {
+                var realAction4 = RealAction("4")
+                realAction4.setPriority(4)
+                realAction4.setConsumer {
+                    showTipDialog("任务4")
+                    Thread {
+                        Thread.sleep(1000)
+                        LogUtils.e("-->>任务1执行完了")
+//                it.next()
+                    }.start()
+                }
+                actionChain.register(realAction4)
+
                 Thread.sleep(3000)
                 LogUtils.e("-->>任务2执行完了")
 //                it.next()
@@ -97,6 +112,14 @@ class MainActivity : AppCompatActivity() {
         }
         actionChain.notifyAction()
         LogUtils.e("-->>任务链开始 ")
+
+
+        AsyncChain.with(object :AsyncChainRunnable<String,String>() {
+            override fun run(task: AsyncChainTask<String, String>?) {
+
+            }
+
+        }).go()
     }
 
     private fun showTipDialog(title: String) {
