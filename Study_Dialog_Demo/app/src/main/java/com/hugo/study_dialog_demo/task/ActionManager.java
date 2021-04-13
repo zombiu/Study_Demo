@@ -21,6 +21,14 @@ public class ActionManager {
         return actionManager;
     }
 
+    public ActionChain create(String tag) {
+        ActionChain actionChain = new ActionChain();
+        actionChain.setTag(tag);
+        chainMap.put(tag, actionChain);
+        return actionChain;
+    }
+
+
     public void notifyAction(String chainTag) {
         ActionChain actionChain = chainMap.get(chainTag);
         if (actionChain != null) {

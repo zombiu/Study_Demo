@@ -46,6 +46,14 @@ public class ActionChain {
         }
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     public void clear(String tag) {
         RealAction realAction = new RealAction(tag);
        clear(realAction);

@@ -9,9 +9,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import com.blankj.utilcode.util.GsonUtils
+import androidx.core.view.MenuItemCompat
 import com.hugo.study_toolbar.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -65,22 +64,27 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.menu_main, menu)
-        var searchLayout = menu!!.findItem(R.id.action_search)
-        Log.e("-->>", "onCreateOptionsMenu " + searchLayout.itemId)
+        var searchItem = menu!!.findItem(R.id.action_search)
+        Log.e("-->>", "onCreateOptionsMenu " + searchItem.itemId)
 
-        searchLayout.setOnActionExpandListener(expandListener)
+        searchItem.setOnActionExpandListener(expandListener)
+        var search_rl: View = searchItem.actionView.findViewById(R.id.search_rl)
 
-        var searchView: SearchView = searchLayout.actionView.findViewById(R.id.search_view)
+        var searchView: SearchView = searchItem.actionView.findViewById(R.id.search_view)
 
-        var searchIcon: ImageView = searchLayout.actionView.findViewById(R.id.search_icon)
+        var searchIcon: ImageView = searchItem.actionView.findViewById(R.id.search_icon)
 
-        var cancel: TextView = searchLayout.actionView.findViewById(R.id.cancel)
+        var cancel: TextView = searchItem.actionView.findViewById(R.id.cancel)
         cancel.setOnClickListener {
+            searchView.setQuery("",false)
             // 处于收缩状态
             searchView.setIconified(true)
             cancel.visibility = View.GONE
             searchIcon.visibility = View.GONE
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+            search_rl.setBackgroundResource(android.R.color.transparent)
+
+            MenuItemCompat.collapseActionView(searchItem)
         }
 
         // 如何默认打开搜索框
@@ -97,7 +101,7 @@ class MainActivity : AppCompatActivity() {
         }*/
 
         SearchViewUtils.setSearchViewStyle(searchView)
-        SearchViewUtils.setSearchHintNoIcon(searchView,"输入点什么")
+        SearchViewUtils.setSearchHintNoIcon(searchView, "输入点什么")
 
         searchView.setOnSearchClickListener {
             Log.e("-->>", "setOnSearchClickListener " + it.toString())
@@ -105,6 +109,9 @@ class MainActivity : AppCompatActivity() {
             searchView.onActionViewExpanded();// 当展开无输入内容的时候，没有关闭的图标
             cancel.visibility = View.VISIBLE
             searchIcon.visibility = View.VISIBLE
+            search_rl.setBackgroundResource(R.drawable.bg_search)
+
+            MenuItemCompat.expandActionView(searchItem)
         }
 
         return true
