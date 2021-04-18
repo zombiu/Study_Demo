@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="1234567"
         android:layout_toRightOf="@+id/tv1"
-        android:layout_alignBottom="@id/tv1"
+        android:layout_alignBaseline="@id/tv1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBaseline_toBaselineOf="@+id/tv1"

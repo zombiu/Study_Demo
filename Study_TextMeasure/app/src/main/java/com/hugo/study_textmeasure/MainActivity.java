@@ -22,9 +22,13 @@ public class MainActivity extends AppCompatActivity {
         final TextView tv2 = findViewById(R.id.tv2);
 
         // 获取的是view相对text原点的位置
-        Rect rect = new Rect();
-        tv1.getPaint().getTextBounds(tv1.getText(),1,tv1.getText().length(),rect);
+        final Rect rect = new Rect();
+        tv1.getPaint().getTextBounds(tv1.getText(),0,tv1.getText().length(),rect);
         Log.e("-->> ", "tv1 显示范围=" + rect.toString());
+
+        Rect rect2 = new Rect();
+        tv2.getPaint().getTextBounds(tv2.getText(),0,tv2.getText().length(),rect2);
+        Log.e("-->> ", "tv2 显示范围=" + rect2.toString());
 
         // FontMetrics对象中的字段值 = 对应线条的 Y 坐标值 - baseline的 Y 坐标值
         final Paint.FontMetrics fontMetrics = tv1.getPaint().getFontMetrics();
@@ -38,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
                 // fontMetrics中的bottom就是相对于 baseline 0，0的 y轴坐标
                 // 为了将数字对齐汉字，这里将第二个textview向下移动5
-              ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tv2.getLayoutParams();
-              params.bottomMargin = (int) -fontMetrics.bottom;
-              tv2.setLayoutParams(params);
+//              ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tv2.getLayoutParams();
+//              params.bottomMargin = (int) (rect.bottom - rect.bottom);
+//              tv2.setLayoutParams(params);
             }
         });
 
@@ -50,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 int baseline = tv1.getBaseline();
-//                Log.e("-->> ", "tv1 baseline=" + baseline);
-//                Log.e("-->> ", "tv1 top=" + fontMetrics2.top);
+                Log.e("-->> ", "tv2 baseline=" + baseline);
+                Log.e("-->> ", "tv1 top=" + fontMetrics2.top);
             }
         });
     }
