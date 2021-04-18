@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuItemCompat
+import com.google.android.material.card.MaterialCardView
 import com.hugo.study_toolbar.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.toolbar.addView(centeredTitleTextView)
 
+        var cardView:MaterialCardView
         centeredTitleTextView.setText("我是标题我是标题我是标题我是标题我是标题我是标题我是标题")
 
         binding.toolbar.setContentInsetStartWithNavigation(0)
