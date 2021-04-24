@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuItemCompat
+import com.blankj.utilcode.util.LogUtils
 import com.google.android.material.card.MaterialCardView
 import com.hugo.study_toolbar.databinding.ActivityMainBinding
 
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         var cardView:MaterialCardView
         centeredTitleTextView.setText("我是标题我是标题我是标题我是标题我是标题我是标题我是标题")
 
+        // 在activity上设置 android:theme="@style/AppTheme.ToolbarHeight" 控制宽度
         binding.toolbar.setContentInsetStartWithNavigation(0)
         binding.toolbar.setContentInsetsRelative(0, 0);
 
@@ -47,6 +49,11 @@ class MainActivity : AppCompatActivity() {
         binding.clickTv.setOnClickListener {
             showBackIcon = !showBackIcon
             supportActionBar!!.setDisplayHomeAsUpEnabled(showBackIcon)
+        }
+
+        binding.tv1.background = Theme.getRoundRectSelectorDrawable(R.color.design_default_color_error)
+        binding.tv1.setOnClickListener {
+            LogUtils.e("-->>点击了tv1")
         }
     }
 

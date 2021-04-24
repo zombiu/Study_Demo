@@ -11,6 +11,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.bearever.async.chain.AsyncChain
@@ -120,6 +121,17 @@ class MainActivity : AppCompatActivity() {
             }
 
         }).go()
+
+        var alertDialog = AlertDialog.Builder(this)
+        alertDialog.setView(R.layout.layout_dialog)
+            .create()
+
+        var viewLayer = ViewLayer.Builder()
+            .setContentView(R.layout.layout_dialog)
+            .initView {
+
+            }.create()
+        viewLayer.show()
     }
 
     private fun showTipDialog(title: String) {

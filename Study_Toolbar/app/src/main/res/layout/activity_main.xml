@@ -10,11 +10,11 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        style="@style/MyToolbar"
         android:layout_width="match_parent"
         android:background="@android:color/white"
         android:contentInsetStart="0dp"
         android:contentInsetLeft="0dp"
+        android:paddingLeft="0dp"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         app:titleMargin="0dp"
@@ -50,5 +50,13 @@
         android:layout_alignParentBottom="false"
         app:cardBackgroundColor="@android:color/white"
         app:cardElevation="50dp"/>
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_below="@+id/click_tv"
+            android:layout_marginTop="10dp"
+            android:text="一个按钮454545"/>
     </RelativeLayout>
 </LinearLayout>
