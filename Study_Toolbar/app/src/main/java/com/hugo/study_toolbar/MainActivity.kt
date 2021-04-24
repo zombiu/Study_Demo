@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuItemCompat
 import com.blankj.utilcode.util.LogUtils
 import com.google.android.material.card.MaterialCardView
@@ -51,7 +52,11 @@ class MainActivity : AppCompatActivity() {
             supportActionBar!!.setDisplayHomeAsUpEnabled(showBackIcon)
         }
 
-        binding.tv1.background = Theme.getRoundRectSelectorDrawable(R.color.design_default_color_error)
+//        binding.tv1.background = Theme.getRoundRectSelectorDrawable(R.color.design_default_color_error)
+        binding.tv1.background = Theme.getRoundRectSelectorDrawable(10,
+            ContextCompat.getColor(this,android.R.color.darker_gray),
+            ContextCompat.getColor(this,android.R.color.holo_red_light)
+        )
         binding.tv1.setOnClickListener {
             LogUtils.e("-->>点击了tv1")
         }

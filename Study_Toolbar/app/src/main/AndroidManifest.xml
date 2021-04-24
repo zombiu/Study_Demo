@@ -17,7 +17,7 @@
             </intent-filter>-->
         </activity>
         <activity android:name=".MainActivity"
-            android:theme="@style/AppTheme.ToolbarHeight">
+            android:theme="@style/AppTheme.Style_Toolbar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
