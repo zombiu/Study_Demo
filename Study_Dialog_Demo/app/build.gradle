@@ -51,4 +51,57 @@ dependencies {
     implementation 'com.gyf.immersionbar:immersionbar-ktx:3.0.0'
 
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
+
+    implementation 'org.jdeferred.v2:jdeferred-core:2.0.0'
+
+    implementation 'com.github.getActivity:ToastUtils:9.0'
+
+    implementation 'com.xgr.easypay:EasyPay:2.0.5'   // 基类库，必选
+    implementation 'com.xgr.easypay:wechatpay:2.0.5' // 微信支付，可选
+    implementation 'com.xgr.easypay:alipay:2.0.5'    // 支付宝支付，可选
+    implementation 'com.xgr.easypay:unionpay:2.0.5'  // 银联支付，可选
+
+    implementation 'com.zhy.base:fileprovider:1.0.0'
+
+    implementation 'com.github.xujiaji:happy-bubble:1.2.3'
+
+    implementation 'com.github.GcsSloop:FontsManager:v1.0.0'
+
+    // https://github.com/gzu-liyujiang/Android_CN_OAID
+    ext.oaid_version = "3.0.3"
+    implementation "com.github.gzu-liyujiang.Android_CN_OAID:OAID_ASUS:${oaid_version}" //华硕
+    implementation "com.github.gzu-liyujiang.Android_CN_OAID:OAID_BUN:${oaid_version}" //中兴、卓易
+    implementation "com.github.gzu-liyujiang.Android_CN_OAID:OAID_HEYTAP:${oaid_version}" //欧珀、一加
+    implementation "com.github.gzu-liyujiang.Android_CN_OAID:OAID_SAMSUNG:${oaid_version}" //三星
+    implementation "com.github.gzu-liyujiang.Android_CN_OAID:OAID_UODIS:${oaid_version}" //华为
+    implementation "com.github.gzu-liyujiang.Android_CN_OAID:OAID_ZUI:${oaid_version}" //联想、摩托罗拉
+    implementation "com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:${oaid_version}" //具体实现
+
+    // 弹框 https://github.com/MrCodeSniper/PoupoLayer
+    implementation 'com.github.MrCodeSniper:PopLayer:3.0.2'
+    // https://github.com/li-xiaojun/XPopup
+    implementation 'com.lxj:xpopup:2.2.23'
+    implementation 'com.google.android.material:material:1.3.0-alpha01'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    // https://github.com/razerdp/BasePopup
+    implementation 'com.github.razerdp:BasePopup:2.2.2'
+
+
+    // 语种切换框架：https://github.com/getActivity/MultiLanguages
+    implementation 'com.github.getActivity:MultiLanguages:6.6'
+
+    // GitHub代码
+    //    https://github.com/yangchong211/YCAndroidTool
+    // 崩溃重启库
+    implementation 'cn.yc:ToolLib:1.2.3'
+    // 网络拦截日志库
+    implementation 'cn.yc:NetLib:1.0.1'
+
+    // 简化顺序调用方法之间的嵌套和耦合 https://github.com/soulqw/WorkFlow
+    implementation 'com.qw:workflow:0.0.4'
+
+
+    // https://github.com/simplezhli/RxPay
+    implementation 'com.github.simplezhli.RxPay:pay-api:1.2.0'
+    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:1.2.0'
 }
