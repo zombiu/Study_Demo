@@ -103,8 +103,8 @@ dependencies {
 
 
     // https://github.com/simplezhli/RxPay
-    implementation 'com.github.simplezhli.RxPay:pay-api:1.2.0'
-    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:1.2.0'
+//    implementation 'com.github.simplezhli.RxPay:pay-api:1.2.0'
+//    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:1.2.0'
 
     implementation "org.greenrobot:eventbus:3.0.0"
 }

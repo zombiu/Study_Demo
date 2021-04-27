@@ -12,9 +12,10 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.annotation.Keep;
 import android.text.TextPaint;
 import android.view.View;
+
+import androidx.annotation.Keep;
 
 import com.blankj.utilcode.util.LogUtils;
 
