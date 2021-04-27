@@ -143,6 +143,10 @@ class MainActivity : AppCompatActivity() {
 
             }.create()
         viewLayer.show()*/
+
+        binding.tv2.setOnClickListener {
+            LogUtils.e("-->>点击了tv2")
+        }
     }
 
     fun showAnimation() {
@@ -178,7 +182,7 @@ class MainActivity : AppCompatActivity() {
             0.5f)
 
         var animationSet = AnimationSet(false)
-
+        // 监听需要设置在  binding.dialogIv.startAnimation(animationSet) 之前
         animationSet.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(animation: Animation?) {
 
