@@ -1,0 +1,3 @@
+include ':mentions'
+include ':app'
+rootProject.name = "Study_RichText"
