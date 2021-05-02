@@ -5,10 +5,11 @@ import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.view.Gravity
-import android.view.View
-import android.view.Window
-import android.view.WindowManager
+import android.view.*
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.ScaleAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -17,21 +18,24 @@ import androidx.fragment.app.DialogFragment
 import com.bearever.async.chain.AsyncChain
 import com.bearever.async.chain.core.AsyncChainRunnable
 import com.bearever.async.chain.core.AsyncChainTask
+import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.gyf.immersionbar.ImmersionBar
+import com.hugo.study_dialog_demo.databinding.ActivityMainBinding
 import com.hugo.study_dialog_demo.task.ActionChain
 import com.hugo.study_dialog_demo.task.RealAction
 import com.jaeger.library.StatusBarUtil
 import im.yixin.ui.dialog.CommonDialog
 
 class MainActivity : AppCompatActivity() {
+    lateinit var binding: ActivityMainBinding
 
     lateinit var actionChain: ActionChain
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         ImmersionBar.with(this)
             .transparentStatusBar()
             .init()
@@ -43,10 +47,17 @@ class MainActivity : AppCompatActivity() {
         }
         findViewById<View>(R.id.show_tv).setOnClickListener {
 //            showTipDialog()
+            showViewDialog()
+        }
+
+        binding.rootView.setOnTouchListener { v, event ->
+            LogUtils.e("-->> " + event)
+            dismissAnimation()
+            return@setOnTouchListener false
         }
 
 
-        actionChain = ActionChain()
+        /*actionChain = ActionChain()
         var realAction1 = RealAction("1")
         realAction1.setPriority(1)
         realAction1.setConsumer {
@@ -111,11 +122,11 @@ class MainActivity : AppCompatActivity() {
             var action = it as RealAction
             LogUtils.e("-->> head  ${action.tag()} ${action.priority()}")
         }
-        actionChain.notifyAction()
+        actionChain.notifyAction()*/
         LogUtils.e("-->>任务链开始 ")
 
 
-        AsyncChain.with(object :AsyncChainRunnable<String,String>() {
+        AsyncChain.with(object : AsyncChainRunnable<String, String>() {
             override fun run(task: AsyncChainTask<String, String>?) {
 
             }
@@ -126,12 +137,82 @@ class MainActivity : AppCompatActivity() {
         alertDialog.setView(R.layout.layout_dialog)
             .create()
 
-        var viewLayer = ViewLayer.Builder()
+        /*var viewLayer = ViewLayer.Builder()
             .setContentView(R.layout.layout_dialog)
             .initView {
 
             }.create()
-        viewLayer.show()
+        viewLayer.show()*/
+
+        binding.tv2.setOnClickListener {
+            LogUtils.e("-->>点击了tv2")
+        }
+    }
+
+    fun showAnimation() {
+        var alphaAnimation = AlphaAnimation(0f, 1f)
+
+        var scaleAnimation = ScaleAnimation(
+            0.8f,
+            1f,
+            0.8f,
+            1f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+
+
+        var animationSet = AnimationSet(false)
+        binding.dialogIv.animation = animationSet
+
+        animationSet.addAnimation(alphaAnimation)
+        animationSet.addAnimation(scaleAnimation)
+        animationSet.duration = 100
+        animationSet.start()
+    }
+
+    fun dismissAnimation() {
+        var alphaAnimation = AlphaAnimation(1f, 0f)
+
+        var scaleAnimation = ScaleAnimation(1f, 0.8f, 1f, 0.8f, Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f)
+
+        var animationSet = AnimationSet(false)
+        // 监听需要设置在  binding.dialogIv.startAnimation(animationSet) 之前
+        animationSet.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                binding.dialogIv.visibility = View.GONE
+                LogUtils.e("-->>onAnimationEnd")
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+                LogUtils.e("-->>开始")
+            }
+
+        })
+
+        animationSet.addAnimation(alphaAnimation)
+        animationSet.addAnimation(scaleAnimation)
+        animationSet.duration = 100
+
+        binding.dialogIv.startAnimation(animationSet)
+    }
+
+    private fun showViewDialog() {
+        binding.dialogIv.visibility = View.VISIBLE
+        var layoutParams: ViewGroup.MarginLayoutParams =
+            binding.dialogIv.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(0, ConvertUtils.dp2px(100f), 0, 0)
+        binding.dialogIv.layoutParams = layoutParams
+        showAnimation()
     }
 
     private fun showTipDialog(title: String) {
