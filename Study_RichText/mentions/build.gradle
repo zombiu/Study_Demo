@@ -27,6 +27,8 @@ dependencies {
   })
   compile 'androidx.appcompat:appcompat:1.0.0'
   testCompile 'junit:junit:4.12'
+
+  implementation 'com.blankj:utilcodex:1.30.6'
 }
 
 buildscript {

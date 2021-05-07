@@ -7,14 +7,6 @@ import com.bobomee.android.mentions.model.FormatRange;
 
 import java.io.Serializable;
 
-/**
- * Resume:
- *
- * @author 汪波
- * @version 1.0
- * @see
- * @since 2017/4/3 汪波 first commit
- */
 public class Tag implements Serializable, InsertData {
 
   private final CharSequence tagLable;
