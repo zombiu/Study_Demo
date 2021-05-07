@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,6 +24,9 @@ import com.hugo.study_richtext.test.edit.TagListActivity;
 import com.hugo.study_richtext.test.parser.Parser;
 
 
+/**
+ * tag半角转全角不行，太难看了
+ */
 public class MainActivity2 extends AppCompatActivity implements View.OnClickListener {
 
     ActivityMain2Binding binding;
@@ -77,6 +81,13 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
         mMentiontextview.setParserConverter(mTagParser);
 
         mMentiontextview.setText(str2);
+        // 成功获取无格式的字符串
+        Log.e("-->>","获取剥去格式后的字符串 " + mMentiontextview.getText());
+
+        // 编辑帖子时，有话题的场景，将格式化的tag，解析为有颜色的字符串
+        // 目前MentionEditText是不带格式的string，携带格式后，计算tag的起始、接受位置会出问题
+        // 暂时看是不是将 带格式的string先转化为不带格式的string，然后设置给MentionEditText
+        binding.mentionedittext.setText(str2);
     }
 
     private void initListener() {
@@ -165,7 +176,7 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
 
 
     String str2 =
-            "myfont效果：<tag id='100'>导演：轻口味</tag>副导演:重口味";
+            "myfont效果：<tag id='100'>导演：轻口味</tag>副导演:重口味  再来一次<tag id='100'>导演：轻口味</tag>";
 
 
 }

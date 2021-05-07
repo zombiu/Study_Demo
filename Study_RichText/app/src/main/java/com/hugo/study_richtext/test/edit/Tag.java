@@ -3,6 +3,7 @@ package com.hugo.study_richtext.test.edit;
 import android.graphics.Color;
 
 import com.bobomee.android.mentions.edit.listener.InsertData;
+import com.bobomee.android.mentions.edit.listener.MentionTextWatcher;
 import com.bobomee.android.mentions.model.FormatRange;
 
 import java.io.Serializable;
@@ -15,7 +16,7 @@ public class Tag implements Serializable, InsertData {
     private CharSequence tagUrl;
 
     public Tag(CharSequence tagLable, CharSequence tagId) {
-        this.tagLable = toDBC(tagLable.toString());
+        this.tagLable = tagLable;
         this.tagId = tagId;
     }
 

@@ -60,15 +60,16 @@ public class MentionTextWatcher implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence charSequence, int index, int i1, int count) {
-        charSequence = toDBC(charSequence.toString());
+
     }
 
     @Override
     public void afterTextChanged(Editable editable) {
+
     }
 
     /**
-     * 半角转换为全角，避免换行混乱
+     * 全角转换为半角
      *
      * @param input
      * @return
@@ -85,4 +86,27 @@ public class MentionTextWatcher implements TextWatcher {
         }
         return new String(c);
     }
+
+    /**
+     全角空格为12288，半角空格为32
+     其他字符半角(33-126)与全角(65281-65374)的对应关系是：均相差65248
+     * @param input 任意字符串
+     * @return 全角字符串
+     *
+     */
+    public static String toSBC(String input) {
+        char[] c=input.toCharArray();
+        for (int i = 0; i < c.length; i++)
+        {
+            if (c[i]==32)
+            {
+                c[i]=(char)12288;
+                continue;
+            }
+            if (c[i]<127)
+                c[i]=(char)(c[i]+65248);
+        }
+        return new String(c);
+    }
+
 }
