@@ -20,17 +20,14 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.widget.EditText;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
-import com.blankj.utilcode.util.GsonUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.bobomee.android.mentions.edit.listener.InsertData;
 import com.bobomee.android.mentions.edit.listener.MentionInputConnection;
 import com.bobomee.android.mentions.edit.listener.MentionTextWatcher;
@@ -64,6 +61,7 @@ public class MentionEditText extends AppCompatEditText {
 
     /**
      * 监听删除输入事件
+     *
      * @param outAttrs
      * @return
      */
@@ -90,7 +88,6 @@ public class MentionEditText extends AppCompatEditText {
     @Override
     protected void onSelectionChanged(int selStart, int selEnd) {
         super.onSelectionChanged(selStart, selEnd);
-        Log.e("-->>onSelectionChanged", "开始 " + selStart + " ,结束 " + selEnd);
         //avoid infinite recursion after calling setSelection()
         if (null != mRangeManager && !mRangeManager.isEqual(selStart, selEnd)) {
             //if user cancel a selection of mention string, reset the state of 'mIsSelected'
@@ -120,7 +117,6 @@ public class MentionEditText extends AppCompatEditText {
 
     public void insert(InsertData insertData) {
         if (null != insertData) {
-            LogUtils.e("-->>insert " + GsonUtils.toJson(insertData));
             CharSequence charSequence = insertData.charSequence();
             Editable editable = getText();
             int start = getSelectionStart();
@@ -135,6 +131,7 @@ public class MentionEditText extends AppCompatEditText {
             int color = insertData.color();
             editable.setSpan(new ForegroundColorSpan(color), start, end,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
         }
     }
 
