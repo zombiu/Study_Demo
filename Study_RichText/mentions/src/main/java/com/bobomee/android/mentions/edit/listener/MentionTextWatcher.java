@@ -60,7 +60,6 @@ public class MentionTextWatcher implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence charSequence, int index, int i1, int count) {
-        charSequence = toDBC(charSequence.toString());
     }
 
     @Override
