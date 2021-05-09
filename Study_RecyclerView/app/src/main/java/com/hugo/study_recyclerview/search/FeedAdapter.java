@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +19,7 @@ import java.util.List;
 
 public class FeedAdapter extends ListAdapter<FeedItem, FeedAdapter.FeedItemViewHolder> {
     private List<FeedItem> items = new ArrayList<>();
+    private MediatorLiveData<Boolean> mUpdateMediatorLiveData = new MediatorLiveData<>();
 
     public FeedAdapter() {
         super(new DiffUtil.ItemCallback<FeedItem>() {
@@ -55,6 +58,22 @@ public class FeedAdapter extends ListAdapter<FeedItem, FeedAdapter.FeedItemViewH
         holder.bind(position, getCurrentList().get(position));
     }
 
+    /**
+     * 单个item的刷新,跟 refreshItem区别不大
+     * @param elementData
+     * @param updatePayloadFunction
+     * @param <I>
+     * @param <R>
+     */
+    /*public <I, R extends BaseMutableData> void addUpdateMediator(LiveData<I> elementData,
+                                                                 final UpdatePayloadFunction<I, R> updatePayloadFunction) {
+
+    }
+*/
+
+    public void refreshItem(FeedItem item) {
+
+    }
     static class FeedItemViewHolder extends RecyclerView.ViewHolder {
         private SearchFeedItemBinding itemBinding;
 

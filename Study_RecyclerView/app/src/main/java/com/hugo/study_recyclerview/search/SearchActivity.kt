@@ -2,14 +2,22 @@ package com.hugo.study_recyclerview.search
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.LogUtils
 import com.hugo.study_recyclerview.R
 import com.hugo.study_recyclerview.databinding.ActivitySearchBinding
 
 class SearchActivity : AppCompatActivity() {
     var lastIndex = 1
     var pageNumber = 15
+    lateinit var searchView: SearchView
     lateinit var feedAdapter: FeedAdapter
+
+     val searchViewModel by viewModels<SearchViewModel>()
 
     lateinit var binding: ActivitySearchBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,8 +25,38 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initTitle()
         initFeed()
         setupSmartRefreshLayout()
+
+        searchViewModel.keywordLiveData.observe(this, Observer {
+//            LogUtils.e("-->>最终结果$it<<  ${it == null}")
+        })
+    }
+
+    private fun initTitle() {
+        searchView = findViewById(R.id.search_view)
+
+        // 处于展开状态
+        searchView.setIconified(false)
+//        searchView.onActionViewExpanded()
+        SearchViewUtils.setSearchViewStyle(searchView)
+        SearchViewUtils.setSearchHintNoIcon(searchView, "输入点什么")
+
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                LogUtils.e("-->>$newText<<")
+                searchViewModel.keywordLiveData.postValue(newText)
+                return true
+            }
+
+        })
     }
 
     private fun initFeed() {
@@ -58,4 +96,5 @@ class SearchActivity : AppCompatActivity() {
         }
         return result
     }
+
 }

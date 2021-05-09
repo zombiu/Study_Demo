@@ -20,6 +20,16 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -57,11 +67,11 @@ dependencies {
 //    10、NavigationView 侧滑
 //    implementation 'com.google.android.material.navigation.NavigationView：1.0.0'
 //    11、drawerlayout 抽屉布局
-    implementation'androidx.drawerlayout:drawerlayout:1.0.0'
+    implementation 'androidx.drawerlayout:drawerlayout:1.0.0'
 //    12、gridlayout 网格布局
-    implementation'androidx.gridlayout:gridlayout:1.0.0'
+    implementation 'androidx.gridlayout:gridlayout:1.0.0'
 //    13、recyclerview-selection RecycleView 高亮显示方案
-    implementation'androidx.recyclerview:recyclerview-selection:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
 //    15、viewPager 2 这个是2与viewPager不同哦
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
 
@@ -89,6 +99,15 @@ dependencies {
     implementation "androidx.activity:activity-ktx:$activity_version"
 
     // 下拉、上拉刷新
-    implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'      //核心必须依赖
-    implementation  'com.scwang.smart:refresh-header-classics:2.0.3'    //经典刷新头
+    implementation 'com.scwang.smart:refresh-layout-kernel:2.0.3'      //核心必须依赖
+    implementation 'com.scwang.smart:refresh-header-classics:2.0.3'    //经典刷新头
+
+    implementation "io.reactivex.rxjava3:rxjava:3.0.13-RC4"
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
+    //下面的 Kotlin 扩展需要依赖以下或更新新版本的 ktx 库：
+//androidx.fragment:fragment-ktx:1.0.0（最新版本 1.2.4） 或
+//androidx.activity:activity-ktx:1.0.0 （最新版本 1.1.0）
+    implementation "androidx.activity:activity-ktx:1.1.0"
+    implementation "androidx.fragment:fragment-ktx:1.2.4"
 }
