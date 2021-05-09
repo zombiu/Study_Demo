@@ -1,0 +1,94 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    viewBinding {
+        enabled = true
+    }
+
+    defaultConfig {
+        applicationId "com.hugo.study_recyclerview"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation 'com.blankj:utilcodex:1.30.6'
+
+//    1、CardView
+    implementation 'androidx.cardview:cardview:1.0.0'
+//    2、design ui 库
+    implementation 'com.google.android.material:material:1.0.0'
+//    3、RecycleView
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+//    4、Snackbar
+//    implementation 'com.google.android.material.snackbar.Snackbar:1.0.0-rc01'
+//    5、swiperefreshlayout
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+//    6、viewpager
+    implementation 'androidx.viewpager:viewpager:1.0.0'
+//    8、coordinatorlayout
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.0.0'
+//    10、NavigationView 侧滑
+//    implementation 'com.google.android.material.navigation.NavigationView：1.0.0'
+//    11、drawerlayout 抽屉布局
+    implementation'androidx.drawerlayout:drawerlayout:1.0.0'
+//    12、gridlayout 网格布局
+    implementation'androidx.gridlayout:gridlayout:1.0.0'
+//    13、recyclerview-selection RecycleView 高亮显示方案
+    implementation'androidx.recyclerview:recyclerview-selection:1.0.0'
+//    15、viewPager 2 这个是2与viewPager不同哦
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+
+
+    // 协程相关
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+
+    def lifecycle_version = "2.2.0"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+
+    def activity_version = "1.1.0"
+
+    // Java language implementation
+//    implementation "androidx.activity:activity:$activity_version"
+    // Kotlin
+    implementation "androidx.activity:activity-ktx:$activity_version"
+
+    // 下拉、上拉刷新
+    implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'      //核心必须依赖
+    implementation  'com.scwang.smart:refresh-header-classics:2.0.3'    //经典刷新头
+}

@@ -122,7 +122,6 @@ public class MentionEditText extends AppCompatEditText {
             int start = getSelectionStart();
             int end = start + charSequence.length();
             editable.insert(start, charSequence);
-            editable.insert(end, " ");
             // 加一个空格
             editable.insert(end, " ");
             FormatRange.FormatData format = insertData.formatData();
