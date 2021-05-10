@@ -3,11 +3,14 @@ package com.bobomee.android.mentions.model;
 
 import androidx.annotation.NonNull;
 
+import com.bobomee.android.mentions.edit.listener.InsertData;
+
 
 public class Range implements Comparable<Range> {
 
     private int mFrom;
     private int mTo;
+    private InsertData insertData;
 
     public Range(int from, int to) {
         this.mFrom = from;
@@ -64,5 +67,12 @@ public class Range implements Comparable<Range> {
         this.mTo = to;
     }
 
+    public InsertData getInsertData() {
+        return insertData;
+    }
+
+    public void setInsertData(InsertData insertData) {
+        this.insertData = insertData;
+    }
 }
 

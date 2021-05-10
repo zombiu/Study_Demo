@@ -18,9 +18,11 @@ package com.bobomee.android.mentions.edit;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.nfc.Tag;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
@@ -35,6 +37,12 @@ import com.bobomee.android.mentions.edit.util.FormatRangeManager;
 import com.bobomee.android.mentions.edit.util.RangeManager;
 import com.bobomee.android.mentions.model.FormatRange;
 import com.bobomee.android.mentions.model.Range;
+
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -126,6 +134,7 @@ public class MentionEditText extends AppCompatEditText {
             editable.insert(end, " ");
             FormatRange.FormatData format = insertData.formatData();
             FormatRange range = new FormatRange(start, end);
+            range.setInsertData(insertData);
             range.setConvert(format);
             range.setRangeCharSequence(charSequence);
             mRangeManager.add(range);
@@ -204,5 +213,22 @@ public class MentionEditText extends AppCompatEditText {
     @Override
     public void setSelected(boolean selected) {
         mIsSelected = selected;
+    }
+
+    public void restore(String content, List<Range> ranges) {
+        SpannableStringBuilder builder = new SpannableStringBuilder(content);
+        Collections.sort(ranges);
+        for (Range range : ranges) {
+            String matchTag = range.getInsertData().charSequence().toString();
+            String substring = content.substring(range.getFrom(), range.getTo());
+            if (TextUtils.equals(matchTag, substring)) {
+                mRangeManager.add(range);
+                // 设置颜色
+                int color = range.getInsertData().color();
+                builder.setSpan(new ForegroundColorSpan(color), range.getFrom(), range.getTo(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        setText(builder);
     }
 }

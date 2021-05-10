@@ -3,6 +3,7 @@ package com.hugo.study_richtext.test;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -15,13 +16,24 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.GsonUtils;
 import com.bobomee.android.mentions.edit.MentionEditText;
+import com.bobomee.android.mentions.edit.listener.InsertData;
+import com.bobomee.android.mentions.model.Range;
 import com.bobomee.android.mentions.text.MentionTextView;
 import com.hugo.study_richtext.R;
 import com.hugo.study_richtext.databinding.ActivityMain2Binding;
+import com.hugo.study_richtext.test.edit.MentionData;
 import com.hugo.study_richtext.test.edit.Tag;
 import com.hugo.study_richtext.test.edit.TagListActivity;
 import com.hugo.study_richtext.test.parser.Parser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -52,6 +64,8 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
     public static final int REQUEST_TAG_APPEND = 1 << 3;
 
     private Parser mTagParser = new Parser();
+    private JSONArray tagArr;
+    private String content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +96,7 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
 
         mMentiontextview.setText(str2);
         // 成功获取无格式的字符串
-        Log.e("-->>","获取剥去格式后的字符串 " + mMentiontextview.getText());
+        Log.e("-->>", "获取剥去格式后的字符串 " + mMentiontextview.getText());
 
         // 编辑帖子时，有话题的场景，将格式化的tag，解析为有颜色的字符串
         // 目前MentionEditText是不带格式的string，携带格式后，计算tag的起始、接受位置会出问题
@@ -98,6 +112,7 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
         binding.topic.setOnClickListener(this);
         binding.insert.setOnClickListener(this);
         binding.btnShow.setOnClickListener(this);
+        binding.restore.setOnClickListener(this);
 
 
         mMentionedittext.addTextChangedListener(new TextWatcher() {
@@ -170,8 +185,56 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
             case R.id.btn_show:
                 CharSequence convertMetionString1 = mMentionedittext.getFormatCharSequence();
                 mMentiontextview.setText(convertMetionString1);
+
+//                getTagArr();
+                break;
+            case R.id.restore:
+                try {
+                    tagArr = getTagArr();
+                    content = binding.mentionedittext.getText().toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                binding.mentionedittext.clear();
+                Handler handler = new Handler(getMainLooper());
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<Range> ranges = MentionData.convertRanges(tagArr);
+                        binding.mentionedittext.restore(content, ranges);
+                    }
+                }, 2000);
                 break;
         }
+    }
+
+    public JSONArray getTagArr() throws JSONException {
+        ArrayList<? extends Range> ranges = binding.mentionedittext.getRangeManager().get();
+
+        JSONArray tagJsonArr = new JSONArray();
+        for (Range range : ranges) {
+            InsertData insertData = range.getInsertData();
+            if (insertData instanceof Tag) {
+                /*JSONObject jsonObject = new JSONObject();
+                jsonObject.put("topic_id", ((Tag) insertData).getTagId());
+                jsonObject.put("topic_name", ((Tag) insertData).getTagLable());
+                jsonObject.put("start", range.getFrom());
+                jsonObject.put("end", range.getTo());
+
+                tagJsonArr.put(jsonObject);*/
+
+//                MentionData mentionData = MentionData.convertMention(range, (Tag) insertData);
+//                JSONObject object = new JSONObject();
+                JSONObject jsonObject = MentionData.convertJsonObject(range, (Tag) insertData);
+                tagJsonArr.put(jsonObject);
+            }
+        }
+
+        return tagJsonArr;
+    }
+
+    private void recoverMentions(JSONArray jsonArray) {
+
     }
 
 
