@@ -16,6 +16,9 @@ public class MentionInputConnection extends InputConnectionWrapper {
     private final MentionEditText mEditText;
     private final RangeManager mRangeManager;
 
+    private int lastStart=-1;
+    private int lastend=-1;
+
     public MentionInputConnection(InputConnection target, boolean mutable, MentionEditText editText) {
         super(target, mutable);
         this.mEditText = editText;
@@ -36,8 +39,12 @@ public class MentionInputConnection extends InputConnectionWrapper {
                 // selectionEnd表示在选择过程中移动的位置
                 int selectionStart = mEditText.getSelectionStart();
                 int selectionEnd = mEditText.getSelectionEnd();
-                LogUtils.e("-->>sendKeyEvent selectionStart=" + selectionStart + " , selectionEnd=" + selectionEnd);
+                /*if (lastStart==selectionStart && lastend==selectionEnd){
+                    return true;
+                }*/
+//                LogUtils.e("-->>sendKeyEvent selectionStart=" + selectionStart + " , selectionEnd=" + selectionEnd);
                 Range closestRange = mRangeManager.getRangeOfClosestMentionString(selectionStart, selectionEnd);
+                LogUtils.e("-->> " + mEditText.getText().length());
                 if (closestRange == null) {
                     mEditText.setSelected(false);
                     return super.sendKeyEvent(event);
@@ -46,9 +53,14 @@ public class MentionInputConnection extends InputConnectionWrapper {
                 //if mention string has been selected or the cursor is at the beginning of mention string, just use default action(delete)
                 if (mEditText.isSelected() || selectionStart == closestRange.getFrom()) {
                     mEditText.setSelected(false);
+
+//                    lastStart=selectionStart;
+//                    lastend=selectionEnd;
+
                     // 删除选中的 #tag#
                     return super.sendKeyEvent(event);
                 } else {
+                    Log.e("-->>", "from=" + closestRange.getFrom() + ", to=" + closestRange.getTo());
                     //select the mention string
                     mEditText.setSelected(true);
                     mRangeManager.setLastSelectedRange(closestRange);

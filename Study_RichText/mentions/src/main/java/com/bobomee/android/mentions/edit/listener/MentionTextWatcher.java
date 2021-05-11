@@ -26,7 +26,7 @@ public class MentionTextWatcher implements TextWatcher {
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         Editable editable = mEditText.getText();
-        LogUtils.e("-->>beforeTextChanged  start=" + start + " , count=" + count + " , after=" + after);
+//        LogUtils.e("-->>beforeTextChanged  start=" + start + " , count=" + count + " , after=" + after);
         //在末尾增加就不需要处理了
         if (start < editable.length()) {
             int end = start + count;

@@ -30,6 +30,7 @@ import android.view.inputmethod.InputConnection;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.bobomee.android.mentions.edit.listener.InsertData;
 import com.bobomee.android.mentions.edit.listener.MentionInputConnection;
 import com.bobomee.android.mentions.edit.listener.MentionTextWatcher;
@@ -107,6 +108,7 @@ public class MentionEditText extends AppCompatEditText {
             Range nearbyRange = mRangeManager.getRangeOfNearbyMentionString(selStart, selEnd);
             //if there is no mention string nearby the cursor, just skip
             if (null != nearbyRange) {
+                LogUtils.e("-->> " + getText().length());
                 //forbid cursor located in the mention string.
                 if (selStart == selEnd) {
                     setSelection(nearbyRange.getAnchorPosition(selStart));
