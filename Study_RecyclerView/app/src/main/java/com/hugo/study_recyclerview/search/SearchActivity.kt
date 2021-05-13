@@ -76,7 +76,7 @@ class SearchActivity : AppCompatActivity() {
                 return@setOnLoadMoreListener
             }
             val pageList = getPageList()
-            // 注意 更新需要一个新的list
+            // 注意 更新需要一个新的list,否则无效
             val newList = mutableListOf<FeedItem>()
             newList.addAll(feedAdapter.currentList)
             newList.addAll(pageList)

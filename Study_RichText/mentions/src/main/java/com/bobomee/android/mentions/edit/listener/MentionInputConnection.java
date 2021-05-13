@@ -16,8 +16,8 @@ public class MentionInputConnection extends InputConnectionWrapper {
     private final MentionEditText mEditText;
     private final RangeManager mRangeManager;
 
-    private int lastStart=-1;
-    private int lastend=-1;
+    private int lastStart = -1;
+    private int lastend = -1;
 
     public MentionInputConnection(InputConnection target, boolean mutable, MentionEditText editText) {
         super(target, mutable);
@@ -39,24 +39,36 @@ public class MentionInputConnection extends InputConnectionWrapper {
                 // selectionEnd表示在选择过程中移动的位置
                 int selectionStart = mEditText.getSelectionStart();
                 int selectionEnd = mEditText.getSelectionEnd();
-                /*if (lastStart==selectionStart && lastend==selectionEnd){
+                if (lastStart == selectionStart && lastend == selectionEnd) {
+                    return true;
+                }
+                /*// todo 这么改快速删除时没有选中效果，其实从交互上来说，快速删除也不需要选中效果
+                if (lastStart == selectionStart && lastend == selectionEnd) {
+                    Log.e("-->>跳过", "selectionStart=" + selectionStart + ", selectionEnd=" + selectionEnd + ",text=" + mEditText.getText().length());
                     return true;
                 }*/
 //                LogUtils.e("-->>sendKeyEvent selectionStart=" + selectionStart + " , selectionEnd=" + selectionEnd);
                 Range closestRange = mRangeManager.getRangeOfClosestMentionString(selectionStart, selectionEnd);
                 LogUtils.e("-->> " + mEditText.getText().length());
                 if (closestRange == null) {
+                    // 这么搞 有选中 、 删除效果
+                    if (selectionStart > 0 && lastStart == selectionStart && lastend == selectionEnd) {
+                        Log.e("-->>删除一个", "selectionStart=" + selectionStart + ", selectionEnd=" + selectionEnd + ",text=" + mEditText.getText().length());
+                        mEditText.getText().delete(selectionStart - 1, selectionEnd);
+                        Log.e("-->>删除一个后", "selectionStart=" + selectionStart + ", selectionEnd=" + selectionEnd + ",text=" + mEditText.getText().length());
+                        return true;
+                    }
+                    lastStart = selectionStart;
+                    lastend = selectionEnd;
                     mEditText.setSelected(false);
                     return super.sendKeyEvent(event);
                 }
+                lastStart = selectionStart;
+                lastend = selectionEnd;
                 Log.e("-->>", "选中的range " + GsonUtils.toJson(closestRange));
                 //if mention string has been selected or the cursor is at the beginning of mention string, just use default action(delete)
                 if (mEditText.isSelected() || selectionStart == closestRange.getFrom()) {
                     mEditText.setSelected(false);
-
-//                    lastStart=selectionStart;
-//                    lastend=selectionEnd;
-
                     // 删除选中的 #tag#
                     return super.sendKeyEvent(event);
                 } else {

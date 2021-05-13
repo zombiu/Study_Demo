@@ -9,11 +9,7 @@ import android.widget.TextView;
 import com.bobomee.android.mentions.text.listener.ParserConverter;
 
 /**
- * Resume:
  *
- * @author 汪波
- * @version 1.0
- * @since 2017/4/9 汪波 first commit
  */
 public class MentionTextView extends TextView {
 

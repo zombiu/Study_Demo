@@ -224,6 +224,7 @@ public class MentionEditText extends AppCompatEditText {
             String matchTag = range.getInsertData().charSequence().toString();
             String substring = content.substring(range.getFrom(), range.getTo());
             if (TextUtils.equals(matchTag, substring)) {
+                LogUtils.e("-->> " + range.getInsertData().charSequence() + " , start=" + range.getFrom() + ", end=" + range.getTo());
                 mRangeManager.add(range);
                 // 设置颜色
                 int color = range.getInsertData().color();

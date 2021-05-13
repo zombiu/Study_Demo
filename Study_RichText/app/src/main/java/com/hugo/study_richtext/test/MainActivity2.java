@@ -33,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -102,6 +103,9 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
         // 目前MentionEditText是不带格式的string，携带格式后，计算tag的起始、接受位置会出问题
         // 暂时看是不是将 带格式的string先转化为不带格式的string，然后设置给MentionEditText
         binding.mentionedittext.setText(str2);
+
+        List<String> strings = new ArrayList<>();
+        Iterator<String> iterator = strings.iterator();
     }
 
     private void initListener() {
