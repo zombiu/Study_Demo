@@ -42,6 +42,8 @@ public class MentionInputConnection extends InputConnectionWrapper {
                 if (lastStart == selectionStart && lastend == selectionEnd) {
                     return true;
                 }
+                lastStart = selectionStart;
+                lastend = selectionEnd;
                 /*// todo 这么改快速删除时没有选中效果，其实从交互上来说，快速删除也不需要选中效果
                 if (lastStart == selectionStart && lastend == selectionEnd) {
                     Log.e("-->>跳过", "selectionStart=" + selectionStart + ", selectionEnd=" + selectionEnd + ",text=" + mEditText.getText().length());
@@ -51,20 +53,16 @@ public class MentionInputConnection extends InputConnectionWrapper {
                 Range closestRange = mRangeManager.getRangeOfClosestMentionString(selectionStart, selectionEnd);
                 LogUtils.e("-->> " + mEditText.getText().length());
                 if (closestRange == null) {
-                    // 这么搞 有选中 、 删除效果
-                    if (selectionStart > 0 && lastStart == selectionStart && lastend == selectionEnd) {
+                    // 这么搞 有选中 、 删除效果  走不到这里
+                    /*if (selectionStart > 0 && lastStart == selectionStart && lastend == selectionEnd) {
                         Log.e("-->>删除一个", "selectionStart=" + selectionStart + ", selectionEnd=" + selectionEnd + ",text=" + mEditText.getText().length());
                         mEditText.getText().delete(selectionStart - 1, selectionEnd);
                         Log.e("-->>删除一个后", "selectionStart=" + selectionStart + ", selectionEnd=" + selectionEnd + ",text=" + mEditText.getText().length());
                         return true;
-                    }
-                    lastStart = selectionStart;
-                    lastend = selectionEnd;
+                    }*/
                     mEditText.setSelected(false);
                     return super.sendKeyEvent(event);
                 }
-                lastStart = selectionStart;
-                lastend = selectionEnd;
                 Log.e("-->>", "选中的range " + GsonUtils.toJson(closestRange));
                 //if mention string has been selected or the cursor is at the beginning of mention string, just use default action(delete)
                 if (mEditText.isSelected() || selectionStart == closestRange.getFrom()) {

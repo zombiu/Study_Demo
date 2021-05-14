@@ -74,6 +74,22 @@ public class FeedAdapter extends ListAdapter<FeedItem, FeedAdapter.FeedItemViewH
     public void refreshItem(FeedItem item) {
 
     }
+
+    @Override
+    public void onViewRecycled(@NonNull FeedItemViewHolder holder) {
+        super.onViewRecycled(holder);
+    }
+
+    /**
+     * 当 Item 移出屏幕时，onViewRecycled() 不一定会回调，但 onViewDetachedFromWindow() 肯定会回调。相反，当 Item 移进屏幕内时，另一个方法则会回调。
+     * @param holder
+     */
+    @Override
+    public void onViewDetachedFromWindow(@NonNull FeedItemViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+
+    }
+
     static class FeedItemViewHolder extends RecyclerView.ViewHolder {
         private SearchFeedItemBinding itemBinding;
 
