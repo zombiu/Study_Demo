@@ -1,11 +1,51 @@
 package com.hugo.study_richtext
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import com.blankj.utilcode.util.LogUtils
+import com.hugo.study_richtext.databinding.ActivityMainBinding
+import com.hugo.study_richtext.test.MainActivity2
 
 class MainActivity : AppCompatActivity() {
+    lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+
+        var mClipboardManager: ClipboardManager =
+            getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+
+        // 由于每次粘贴需要长按 这里设置长按监听 每次长按时，获取剪切板的内容，然后去掉格式后再添加回剪切板
+        binding.inputEt.setOnLongClickListener {
+            var clipboardHelper = ClipboardHelper.getInstance(this)
+            var clipText = clipboardHelper.getClipText(this)
+            LogUtils.e("-->>$clipText")
+            if (!clipText.isNullOrEmpty()) {
+                LogUtils.e("-->>${clipText::class.java.canonicalName}")
+                val clip: ClipData = ClipData.newPlainText("simple text", clipText)
+                mClipboardManager.setPrimaryClip(clip)
+            }
+            return@setOnLongClickListener false
+        }
+
+        binding.topicTv.setOnClickListener {
+            startActivity(Intent(this, MainActivity2::class.java))
+        }
+
+
+        copy()
+    }
+
+    fun copy() {
+
     }
 }

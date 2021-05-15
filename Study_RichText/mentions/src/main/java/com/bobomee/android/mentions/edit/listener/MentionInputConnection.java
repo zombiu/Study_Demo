@@ -63,14 +63,12 @@ public class MentionInputConnection extends InputConnectionWrapper {
                     mEditText.setSelected(false);
                     return super.sendKeyEvent(event);
                 }
-                Log.e("-->>", "选中的range " + GsonUtils.toJson(closestRange));
                 //if mention string has been selected or the cursor is at the beginning of mention string, just use default action(delete)
                 if (mEditText.isSelected() || selectionStart == closestRange.getFrom()) {
                     mEditText.setSelected(false);
                     // 删除选中的 #tag#
                     return super.sendKeyEvent(event);
                 } else {
-                    Log.e("-->>", "from=" + closestRange.getFrom() + ", to=" + closestRange.getTo());
                     //select the mention string
                     mEditText.setSelected(true);
                     mRangeManager.setLastSelectedRange(closestRange);
