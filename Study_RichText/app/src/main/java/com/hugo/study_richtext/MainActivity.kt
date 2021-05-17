@@ -6,9 +6,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import com.blankj.utilcode.util.LogUtils
+import com.bobomee.android.mentions.edit.util.ClipboardHelper
 import com.hugo.study_richtext.databinding.ActivityMainBinding
 import com.hugo.study_richtext.test.MainActivity2
 

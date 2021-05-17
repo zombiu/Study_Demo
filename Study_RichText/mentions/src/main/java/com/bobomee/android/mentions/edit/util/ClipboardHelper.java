@@ -1,4 +1,4 @@
-package com.hugo.study_richtext;
+package com.bobomee.android.mentions.edit.util;
 
 
 import android.content.ClipData;

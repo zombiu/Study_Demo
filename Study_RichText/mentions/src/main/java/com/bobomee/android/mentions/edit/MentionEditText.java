@@ -16,6 +16,8 @@
 
 package com.bobomee.android.mentions.edit;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.nfc.Tag;
@@ -25,6 +27,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
@@ -34,6 +37,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.bobomee.android.mentions.edit.listener.InsertData;
 import com.bobomee.android.mentions.edit.listener.MentionInputConnection;
 import com.bobomee.android.mentions.edit.listener.MentionTextWatcher;
+import com.bobomee.android.mentions.edit.util.ClipboardHelper;
 import com.bobomee.android.mentions.edit.util.FormatRangeManager;
 import com.bobomee.android.mentions.edit.util.RangeManager;
 import com.bobomee.android.mentions.model.FormatRange;
@@ -52,6 +56,7 @@ public class MentionEditText extends AppCompatEditText {
     private Runnable mAction;
 
     private boolean mIsSelected;
+    private ClipboardManager mClipboardManager;
 
     public MentionEditText(Context context) {
         super(context);
@@ -196,9 +201,24 @@ public class MentionEditText extends AppCompatEditText {
     protected FormatRangeManager mRangeManager;
 
     private void init() {
+        mClipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         mRangeManager = new FormatRangeManager();
         //disable suggestion
         addTextChangedListener(new MentionTextWatcher(this));
+
+        // 长按监听 去除复制的格式
+        setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String clipText = ClipboardHelper.getInstance(getContext()).getClipText(getContext());
+                if (!TextUtils.isEmpty(clipText)) {
+                    // 保存无格式的 text
+                    ClipData simple_text = ClipData.newPlainText("simple_text", clipText);
+                    mClipboardManager.setPrimaryClip(simple_text);
+                }
+                return false;
+            }
+        });
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
