@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
 
         // 由于每次粘贴需要长按 这里设置长按监听 每次长按时，获取剪切板的内容，然后去掉格式后再添加回剪切板
-        binding.inputEt.setOnLongClickListener {
+        binding.inputEt1.setOnLongClickListener {
             var clipboardHelper = ClipboardHelper.getInstance(this)
             var clipText = clipboardHelper.getClipText(this)
             LogUtils.e("-->>$clipText")
@@ -40,6 +40,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity2::class.java))
         }
 
+//        binding.inputEt1.filters = arrayOf(TextLengthFilter())
+
+        LimitEditUtils.getInstance().registerWatcher(binding.inputEt1)
+        LimitEditUtils.getInstance().registerWatcher(binding.inputEt2)
+        LimitEditUtils.getInstance().registerWatcher(binding.inputEt3)
 
         copy()
     }
