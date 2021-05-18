@@ -86,13 +86,17 @@ public class LimitEditUtils {
             if (editText == null) {
                 return;
             }
-            int length = s.length();
-            int allLength = LimitEditUtils.getInstance().getTotalLength() + length;
+            int newLength = s.length();
+            int newAllLength = LimitEditUtils.getInstance().getTotalLength() + newLength - length;
+            int capacity = newAllLength - MAX_LENGTH;
             // 超出最大长度，截断
-            if (allLength > MAX_LENGTH) {
-                editText.setText(s.subSequence(0, allLength - MAX_LENGTH));
+            if (capacity > 0) {
+                editText.setText(s.toString().substring(0, newLength - capacity));
                 ToastUtils.showShort("超出了");
+            } else {
+                length = newLength;
             }
+
         }
 
         public int getLength() {

@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity2::class.java))
         }
 
-//        binding.inputEt1.filters = arrayOf(TextLengthFilter())
+        binding.inputEt1.filters = arrayOf(TextLengthFilter())
 
         LimitEditUtils.getInstance().registerWatcher(binding.inputEt1)
         LimitEditUtils.getInstance().registerWatcher(binding.inputEt2)

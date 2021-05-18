@@ -25,6 +25,23 @@ public class TextLengthFilter implements InputFilter {
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
         LogUtils.e("-->>source=" + source + ",start=" + start + ",end=" + end);
         LogUtils.e("-->>dest=" + dest + ",dstart=" + dstart + ",dend=" + dend);
-        return null;
+        // 剩余的文本长度
+        int keep = LimitEditUtils.getInstance().getTotalLength() - (dest.length() - (dend - dstart));
+        // 没有剩余
+        if (keep <= 0) {
+            return "";
+        } else if (keep >= end - start) {
+            // 剩余长度 大于 要添加的文本长度
+            return null;
+        } else {
+            keep += start;
+            if (Character.isHighSurrogate(source.charAt(keep - 1))) {
+                --keep;
+                if (keep == start) {
+                    return "";
+                }
+            }
+            return source.subSequence(start, keep);
+        }
     }
 }
