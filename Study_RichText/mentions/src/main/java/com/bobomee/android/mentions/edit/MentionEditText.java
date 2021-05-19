@@ -219,6 +219,13 @@ public class MentionEditText extends AppCompatEditText {
                 return false;
             }
         });
+
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSelected(false);
+            }
+        });
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////

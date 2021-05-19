@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputFilter
 import com.blankj.utilcode.util.LogUtils
 import com.bobomee.android.mentions.edit.util.ClipboardHelper
 import com.hugo.study_richtext.databinding.ActivityMainBinding
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.inputEt1.filters = arrayOf(TextLengthFilter())
+        binding.inputEt4.filters = arrayOf(InputFilter.LengthFilter(10))
 
         LimitEditUtils.getInstance().registerWatcher(binding.inputEt1)
         LimitEditUtils.getInstance().registerWatcher(binding.inputEt2)

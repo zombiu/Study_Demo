@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * 限制多个edit text 输入的长度
+ * 发帖页面限制多个edit text 输入的长度
  */
 public class LimitEditUtils {
     private static LimitEditUtils limitEditUtils;
@@ -92,6 +92,7 @@ public class LimitEditUtils {
             // 超出最大长度，截断
             if (capacity > 0) {
                 editText.setText(s.toString().substring(0, newLength - capacity));
+                editText.setSelection(newLength - capacity);
                 ToastUtils.showShort("超出了");
             } else {
                 length = newLength;

@@ -30,6 +30,14 @@
         app:layout_constraintTop_toBottomOf="@+id/input_et2"
         android:layout_marginTop="20dp"/>
 
+    <EditText
+        android:id="@+id/input_et4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_et3"
+        android:layout_marginTop="20dp"/>
+
     <TextView
         android:id="@+id/topic_tv"
         android:layout_width="wrap_content"

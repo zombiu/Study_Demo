@@ -26,7 +26,7 @@ public class TextLengthFilter implements InputFilter {
         LogUtils.e("-->>source=" + source + ",start=" + start + ",end=" + end);
         LogUtils.e("-->>dest=" + dest + ",dstart=" + dstart + ",dend=" + dend);
         // 剩余的文本长度
-        int keep = LimitEditUtils.getInstance().getTotalLength() - (dest.length() - (dend - dstart));
+        int keep = LimitEditUtils.MAX_LENGTH - (dest.length() - (dend - dstart));
         // 没有剩余
         if (keep <= 0) {
             return "";
