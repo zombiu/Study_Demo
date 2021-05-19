@@ -14,7 +14,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.searchGoBtn.setOnClickListener {
-            startActivity(Intent(this,SearchActivity::class.java))
+            startActivity(Intent(this, SearchActivity::class.java))
+        }
+
+        binding.tv1.setOnClickListener {
+            startActivity(Intent(this, ViewPage2Activity::class.java))
         }
     }
 }
