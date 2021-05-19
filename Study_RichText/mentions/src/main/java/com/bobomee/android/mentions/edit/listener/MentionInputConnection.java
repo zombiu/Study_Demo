@@ -39,19 +39,17 @@ public class MentionInputConnection extends InputConnectionWrapper {
                 // selectionEnd表示在选择过程中移动的位置
                 int selectionStart = mEditText.getSelectionStart();
                 int selectionEnd = mEditText.getSelectionEnd();
+                Log.e("-->>", "sendKeyEvent selectionStart=" + selectionStart + " , selectionEnd=" + selectionEnd);
+//                LogUtils.e("-->>sendKeyEvent lastStart=" + lastStart + " , lastend=" + lastend);
                 if (lastStart == selectionStart && lastend == selectionEnd) {
+                    LogUtils.e("-->>return true");
                     return true;
                 }
                 lastStart = selectionStart;
                 lastend = selectionEnd;
-                /*// todo 这么改快速删除时没有选中效果，其实从交互上来说，快速删除也不需要选中效果
-                if (lastStart == selectionStart && lastend == selectionEnd) {
-                    Log.e("-->>跳过", "selectionStart=" + selectionStart + ", selectionEnd=" + selectionEnd + ",text=" + mEditText.getText().length());
-                    return true;
-                }*/
 //                LogUtils.e("-->>sendKeyEvent selectionStart=" + selectionStart + " , selectionEnd=" + selectionEnd);
                 Range closestRange = mRangeManager.getRangeOfClosestMentionString(selectionStart, selectionEnd);
-                LogUtils.e("-->> " + mEditText.getText().length());
+//                LogUtils.e("-->> " + mEditText.getText().length());
                 if (closestRange == null) {
                     // 这么搞 有选中 、 删除效果  走不到这里
                     /*if (selectionStart > 0 && lastStart == selectionStart && lastend == selectionEnd) {
@@ -87,5 +85,10 @@ public class MentionInputConnection extends InputConnectionWrapper {
                     new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
         }
         return super.deleteSurroundingText(beforeLength, afterLength);
+    }
+
+    public void resetLastIndex() {
+        lastStart = -1;
+        lastend = -1;
     }
 }

@@ -57,6 +57,7 @@ public class MentionEditText extends AppCompatEditText {
 
     private boolean mIsSelected;
     private ClipboardManager mClipboardManager;
+    private MentionInputConnection mentionInputConnection;
 
     public MentionEditText(Context context) {
         super(context);
@@ -81,7 +82,8 @@ public class MentionEditText extends AppCompatEditText {
      */
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-        return new MentionInputConnection(super.onCreateInputConnection(outAttrs), true, this);
+        mentionInputConnection = new MentionInputConnection(super.onCreateInputConnection(outAttrs), true, this);
+        return mentionInputConnection;
     }
 
     @Override
@@ -138,7 +140,7 @@ public class MentionEditText extends AppCompatEditText {
             int end = start + charSequence.length();
             editable.insert(start, charSequence);
             // 加一个空格
-            editable.insert(end, " ");
+//            editable.insert(end, " ");
             FormatRange.FormatData format = insertData.formatData();
             FormatRange range = new FormatRange(start, end);
             range.setInsertData(insertData);
@@ -224,6 +226,10 @@ public class MentionEditText extends AppCompatEditText {
             @Override
             public void onClick(View v) {
                 setSelected(false);
+                // 重置索引保护
+                if (mentionInputConnection != null) {
+                    mentionInputConnection.resetLastIndex();
+                }
             }
         });
     }
