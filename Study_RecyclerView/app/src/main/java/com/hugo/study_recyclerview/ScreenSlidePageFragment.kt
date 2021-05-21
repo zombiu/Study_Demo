@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.hugo.study_recyclerview.search.SearchViewModel
 
 class ScreenSlidePageFragment : Fragment() {
     val myViewModel by viewModels<MyViewModel>()
@@ -23,6 +21,10 @@ class ScreenSlidePageFragment : Fragment() {
 
     }
 
+    /**
+     * 这bug 牛批
+     * Can't access ViewModels from detached fragment
+     */
     fun refresh() {
         myViewModel.refresh()
     }

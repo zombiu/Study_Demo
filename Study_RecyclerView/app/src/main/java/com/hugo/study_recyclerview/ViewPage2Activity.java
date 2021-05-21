@@ -8,7 +8,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import android.os.Bundle;
 import android.view.View;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.hugo.study_recyclerview.databinding.ActivityViewPage2Binding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewPage2Activity extends AppCompatActivity {
     private ActivityViewPage2Binding binding;
@@ -27,20 +31,28 @@ public class ViewPage2Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 binding.pager.setCurrentItem(1);
-                ScreenSlidePageFragment myFragment = (ScreenSlidePageFragment) getSupportFragmentManager().findFragmentByTag("f" + pagerAdapter.getItemId(1));
+                LogUtils.e("-->>" + pagerAdapter.getItemId(1));
+                ScreenSlidePageFragment myFragment = pagerAdapter.fragments.get(1);
                 myFragment.refresh();
             }
         });
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStateAdapter {
+       public List<ScreenSlidePageFragment> fragments = new ArrayList<>();
+
+
         public ScreenSlidePagerAdapter(FragmentActivity fa) {
             super(fa);
+
+            fragments.clear();
+            fragments.add(new ScreenSlidePageFragment());
+            fragments.add(new ScreenSlidePageFragment());
         }
 
         @Override
         public Fragment createFragment(int position) {
-            return new ScreenSlidePageFragment();
+            return fragments.get(position);
         }
 
         @Override

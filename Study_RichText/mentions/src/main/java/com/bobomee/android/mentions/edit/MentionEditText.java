@@ -24,17 +24,21 @@ import android.nfc.Tag;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bobomee.android.mentions.edit.listener.InsertData;
+import com.bobomee.android.mentions.edit.listener.LinkTouchMethod;
 import com.bobomee.android.mentions.edit.listener.MentionInputConnection;
 import com.bobomee.android.mentions.edit.listener.MentionTextWatcher;
 import com.bobomee.android.mentions.edit.util.ClipboardHelper;
@@ -42,10 +46,6 @@ import com.bobomee.android.mentions.edit.util.FormatRangeManager;
 import com.bobomee.android.mentions.edit.util.RangeManager;
 import com.bobomee.android.mentions.model.FormatRange;
 import com.bobomee.android.mentions.model.Range;
-
-import org.json.JSONArray;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -136,8 +136,8 @@ public class MentionEditText extends AppCompatEditText {
         if (null != insertData) {
             CharSequence charSequence = insertData.charSequence();
             Editable editable = getText();
-            int start = getSelectionStart();
-            int end = start + charSequence.length();
+            final int start = getSelectionStart();
+            final int end = start + charSequence.length();
             editable.insert(start, charSequence);
             // 加一个空格
 //            editable.insert(end, " ");
@@ -147,6 +147,21 @@ public class MentionEditText extends AppCompatEditText {
             range.setConvert(format);
             range.setRangeCharSequence(charSequence);
             mRangeManager.add(range);
+
+            //设置部分文字点击事件
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    LogUtils.e("-->>点击了话题");
+                    setSelection(start, end);
+                }
+
+                @Override
+                public void updateDrawState(@NonNull TextPaint ds) {
+                    ds.setUnderlineText(false);
+                }
+            };
+            editable.setSpan(clickableSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             int color = insertData.color();
             editable.setSpan(new ForegroundColorSpan(color), start, end,
@@ -222,9 +237,11 @@ public class MentionEditText extends AppCompatEditText {
             }
         });
 
+        // 点击话题选中后，点击一次edittext不响应点击事件 ，再点一次才会响应
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                LogUtils.e("-->>onClick");
                 setSelected(false);
                 // 重置索引保护
                 if (mentionInputConnection != null) {
@@ -232,6 +249,8 @@ public class MentionEditText extends AppCompatEditText {
                 }
             }
         });
+
+        setOnTouchListener(new LinkTouchMethod());
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
