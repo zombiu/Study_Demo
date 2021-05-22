@@ -8,6 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
+
 public class LinkTouchMethod implements View.OnTouchListener {
     long startTime = 0;
 
@@ -23,7 +25,7 @@ public class LinkTouchMethod implements View.OnTouchListener {
             if (action == MotionEvent.ACTION_UP) {
                 // 避免长按和点击冲突，如果超过300毫秒，认为是在长按，不执行点击操作
                 if (System.currentTimeMillis() - startTime > 300) {
-//                    return false;
+                    return false;
                 }
                 int x = (int) event.getX();
                 int y = (int) event.getY();
@@ -35,9 +37,11 @@ public class LinkTouchMethod implements View.OnTouchListener {
                 y += tv.getScrollY();
 
                 Layout layout = tv.getLayout();
+                // 获取y坐标所在行数
                 int line = layout.getLineForVertical(y);
+                // 获取所在行数 x坐标的偏移量
                 int off = layout.getOffsetForHorizontal(line, x);
-
+                LogUtils.e("-->>");
                 ClickableSpan[] link = ((Spanned) text).getSpans(off, off, ClickableSpan.class);
                 if (link.length != 0) {
                     if (x < layout.getLineWidth(line) && x > 0) {

@@ -153,7 +153,12 @@ public class MentionEditText extends AppCompatEditText {
                 @Override
                 public void onClick(View widget) {
                     LogUtils.e("-->>点击了话题");
-                    setSelection(start, end);
+                    widget.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            setSelection(start, end);
+                        }
+                    });
                 }
 
                 @Override

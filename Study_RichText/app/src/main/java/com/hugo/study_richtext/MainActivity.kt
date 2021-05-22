@@ -48,7 +48,10 @@ class MainActivity : AppCompatActivity() {
         LimitEditUtils.getInstance().registerWatcher(binding.inputEt2)
         LimitEditUtils.getInstance().registerWatcher(binding.inputEt3)
 
-        copy()
+
+        binding.richTv.setOnClickListener {
+            ClickSpanActivity.start(this)
+        }
     }
 
     fun copy() {

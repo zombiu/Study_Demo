@@ -23,6 +23,7 @@ import com.bobomee.android.mentions.model.Range;
 import com.bobomee.android.mentions.text.MentionTextView;
 import com.hugo.study_richtext.R;
 import com.hugo.study_richtext.databinding.ActivityMain2Binding;
+import com.hugo.study_richtext.kit.LinkMoveMentMehtodEx;
 import com.hugo.study_richtext.test.edit.MentionData;
 import com.hugo.study_richtext.test.edit.Tag;
 import com.hugo.study_richtext.test.edit.TagListActivity;
@@ -81,6 +82,12 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
 
     private void initViews() {
         mMentionedittext = binding.mentionedittext;
+        // 当设置setMovementMethod之后，在小米手机上会有一个拖拽的特性，会使原本的长按选中事件失效，这个特性会破坏被拖拽话题的选中删除逻辑
+//        mMentionedittext.setMovementMethod(new LinkMoveMentMehtodEx());
+//        mMentionedittext.setMovementMethod(LinkMovementMethod.getInstance());
+        // 禁用长按 可以禁用掉小米上的拖拽特性，但是不符合产品需求
+//        mMentionedittext.setLongClickable(false);
+
         mBtnCovert = binding.btnCovert;
         mCovertedString = binding.covertedString;
         mBtnClear = binding.btnClear;
