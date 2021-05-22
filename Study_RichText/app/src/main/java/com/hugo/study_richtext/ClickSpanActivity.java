@@ -80,7 +80,23 @@ public class ClickSpanActivity extends AppCompatActivity {
             }
         });
 
-//        binding.richEt.setMovementMethod(LinkMovementMethod.getInstance());
-        binding.richEt.setMovementMethod(new LinkMoveMentMehtodEx());
+        binding.richEt.setMovementMethod(LinkMovementMethod.getInstance());
+//        binding.richEt.setMovementMethod(new LinkMoveMentMehtodEx());
+
+        // 小米手机上，对已选中的文本长按，就会触发文本拖拽效果
+        binding.richEt.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                LogUtils.e("-->>触发长按");
+                // 这里必须post一下，不然没有选中效果
+                v.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.richEt.setSelection(start, end);
+                    }
+                });
+                return true;
+            }
+        });
     }
 }

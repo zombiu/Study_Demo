@@ -232,6 +232,7 @@ public class MentionEditText extends AppCompatEditText {
         setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                LogUtils.e("-->>edittext 长按监听");
                 String clipText = ClipboardHelper.getInstance(getContext()).getClipText(getContext());
                 if (!TextUtils.isEmpty(clipText)) {
                     // 保存无格式的 text
