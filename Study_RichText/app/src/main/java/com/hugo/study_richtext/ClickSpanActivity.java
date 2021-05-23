@@ -24,7 +24,7 @@ import com.hugo.study_richtext.kit.LinkMoveMentMehtodEx;
 public class ClickSpanActivity extends AppCompatActivity {
 
     private ActivityClickSpanBinding binding;
-    private String text = "这个用户的昵称是碧海鱼龙，一个外包仔。这个是用来换行测试用的，看看多少个字可以换行哟！";
+    private String text = "这个用户的昵称是碧海鱼龙，一个外包仔。这个是用来换行测试用的，看看多少个字可以换行哟！这个用户的昵称是碧海鱼龙，一个外包仔。这个是用来换行测试用的，看看多少个字可以换行哟！";
     private int start = 8;
     private int end = 12;
 

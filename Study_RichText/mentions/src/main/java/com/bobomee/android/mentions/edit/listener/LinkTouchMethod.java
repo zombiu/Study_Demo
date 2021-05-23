@@ -15,17 +15,17 @@ import com.blankj.utilcode.util.LogUtils;
 /**
  * 目前这个需求 感觉用OnTouchListener 实现有问题，会在span点击生效时，触发onLongClick
  * 因为onTouch的up事件返回true时，不会进入onTouchEvent方法，无法取消长按的监听，所以就触发了onLongClick
- *
- *             ListenerInfo li = mListenerInfo;
- *             if (li != null && li.mOnTouchListener != null
- *                     && (mViewFlags & ENABLED_MASK) == ENABLED
- *                     && li.mOnTouchListener.onTouch(this, event)) {
- *                 result = true;
- *             }
- *
- *             if (!result && onTouchEvent(event)) {
- *                 result = true;
- *             }
+ * <p>
+ * ListenerInfo li = mListenerInfo;
+ * if (li != null && li.mOnTouchListener != null
+ * && (mViewFlags & ENABLED_MASK) == ENABLED
+ * && li.mOnTouchListener.onTouch(this, event)) {
+ * result = true;
+ * }
+ * <p>
+ * if (!result && onTouchEvent(event)) {
+ * result = true;
+ * }
  */
 public class LinkTouchMethod implements View.OnTouchListener {
     long longClickDelay = ViewConfiguration.getLongPressTimeout();
@@ -33,6 +33,7 @@ public class LinkTouchMethod implements View.OnTouchListener {
 
     /**
      * 需要判断一下，如果触发了
+     *
      * @param v
      * @param event
      * @return
@@ -60,10 +61,11 @@ public class LinkTouchMethod implements View.OnTouchListener {
 
                 x += tv.getScrollX();
                 y += tv.getScrollY();
-
+                LogUtils.e("-->>y=" + y + " ," + event.toString());
                 Layout layout = tv.getLayout();
                 // 获取y坐标所在行数
                 int line = layout.getLineForVertical(y);
+                LogUtils.e("-->>line=" + line);
                 // 获取所在行数 x坐标的偏移量
                 int off = layout.getOffsetForHorizontal(line, x);
                 ClickableSpan[] link = ((Spanned) text).getSpans(off, off, ClickableSpan.class);

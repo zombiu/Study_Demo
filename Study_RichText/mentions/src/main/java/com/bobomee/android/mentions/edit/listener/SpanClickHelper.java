@@ -6,6 +6,8 @@ import android.text.style.ClickableSpan;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
+
 public class SpanClickHelper {
 
     /**
@@ -26,10 +28,11 @@ public class SpanClickHelper {
 
                 x += tv.getScrollX();
                 y += tv.getScrollY();
-
+                LogUtils.e("-->>y=" + y + ",getTotalPaddingTop=" + tv.getTotalPaddingTop() + ",getScrollY=" + tv.getScrollY());
                 Layout layout = tv.getLayout();
                 // 获取y坐标所在行数
                 int line = layout.getLineForVertical(y);
+                LogUtils.e("-->>line=" + line);
                 // 获取所在行数 x坐标的偏移量
                 int off = layout.getOffsetForHorizontal(line, x);
                 ClickableSpan[] link = ((Spanned) text).getSpans(off, off, ClickableSpan.class);

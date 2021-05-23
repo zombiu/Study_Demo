@@ -51,6 +51,7 @@ import com.bobomee.android.mentions.edit.util.RangeManager;
 import com.bobomee.android.mentions.model.FormatRange;
 import com.bobomee.android.mentions.model.Range;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -153,12 +154,21 @@ public class MentionEditText extends AppCompatEditText {
             CharSequence charSequence = insertData.charSequence();
             Editable editable = getText();
             final int start = getSelectionStart();
+            final int oldEnd = getSelectionEnd();
             final int end = start + charSequence.length();
+
+            // 如果是选中状态
+            if (start != oldEnd) {
+                replaceSelection(insertData);
+                return;
+            }
+
+            LogUtils.e("-->>start=" + start + ",end=" + oldEnd);
             editable.insert(start, charSequence);
             // 加一个空格
 //            editable.insert(end, " ");
             FormatRange.FormatData format = insertData.formatData();
-            FormatRange range = new FormatRange(start, end);
+            final FormatRange range = new FormatRange(start, end);
             range.setInsertData(insertData);
             range.setConvert(format);
             range.setRangeCharSequence(charSequence);
@@ -172,8 +182,9 @@ public class MentionEditText extends AppCompatEditText {
                     widget.post(new Runnable() {
                         @Override
                         public void run() {
-                            setSelection(start, end);
-                            LogUtils.e("-->>选中");
+                            // 这里不能使用 start 和 end，因为选中再进行输入操作时，有可能会改变range的的范围
+                            setSelection(range.getFrom(), range.getTo());
+                            LogUtils.e("-->>选中 start=" + start + ",end=" + end);
                         }
                     });
                 }
@@ -190,6 +201,64 @@ public class MentionEditText extends AppCompatEditText {
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         }
+    }
+
+    private void replaceSelection(InsertData insertData) {
+        CharSequence charSequence = insertData.charSequence();
+        Editable editable = getText();
+        final int start = getSelectionStart();
+        final int oldEnd = getSelectionEnd();
+        final int end = start + charSequence.length();
+        // 先删除 后插入
+        editable.delete(start, oldEnd);
+        editable.insert(start, charSequence);
+        LogUtils.e("-->>" + editable);
+
+        FormatRange.FormatData format = insertData.formatData();
+        FormatRange range = new FormatRange(start, end);
+        range.setInsertData(insertData);
+        range.setConvert(format);
+        range.setRangeCharSequence(charSequence);
+        mRangeManager.add(range);
+
+        //设置部分文字点击事件
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                widget.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setSelection(start, end);
+                        LogUtils.e("-->>选中");
+                    }
+                });
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                ds.setUnderlineText(false);
+            }
+        };
+        editable.setSpan(clickableSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        int color = insertData.color();
+        editable.setSpan(new ForegroundColorSpan(color), start, end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        /*int oldSelRange = oldEnd - start;
+        int newSelRange = charSequence.length();
+        // 对所有range 进行偏移
+        if (newSelRange != oldSelRange) {
+            int offset = newSelRange - oldSelRange;
+            ArrayList<Range> ranges = (ArrayList<Range>) mRangeManager.get();
+            for (Range element : ranges) {
+                if (element.getFrom() >= end) {
+                    element.setOffset(offset);
+                }
+            }
+        }*/
+
+        setSelection(start, end);
     }
 
     public void insert(CharSequence charSequence) {
@@ -294,7 +363,7 @@ public class MentionEditText extends AppCompatEditText {
 
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
-                upMotionEvent = e;
+//                upMotionEvent = e;
                 LogUtils.e("-->>点击up " + e.toString());
                 return false;
             }
@@ -318,9 +387,13 @@ public class MentionEditText extends AppCompatEditText {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (gestureDetector != null) {
-            gestureDetector.onTouchEvent(event);
+        int action = event.getActionMasked();
+        if (action == MotionEvent.ACTION_UP) {
+            this.upMotionEvent = event;
         }
+        /*if (gestureDetector != null) {
+            gestureDetector.onTouchEvent(event);
+        }*/
         return super.onTouchEvent(event);
     }
 
@@ -342,6 +415,25 @@ public class MentionEditText extends AppCompatEditText {
 
     public void restore(String content, List<Range> ranges) {
         SpannableStringBuilder builder = new SpannableStringBuilder(content);
+        Collections.sort(ranges);
+        for (Range range : ranges) {
+            String matchTag = range.getInsertData().charSequence().toString();
+            String substring = content.substring(range.getFrom(), range.getTo());
+            if (TextUtils.equals(matchTag, substring)) {
+                LogUtils.e("-->> " + range.getInsertData().charSequence() + " , start=" + range.getFrom() + ", end=" + range.getTo());
+                mRangeManager.add(range);
+                // 设置颜色
+                int color = range.getInsertData().color();
+                builder.setSpan(new ForegroundColorSpan(color), range.getFrom(), range.getTo(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        setText(builder);
+    }
+
+    public void restore(String content) {
+        SpannableStringBuilder builder = new SpannableStringBuilder(content);
+        ArrayList<? extends Range> ranges = mRangeManager.get();
         Collections.sort(ranges);
         for (Range range : ranges) {
             String matchTag = range.getInsertData().charSequence().toString();
