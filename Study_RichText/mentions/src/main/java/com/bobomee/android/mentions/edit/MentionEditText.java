@@ -335,7 +335,7 @@ public class MentionEditText extends AppCompatEditText {
             @Override
             public void onClick(View v) {
                 LogUtils.e("-->>onClick");
-//                setSelected(false);
+                setSelected(false);
                 // 重置索引保护
                 if (mentionInputConnection != null) {
                     mentionInputConnection.resetLastIndex();
@@ -389,7 +389,8 @@ public class MentionEditText extends AppCompatEditText {
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getActionMasked();
         if (action == MotionEvent.ACTION_UP) {
-            this.upMotionEvent = event;
+            // 必须保存MotionEvent副本，因为会被回收
+            this.upMotionEvent = MotionEvent.obtain(event);
         }
         /*if (gestureDetector != null) {
             gestureDetector.onTouchEvent(event);

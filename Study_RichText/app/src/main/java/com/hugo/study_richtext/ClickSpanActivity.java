@@ -18,6 +18,7 @@ import android.view.View;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.bobomee.android.mentions.edit.listener.LinkTouchMethod;
+import com.bobomee.android.mentions.edit.listener.SpanClickHelper;
 import com.hugo.study_richtext.databinding.ActivityClickSpanBinding;
 import com.hugo.study_richtext.kit.LinkMoveMentMehtodEx;
 
@@ -27,6 +28,8 @@ public class ClickSpanActivity extends AppCompatActivity {
     private String text = "这个用户的昵称是碧海鱼龙，一个外包仔。这个是用来换行测试用的，看看多少个字可以换行哟！这个用户的昵称是碧海鱼龙，一个外包仔。这个是用来换行测试用的，看看多少个字可以换行哟！";
     private int start = 8;
     private int end = 12;
+
+    private MotionEvent upMotionEvent;
 
 
     public static void start(Context context) {
@@ -79,12 +82,27 @@ public class ClickSpanActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 LogUtils.e("-->>点击了文本");
+                if (upMotionEvent != null) {
+                    LogUtils.e("-->> " + upMotionEvent.toString());
+                    SpanClickHelper.spanClickHandle(binding.richEt, upMotionEvent);
+                    upMotionEvent = null;
+                }
             }
         });
 
 //        binding.richEt.setMovementMethod(LinkMovementMethod.getInstance());
 //        binding.richEt.setMovementMethod(new LinkMoveMentMehtodEx());
-        binding.richEt.setOnTouchListener(new LinkTouchMethod());
+//        binding.richEt.setOnTouchListener(new LinkTouchMethod());
+        binding.richEt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int actionMasked = event.getActionMasked();
+                if (actionMasked == MotionEvent.ACTION_UP) {
+                    upMotionEvent = MotionEvent.obtain(event);
+                }
+                return false;
+            }
+        });
 
         // 小米手机上，对已选中的文本长按，就会触发文本拖拽效果
         binding.richEt.setOnLongClickListener(new View.OnLongClickListener() {
