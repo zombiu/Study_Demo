@@ -13,7 +13,19 @@ import android.widget.Toast;
 import com.blankj.utilcode.util.LogUtils;
 
 /**
- * 目前这个需求 感觉只能用OnTouchListener 来实现
+ * 目前这个需求 感觉用OnTouchListener 实现有问题，会在span点击生效时，触发onLongClick
+ * 因为onTouch的up事件返回true时，不会进入onTouchEvent方法，无法取消长按的监听，所以就触发了onLongClick
+ *
+ *             ListenerInfo li = mListenerInfo;
+ *             if (li != null && li.mOnTouchListener != null
+ *                     && (mViewFlags & ENABLED_MASK) == ENABLED
+ *                     && li.mOnTouchListener.onTouch(this, event)) {
+ *                 result = true;
+ *             }
+ *
+ *             if (!result && onTouchEvent(event)) {
+ *                 result = true;
+ *             }
  */
 public class LinkTouchMethod implements View.OnTouchListener {
     long longClickDelay = ViewConfiguration.getLongPressTimeout();

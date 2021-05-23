@@ -29,6 +29,7 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -43,6 +44,7 @@ import com.bobomee.android.mentions.edit.listener.InsertData;
 import com.bobomee.android.mentions.edit.listener.LinkTouchMethod;
 import com.bobomee.android.mentions.edit.listener.MentionInputConnection;
 import com.bobomee.android.mentions.edit.listener.MentionTextWatcher;
+import com.bobomee.android.mentions.edit.listener.SpanClickHelper;
 import com.bobomee.android.mentions.edit.util.ClipboardHelper;
 import com.bobomee.android.mentions.edit.util.FormatRangeManager;
 import com.bobomee.android.mentions.edit.util.RangeManager;
@@ -61,6 +63,8 @@ public class MentionEditText extends AppCompatEditText {
     private boolean mIsSelected;
     private ClipboardManager mClipboardManager;
     private MentionInputConnection mentionInputConnection;
+    private GestureDetector gestureDetector;
+    private MotionEvent upMotionEvent;
 
     public MentionEditText(Context context) {
         super(context);
@@ -165,12 +169,13 @@ public class MentionEditText extends AppCompatEditText {
                 @Override
                 public void onClick(View widget) {
                     LogUtils.e("-->>点击了话题");
-                    /*widget.post(new Runnable() {
+                    widget.post(new Runnable() {
                         @Override
                         public void run() {
                             setSelection(start, end);
+                            LogUtils.e("-->>选中");
                         }
-                    });*/
+                    });
                 }
 
                 @Override
@@ -266,10 +271,57 @@ public class MentionEditText extends AppCompatEditText {
                 if (mentionInputConnection != null) {
                     mentionInputConnection.resetLastIndex();
                 }
+
+                if (upMotionEvent != null) {
+                    SpanClickHelper.spanClickHandle(MentionEditText.this, upMotionEvent);
+                    upMotionEvent = null;
+                }
             }
         });
 
-        setOnTouchListener(new LinkTouchMethod());
+        // 无法实现需求，因为onTouch的up事件返回true时，不会进入onTouchEvent方法，无法取消长按的监听，所以就触发了onLongClick
+//        setOnTouchListener(new LinkTouchMethod());
+
+        gestureDetector = new GestureDetector(getContext(), new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent e) {
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                upMotionEvent = e;
+                LogUtils.e("-->>点击up " + e.toString());
+                return false;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                return false;
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (gestureDetector != null) {
+            gestureDetector.onTouchEvent(event);
+        }
+        return super.onTouchEvent(event);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
