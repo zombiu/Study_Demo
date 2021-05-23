@@ -13,9 +13,11 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.bobomee.android.mentions.edit.listener.LinkTouchMethod;
 import com.hugo.study_richtext.databinding.ActivityClickSpanBinding;
 import com.hugo.study_richtext.kit.LinkMoveMentMehtodEx;
 
@@ -80,8 +82,9 @@ public class ClickSpanActivity extends AppCompatActivity {
             }
         });
 
-        binding.richEt.setMovementMethod(LinkMovementMethod.getInstance());
+//        binding.richEt.setMovementMethod(LinkMovementMethod.getInstance());
 //        binding.richEt.setMovementMethod(new LinkMoveMentMehtodEx());
+        binding.richEt.setOnTouchListener(new LinkTouchMethod());
 
         // 小米手机上，对已选中的文本长按，就会触发文本拖拽效果
         binding.richEt.setOnLongClickListener(new View.OnLongClickListener() {

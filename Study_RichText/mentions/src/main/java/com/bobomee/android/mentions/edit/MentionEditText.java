@@ -29,6 +29,7 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -36,6 +37,7 @@ import android.view.inputmethod.InputConnection;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
 
+import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.bobomee.android.mentions.edit.listener.InsertData;
 import com.bobomee.android.mentions.edit.listener.LinkTouchMethod;
@@ -46,6 +48,7 @@ import com.bobomee.android.mentions.edit.util.FormatRangeManager;
 import com.bobomee.android.mentions.edit.util.RangeManager;
 import com.bobomee.android.mentions.model.FormatRange;
 import com.bobomee.android.mentions.model.Range;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -104,10 +107,12 @@ public class MentionEditText extends AppCompatEditText {
     @Override
     protected void onSelectionChanged(int selStart, int selEnd) {
         super.onSelectionChanged(selStart, selEnd);
+        LogUtils.e("-->> selStart=" + selStart + ",selEnd=" + selEnd);
         //avoid infinite recursion after calling setSelection()
         if (null != mRangeManager && !mRangeManager.isEqual(selStart, selEnd)) {
             //if user cancel a selection of mention string, reset the state of 'mIsSelected'
             Range closestRange = mRangeManager.getRangeOfClosestMentionString(selStart, selEnd);
+            LogUtils.e("-->>" + GsonUtils.toJson(closestRange));
             if (closestRange != null && closestRange.getTo() == selEnd) {
                 mIsSelected = false;
             }
@@ -115,15 +120,22 @@ public class MentionEditText extends AppCompatEditText {
             Range nearbyRange = mRangeManager.getRangeOfNearbyMentionString(selStart, selEnd);
             //if there is no mention string nearby the cursor, just skip
             if (null != nearbyRange) {
-                LogUtils.e("-->> " + getText().length());
                 //forbid cursor located in the mention string.
+                // 禁止游标移动到字符串中
                 if (selStart == selEnd) {
                     setSelection(nearbyRange.getAnchorPosition(selStart));
                 } else {
-                    if (selEnd < nearbyRange.getTo()) {
+                    /*if (selEnd < nearbyRange.getTo()) {
                         setSelection(selStart, nearbyRange.getTo());
                     }
                     if (selStart > nearbyRange.getFrom()) {
+                        setSelection(nearbyRange.getFrom(), selEnd);
+                    }*/
+                    if (selStart >= nearbyRange.getFrom() && selEnd < nearbyRange.getTo()) {
+                        setSelection(nearbyRange.getFrom(), nearbyRange.getTo());
+                    } else if (selEnd < nearbyRange.getTo()) {
+                        setSelection(selStart, nearbyRange.getTo());
+                    } else if (selStart > nearbyRange.getFrom()) {
                         setSelection(nearbyRange.getFrom(), selEnd);
                     }
                 }
@@ -153,12 +165,12 @@ public class MentionEditText extends AppCompatEditText {
                 @Override
                 public void onClick(View widget) {
                     LogUtils.e("-->>点击了话题");
-                    widget.post(new Runnable() {
+                    /*widget.post(new Runnable() {
                         @Override
                         public void run() {
                             setSelection(start, end);
                         }
-                    });
+                    });*/
                 }
 
                 @Override
@@ -239,6 +251,7 @@ public class MentionEditText extends AppCompatEditText {
                     ClipData simple_text = ClipData.newPlainText("simple_text", clipText);
                     mClipboardManager.setPrimaryClip(simple_text);
                 }
+                // 返回true，将拦截长按复制、粘贴功能
                 return false;
             }
         });
@@ -248,7 +261,7 @@ public class MentionEditText extends AppCompatEditText {
             @Override
             public void onClick(View v) {
                 LogUtils.e("-->>onClick");
-                setSelected(false);
+//                setSelected(false);
                 // 重置索引保护
                 if (mentionInputConnection != null) {
                     mentionInputConnection.resetLastIndex();
