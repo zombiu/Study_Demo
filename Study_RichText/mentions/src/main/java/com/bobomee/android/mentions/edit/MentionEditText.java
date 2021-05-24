@@ -26,6 +26,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -112,7 +113,7 @@ public class MentionEditText extends AppCompatEditText {
     @Override
     protected void onSelectionChanged(int selStart, int selEnd) {
         super.onSelectionChanged(selStart, selEnd);
-        LogUtils.e("-->> selStart=" + selStart + ",selEnd=" + selEnd);
+        LogUtils.e("-->> selStart=" + selStart + ",selEnd=" + selEnd + ",content=" + getText() + ",内容是否为空string=" + (TextUtils.equals(getText(),"")));
         //avoid infinite recursion after calling setSelection()
         if (null != mRangeManager && !mRangeManager.isEqual(selStart, selEnd)) {
             //if user cancel a selection of mention string, reset the state of 'mIsSelected'
@@ -345,6 +346,8 @@ public class MentionEditText extends AppCompatEditText {
                     SpanClickHelper.spanClickHandle(MentionEditText.this, upMotionEvent);
                     upMotionEvent = null;
                 }
+
+                LogUtils.e("-->>selStart=" + getSelectionStart() + ",selEnd=" + getSelectionEnd());
             }
         });
 
