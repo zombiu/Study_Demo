@@ -28,6 +28,7 @@ import com.hugo.study_richtext.test.edit.MentionData;
 import com.hugo.study_richtext.test.edit.Tag;
 import com.hugo.study_richtext.test.edit.TagListActivity;
 import com.hugo.study_richtext.test.parser.Parser;
+import com.shoucai.reslib.utils.UIKit;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,6 +79,11 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
 
         initViews();
         initListener();
+
+        // 默认弹出软键盘，EditText设置setMovementMethod，在从其他页面回到edittext所在页面时，光标会消失，这时候插入话题会崩溃。
+        // 初步排查结果是弹出软键盘中的代码 view.requestFocus() 会使光标消失，变为-1
+        UIKit.INSTANCE.popSoftKeyboard(binding.mentionedittext);
+        binding.mentionedittext.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void initViews() {
