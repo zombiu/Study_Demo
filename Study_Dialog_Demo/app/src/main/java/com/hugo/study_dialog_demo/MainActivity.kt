@@ -146,7 +146,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.tv2.setOnClickListener {
             LogUtils.e("-->>点击了tv2")
+            showDialog()
         }
+    }
+
+    private fun showDialog() {
+        var build = AlertDialog.Builder(this, R.style.MyDialog)
+        build.setView(R.layout.layout_dialog2)
+        var dialog = build.create()
+        dialog.show()
+
     }
 
     fun showAnimation() {
@@ -176,10 +185,12 @@ class MainActivity : AppCompatActivity() {
     fun dismissAnimation() {
         var alphaAnimation = AlphaAnimation(1f, 0f)
 
-        var scaleAnimation = ScaleAnimation(1f, 0.8f, 1f, 0.8f, Animation.RELATIVE_TO_SELF,
+        var scaleAnimation = ScaleAnimation(
+            1f, 0.8f, 1f, 0.8f, Animation.RELATIVE_TO_SELF,
             0.5f,
             Animation.RELATIVE_TO_SELF,
-            0.5f)
+            0.5f
+        )
 
         var animationSet = AnimationSet(false)
         // 监听需要设置在  binding.dialogIv.startAnimation(animationSet) 之前
