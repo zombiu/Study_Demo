@@ -20,6 +20,7 @@ import com.bearever.async.chain.core.AsyncChainRunnable
 import com.bearever.async.chain.core.AsyncChainTask
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.gyf.immersionbar.ImmersionBar
 import com.hugo.study_dialog_demo.databinding.ActivityMainBinding
@@ -154,8 +155,16 @@ class MainActivity : AppCompatActivity() {
         var build = AlertDialog.Builder(this, R.style.MyDialog)
         build.setView(R.layout.layout_dialog2)
         var dialog = build.create()
-        dialog.show()
+        // show之前，可以对宽度进行修改吗？
+        dialog.window?.decorView?.setBackgroundColor(resources.getColor(android.R.color.holo_green_light))
+        var attributes = dialog.window?.attributes!!
+        attributes.width = ScreenUtils.getScreenWidth()
+        dialog.window!!.attributes = attributes
 
+        dialog.show()
+        // show之后，可以对宽度进行修改
+
+        // 可以findview 针对view进行修改
     }
 
     fun showAnimation() {

@@ -80,10 +80,10 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
         initViews();
         initListener();
 
-        // 默认弹出软键盘，EditText设置setMovementMethod，在从其他页面回到edittext所在页面时，光标会消失，这时候插入话题会崩溃。
+        // 前提，默认弹出软键盘，EditText设置setMovementMethod，再从其他页面回到edittext所在页面时，光标会消失，这时候插入话题会崩溃。
         // 初步排查结果是弹出软键盘中的代码 view.requestFocus() 会使光标消失，变为-1
         UIKit.INSTANCE.popSoftKeyboard(binding.mentionedittext);
-        binding.mentionedittext.setMovementMethod(LinkMovementMethod.getInstance());
+//        binding.mentionedittext.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void initViews() {
