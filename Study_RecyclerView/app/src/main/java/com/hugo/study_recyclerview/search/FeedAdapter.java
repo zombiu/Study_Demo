@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.hugo.study_recyclerview.databinding.SearchFeedItemBinding;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class FeedAdapter extends ListAdapter<FeedItem, FeedAdapter.FeedItemViewH
     @NonNull
     @Override
     public FeedItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return FeedItemViewHolder.create(parent);
+        return create(parent);
     }
 
     @Override
@@ -60,10 +61,10 @@ public class FeedAdapter extends ListAdapter<FeedItem, FeedAdapter.FeedItemViewH
 
     /**
      * 单个item的刷新,跟 refreshItem区别不大
-     * @param elementData
-     * @param updatePayloadFunction
-     * @param <I>
-     * @param <R>
+     * @param
+     * @param
+     * @param
+     * @param
      */
     /*public <I, R extends BaseMutableData> void addUpdateMediator(LiveData<I> elementData,
                                                                  final UpdatePayloadFunction<I, R> updatePayloadFunction) {
@@ -90,7 +91,7 @@ public class FeedAdapter extends ListAdapter<FeedItem, FeedAdapter.FeedItemViewH
 
     }
 
-    static class FeedItemViewHolder extends RecyclerView.ViewHolder {
+    class FeedItemViewHolder extends RecyclerView.ViewHolder {
         private SearchFeedItemBinding itemBinding;
 
         public FeedItemViewHolder(@NonNull SearchFeedItemBinding itemBinding) {
@@ -100,11 +101,21 @@ public class FeedAdapter extends ListAdapter<FeedItem, FeedAdapter.FeedItemViewH
 
         public void bind(int position, FeedItem item) {
             itemBinding.titleTv.setText(item.getTitle());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    item.setTitle(item.getTitle() + 1);
+                    notifyItemChanged(position);
+                    LogUtils.e("-->>notifyItemChanged ");
+                }
+            });
         }
 
-        public static FeedItemViewHolder create(ViewGroup parent) {
-            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            return new FeedItemViewHolder(SearchFeedItemBinding.inflate(layoutInflater, parent, false));
-        }
+    }
+
+    public FeedItemViewHolder create(ViewGroup parent) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        SearchFeedItemBinding inflate = SearchFeedItemBinding.inflate(layoutInflater, parent, false);
+        return new FeedItemViewHolder(inflate);
     }
 }
