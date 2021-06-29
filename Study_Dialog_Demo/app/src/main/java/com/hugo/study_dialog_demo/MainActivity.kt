@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+import android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationSet
@@ -44,6 +46,8 @@ class MainActivity : AppCompatActivity() {
         StatusBarUtil.setTranslucent(this)
 
         findViewById<View>(R.id.tv1).setOnClickListener {
+            // 不使用activity 弹出dialog
+            showNoTokenDialog()
             ToastUtils.showShort("点击了")
         }
         findViewById<View>(R.id.show_tv).setOnClickListener {
@@ -149,6 +153,22 @@ class MainActivity : AppCompatActivity() {
             LogUtils.e("-->>点击了tv2")
             showDialog()
         }
+    }
+
+    private fun showNoTokenDialog() {
+        //  java.lang.IllegalStateException: You need to use a Theme.AppCompat theme (or descendant) with this activity. 需要设置theme
+        var alertDialog: AlertDialog = AlertDialog.Builder(AppDelegate.getInstance().application,R.style.Theme_AppCompat_Light_Dialog_Alert)
+            .setTitle("这是标题")
+            .setPositiveButton("确定", object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    dialog?.dismiss()
+                }
+
+            })
+            .create()
+//        alertDialog.window!!.setType(TYPE_SYSTEM_ALERT)
+        alertDialog.window!!.setType(TYPE_APPLICATION_OVERLAY)
+        alertDialog.show()
     }
 
     private fun showDialog() {
