@@ -41,5 +41,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 .transparentStatusBar()
                 .init();
         binding.getRoot().setBackgroundResource(R.drawable.bg_welcome);*/
+
+        ListNode listNode1 = new ListNode(2);
+        ListNode listNode2 = new ListNode(1,listNode1);
+        ListNode listNode3 = new ListNode(1,listNode2);
+        Solution solution = new Solution();
+        solution.deleteDuplicates(listNode3);
     }
 }
