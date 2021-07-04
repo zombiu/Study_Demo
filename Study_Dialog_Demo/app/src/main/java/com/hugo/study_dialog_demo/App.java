@@ -8,6 +8,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
+        AppDelegate.getInstance().init(this);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {

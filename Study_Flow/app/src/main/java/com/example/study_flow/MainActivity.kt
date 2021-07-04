@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.example.study_flow.databinding.ActivityMainBinding
 import com.example.study_flow.utils.observeIn
 import com.example.study_flow.viewmodel.RoomViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
@@ -28,11 +28,14 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     //需要activity-ktx的支持
     private val roomViewModel: RoomViewModel by viewModels()
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        lifecycleScope.launchWhenStarted {
+        /*lifecycleScope.launchWhenStarted {
             roomViewModel.getFlow2().collect {
                 Log.e("-->>","接收到的数据1 ${it}")
             }
@@ -45,9 +48,25 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             roomViewModel.getFlow2().collect {
                 Log.e("-->>","接收到的数据2 ${it}")
             }
-            /*roomViewModel.getFlow2().onEach {
+            *//*roomViewModel.getFlow2().onEach {
                 Log.e("-->>observeIn","接收到的数据 ${it}")
-            }.observeIn(this@MainActivity)*/
+            }.observeIn(this@MainActivity)*//*
+        }*/
+
+        var launch = GlobalScope.launch {
+            Log.e("-->>","launch 开始")
+            delay(10000)
+            Log.e("-->>","launch 结束")
+        }
+
+        var async = GlobalScope.async {
+            Log.e("-->>","async 开始")
+            delay(10000)
+            Log.e("-->>","async 结束")
+        }
+
+        binding.tv1.setOnClickListener {
+            GlobalScope.cancel()
         }
     }
 }

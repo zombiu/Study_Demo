@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+import android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationSet
@@ -20,6 +22,7 @@ import com.bearever.async.chain.core.AsyncChainRunnable
 import com.bearever.async.chain.core.AsyncChainTask
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.gyf.immersionbar.ImmersionBar
 import com.hugo.study_dialog_demo.databinding.ActivityMainBinding
@@ -43,6 +46,8 @@ class MainActivity : AppCompatActivity() {
         StatusBarUtil.setTranslucent(this)
 
         findViewById<View>(R.id.tv1).setOnClickListener {
+            // 不使用activity 弹出dialog
+            showNoTokenDialog()
             ToastUtils.showShort("点击了")
         }
         findViewById<View>(R.id.show_tv).setOnClickListener {
@@ -150,12 +155,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun showNoTokenDialog() {
+        //  java.lang.IllegalStateException: You need to use a Theme.AppCompat theme (or descendant) with this activity. 需要设置theme
+        var alertDialog: AlertDialog = AlertDialog.Builder(AppDelegate.getInstance().application,R.style.Theme_AppCompat_Light_Dialog_Alert)
+            .setTitle("这是标题")
+            .setPositiveButton("确定", object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    dialog?.dismiss()
+                }
+
+            })
+            .create()
+//        alertDialog.window!!.setType(TYPE_SYSTEM_ALERT)
+        alertDialog.window!!.setType(TYPE_APPLICATION_OVERLAY)
+        alertDialog.show()
+    }
+
     private fun showDialog() {
         var build = AlertDialog.Builder(this, R.style.MyDialog)
         build.setView(R.layout.layout_dialog2)
         var dialog = build.create()
-        dialog.show()
+        // show之前，可以对宽度进行修改吗？
+        dialog.window?.decorView?.setBackgroundColor(resources.getColor(android.R.color.holo_green_light))
+        var attributes = dialog.window?.attributes!!
+        attributes.width = ScreenUtils.getScreenWidth()
+        dialog.window!!.attributes = attributes
 
+        dialog.show()
+        // show之后，可以对宽度进行修改
+
+        // 可以findview 针对view进行修改
     }
 
     fun showAnimation() {

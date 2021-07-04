@@ -1,6 +1,7 @@
 package com.hugo.study_dialog_demo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.Window;
 import com.blankj.utilcode.util.LogUtils;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hugo.study_dialog_demo.databinding.ActivityWelcomeBinding;
+import com.hugo.study_dialog_demo.utils.MyViewModel;
 
 /**
  * 闪屏页处理
@@ -17,6 +19,7 @@ import com.hugo.study_dialog_demo.databinding.ActivityWelcomeBinding;
 public class WelcomeActivity extends AppCompatActivity {
 
     ActivityWelcomeBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -28,7 +31,7 @@ public class WelcomeActivity extends AppCompatActivity {
         binding.goMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WelcomeActivity.this,MainActivity.class));
+                startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
             }
         });
 
@@ -42,10 +45,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 .init();
         binding.getRoot().setBackgroundResource(R.drawable.bg_welcome);*/
 
-        ListNode listNode1 = new ListNode(2);
-        ListNode listNode2 = new ListNode(1,listNode1);
-        ListNode listNode3 = new ListNode(1,listNode2);
-        Solution solution = new Solution();
-        solution.deleteDuplicates(listNode3);
+        //        ViewModelProviders弃用后最新用法
+        MyViewModel viewModelWithliveData = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(MyViewModel.class);
     }
 }
