@@ -1,4 +1,4 @@
-package com.hugo.study_dialog_demo;
+package com.hugo.study_dialog_demo.algo;
 
 /**
  * 82. 删除排序链表中的重复元素 II

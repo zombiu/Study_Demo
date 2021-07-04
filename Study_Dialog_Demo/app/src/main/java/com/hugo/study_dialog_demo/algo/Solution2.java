@@ -1,4 +1,4 @@
-package com.hugo.study_dialog_demo;
+package com.hugo.study_dialog_demo.algo;
 
 /**
  * Definition for singly-linked list.
@@ -18,6 +18,10 @@ class Solution2 {
      * @return
      */
     public ListNode deleteDuplicates(ListNode head) {
+        // 没有结点 或者 只有一个结点时
+        if (head == null || head.next == null) {
+            return head;
+        }
         // 这里主要是找出 head结点 和prev结点
         head = findNewHead(head);
 
@@ -32,9 +36,6 @@ class Solution2 {
     }
 
     public ListNode findNewHead(ListNode head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
         ListNode fast = head.next;
         ListNode slow = head;
         int delVal = -101;
