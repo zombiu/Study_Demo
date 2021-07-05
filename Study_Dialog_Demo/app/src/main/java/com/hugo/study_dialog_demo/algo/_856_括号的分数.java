@@ -49,7 +49,18 @@ public class _856_括号的分数 {
                         // 这里保存的就是 分数了
                         int score = (int) pop;
                         score = score * 2;
-                        stack.push(score);
+                        // 这里还需要pop一次，下面有可能是 '(' 、分数、 或者空
+                        if (!stack.isEmpty()) {
+                            Object pop1 = stack.peek();
+                            if (pop1 instanceof Integer) {
+                                pop1 = stack.pop();
+                                stack.push((int)pop1 + score);
+                            }else {
+                                stack.push(score);
+                            }
+                        }else {
+                            stack.push(score);
+                        }
                     }
                 }
             }

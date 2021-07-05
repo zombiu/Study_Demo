@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+//使用kapt依赖rxhttp-compiler时必须
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
@@ -112,4 +114,8 @@ dependencies {
 //    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:1.2.0'
 
     implementation "org.greenrobot:eventbus:3.0.0"
+
+//    implementation 'com.github.liujingxing.rxhttp:rxhttp:2.6.4'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1' //rxhttp v2.2.2版本起，需要手动依赖okhttp
+//    kapt 'com.github.liujingxing.rxhttp:rxhttp-compiler:2.6.4' //生成RxHttp类，纯Java项目，请使用annotationProcessor代替kapt
 }

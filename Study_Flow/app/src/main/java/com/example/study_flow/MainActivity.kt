@@ -1,5 +1,6 @@
 package com.example.study_flow
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -53,20 +54,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             }.observeIn(this@MainActivity)*//*
         }*/
 
-        var launch = GlobalScope.launch {
-            Log.e("-->>","launch 开始")
-            delay(10000)
-            Log.e("-->>","launch 结束")
-        }
 
-        var async = GlobalScope.async {
-            Log.e("-->>","async 开始")
-            delay(10000)
-            Log.e("-->>","async 结束")
-        }
 
         binding.tv1.setOnClickListener {
-            GlobalScope.cancel()
+//            GlobalScope.cancel()
+            startActivity(Intent(this,CancelCoroutineActivity::class.java))
         }
     }
 }

@@ -68,4 +68,8 @@ dependencies {
 //    implementation "androidx.activity:activity:$activity_version"
     // Kotlin
     implementation "androidx.activity:activity-ktx:$activity_version"
+    // Splitties 是一个非常地道的 Kotlin Android 辅助函数库
+    implementation("com.louiscad.splitties:splitties-fun-pack-android-appcompat:3.0.0-beta01")
+    implementation("com.louiscad.splitties:splitties-fun-pack-android-material-components-with-views-dsl:3.0.0-beta01")
+
 }
