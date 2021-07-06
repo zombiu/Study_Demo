@@ -10,50 +10,54 @@ public class _92_反转链表_II {
 
     /**
      * @param head
-     * @param left  开始时的结点的值 不是索引
+     * @param left  开始时的结点的值 不是索引，表示链表第几个元素 真坛蜜恶心
      * @param right 结束时的结点的值
      * @return
      */
     public ListNode reverseBetween(ListNode head, int left, int right) {
+        // 如果只有一个 结点需要反转 直接返回
+        if (left == right) {
+            return head;
+        }
         // 虚拟头结点一般用来应对边界检查
         ListNode newHead = new ListNode(-1, head);
         ListNode slow = newHead;
         ListNode fast = newHead.next;
-
+        // 需要反转的链表头
         ListNode tmpHead = null;
-        ListNode reverseStart = null;
-        ListNode reverseEnd = null;
+        ListNode reverseBefore = null;
+        ListNode reverseTail = null;
+        int count = 0;
         while (fast != null) {
-
+            count++;
             // 找到了 left 保存left之前的一个结点
-            if (fast.val == left) {
-                reverseStart = slow;
-                ListNode slowNext = slow.next;
+            if (count == left) {
+                // 反转之后的尾部
+                reverseTail = slow.next;
+                // 将开始反转的结点和之前的结点 断开
+                reverseBefore = slow;
                 slow.next = null;
-
-                slow = slowNext;
-                fast = fast.next;
-                continue;
             }
 
-            if (reverseStart != null) {
+            if (reverseBefore != null) {
                 ListNode tmp = fast;
                 fast = fast.next;
                 tmp.next = tmpHead;
+                // 反转之后的头结点
                 tmpHead = tmp;
+            } else {
+                fast = fast.next;
+                slow = slow.next;
             }
 
-            fast = fast.next;
-            slow = slow.next;
-
-            // 找到了right 保存right之后的结点
-            if (fast.val == right) {
-                reverseEnd = fast.next;
-
-
-                continue;
+            // 反转之后，检查反转头 是否是right结点，如果是 ，将反转之后的链表进行 与之前的链表进行连接
+            if (tmpHead != null && count == right) {
+                reverseBefore.next = tmpHead;
+                reverseTail.next = fast;
+                break;
             }
+
         }
-        return slow;
+        return newHead.next;
     }
 }
