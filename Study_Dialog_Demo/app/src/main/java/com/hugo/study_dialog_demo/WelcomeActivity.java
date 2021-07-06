@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.Window;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.gyf.immersionbar.ImmersionBar;
-import com.hugo.study_dialog_demo.algo._856_括号的分数;
+import com.hugo.study_dialog_demo.algo._707_设计链表_单链表;
+import com.hugo.study_dialog_demo.algo._707_设计链表_双向链表;
 import com.hugo.study_dialog_demo.databinding.ActivityWelcomeBinding;
 import com.hugo.study_dialog_demo.utils.MyViewModel;
 
@@ -49,8 +49,17 @@ public class WelcomeActivity extends AppCompatActivity {
         //        ViewModelProviders弃用后最新用法
         MyViewModel viewModelWithliveData = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(MyViewModel.class);
 
-        String test = "(()(()))";
-        _856_括号的分数 v = new _856_括号的分数();
-        LogUtils.e("-->>"+v.scoreOfParentheses(test));
+        _707_设计链表_双向链表.MyLinkedList myLinkedList = new _707_设计链表_双向链表.MyLinkedList();
+        myLinkedList.addAtHead(1);
+        LogUtils.e(myLinkedList.toString());
+        myLinkedList.addAtTail(3);
+        LogUtils.e(myLinkedList.toString());
+        myLinkedList.addAtIndex(1, 2);
+        LogUtils.e(myLinkedList.toString());
+         myLinkedList.get(1);
+        myLinkedList.deleteAtIndex(1);
+        LogUtils.e(myLinkedList.toString());
+        myLinkedList.get(1);
+        LogUtils.e(myLinkedList.toString());
     }
 }
