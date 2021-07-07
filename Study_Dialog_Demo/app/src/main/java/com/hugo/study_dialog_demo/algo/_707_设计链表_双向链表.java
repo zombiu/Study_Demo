@@ -125,28 +125,31 @@ public class _707_设计链表_双向链表 {
 
         /**
          * 这里的循环查找有点搞人，浪费了太多时间
+         *
          * @param index
          * @return
          */
         private ListNode node(int index) {
             int mid = size >> 1;
-            if (index >= mid) {
-                ListNode node = last;
-                if (index == size - 1) {
-                    return node;
-                }
-                // 注意：开始循环时， 就已经执行了一次  node = node.prev;
-                for (int i = size - 1; i > index; i--) {
-                    node = node.prev;
+            if (index < mid) {
+                ListNode node = first;
+                for (int i = 0; i <= index; i++) {
+                    if (i == index) {
+                        break;
+                    } else {
+                        node = node.next;
+                    }
                 }
                 return node;
             } else {
-                ListNode node = first;
-                if (index == 0) {
-                    return node;
-                }
-                for (int i = 1; i <= index; i++) {
-                    node = node.next;
+                // 这里为什么需要>=,因为size=2时，mid=1，当index=1时，从last开始遍历最优
+                ListNode node = last;
+                for (int i = size - 1; i >= index; i--) {
+                    if (i == index) {
+                        break;
+                    } else {
+                        node = node.prev;
+                    }
                 }
                 return node;
             }
