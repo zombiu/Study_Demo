@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.Window;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.hugo.study_dialog_demo.algo._707_设计链表_单链表;
 import com.hugo.study_dialog_demo.algo._707_设计链表_双向链表;
 import com.hugo.study_dialog_demo.databinding.ActivityWelcomeBinding;
 import com.hugo.study_dialog_demo.utils.MyViewModel;
@@ -50,16 +49,41 @@ public class WelcomeActivity extends AppCompatActivity {
         MyViewModel viewModelWithliveData = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(MyViewModel.class);
 
         _707_设计链表_双向链表.MyLinkedList myLinkedList = new _707_设计链表_双向链表.MyLinkedList();
-        myLinkedList.addAtHead(1);
+        /*myLinkedList.addAtHead(1);
         LogUtils.e(myLinkedList.toString());
         myLinkedList.addAtTail(3);
         LogUtils.e(myLinkedList.toString());
         myLinkedList.addAtIndex(1, 2);
         LogUtils.e(myLinkedList.toString());
-         myLinkedList.get(1);
+        LogUtils.e("-->>" + myLinkedList.get(1));
         myLinkedList.deleteAtIndex(1);
         LogUtils.e(myLinkedList.toString());
-        myLinkedList.get(1);
+        LogUtils.e("-->>" + myLinkedList.get(1));
+        LogUtils.e(myLinkedList.toString());*/
+
+        /*myLinkedList.addAtHead(2);
+        myLinkedList.deleteAtIndex(1);
+        myLinkedList.addAtHead(2);
+        myLinkedList.addAtHead(7);
+        myLinkedList.addAtHead(3);
+        myLinkedList.addAtHead(2);
+        myLinkedList.addAtHead(5);
+        myLinkedList.addAtTail(5);
         LogUtils.e(myLinkedList.toString());
+        LogUtils.e("-->>" + myLinkedList.get(5));
+        myLinkedList.deleteAtIndex(6);
+        myLinkedList.deleteAtIndex(4);*/
+
+        myLinkedList.addAtHead(0);
+        myLinkedList.addAtIndex(1, 1);
+        myLinkedList.addAtHead(4);
+        myLinkedList.addAtHead(4);
+        LogUtils.e(myLinkedList.toString());
+        LogUtils.e("-->>" + myLinkedList.get(2));
+        LogUtils.e(myLinkedList.toString());
+        LogUtils.e("-->>" + myLinkedList.get(3));
+        myLinkedList.addAtIndex(1, 6);
+        myLinkedList.addAtTail(1);
+        myLinkedList.addAtHead(0);
     }
 }

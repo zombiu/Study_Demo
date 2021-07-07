@@ -51,21 +51,14 @@ public class _707_设计链表_单链表 {
          * Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list.
          */
         public void addAtHead(int val) {
-            first = new ListNode(val, first);
-            size++;
+            addAtIndex(0, val);
         }
 
         /**
          * Append a node of value val to the last element of the linked list.
          */
         public void addAtTail(int val) {
-            if (size == 0) {
-                first = new ListNode(val);
-            } else {
-                ListNode node = node(size - 1);
-                node.next = new ListNode(val);
-            }
-            size++;
+            addAtIndex(size, val);
         }
 
         /**
@@ -73,14 +66,14 @@ public class _707_设计链表_单链表 {
          */
         public void addAtIndex(int index, int val) {
             if (index <= 0) {
-                addAtHead(val);
-                return;
+                first = new ListNode(val, first);
             } else if (index > size) {
                 return;
+            } else {
+                ListNode node = node(index - 1);
+                ListNode nextNode = node.next;
+                node.next = new ListNode(val, nextNode);
             }
-            ListNode node = node(index - 1);
-            ListNode nextNode = node.next;
-            node.next = new ListNode(val, nextNode);
             size++;
         }
 
@@ -102,9 +95,6 @@ public class _707_设计链表_单链表 {
         }
 
         private ListNode node(int index) {
-            /*if (index < 0 || index >= size) {
-                throw new ArrayIndexOutOfBoundsException("数组越界:size=" + size + ",index=" + index);
-            }*/
             ListNode node = first;
             if (index == 0) {
                 return node;

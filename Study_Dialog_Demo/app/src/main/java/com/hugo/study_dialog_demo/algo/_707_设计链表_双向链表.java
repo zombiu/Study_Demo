@@ -54,32 +54,14 @@ public class _707_设计链表_双向链表 {
          * Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list.
          */
         public void addAtHead(int val) {
-            ListNode oldFirst = this.first;
-            this.first = new ListNode(null, val, oldFirst);
-            // 只有一个元素时，first和last指向同一个元素
-            if (oldFirst == null) {
-                last = first;
-            } else {
-                oldFirst.prev = first;
-            }
-            size++;
+            addAtIndex(0, val);
         }
 
         /**
          * Append a node of value val to the last element of the linked list.
          */
         public void addAtTail(int val) {
-            // 为空时
-            if (size == 0) {
-                addAtHead(val);
-            } else {
-                // 获取最后一个元素
-                /*ListNode node = node(size - 1);
-                last = new ListNode(val);
-                node.next = last;
-                last.prev = node;*/
-                addAtIndex(size, val);
-            }
+            addAtIndex(size, val);
         }
 
         /**
@@ -87,17 +69,25 @@ public class _707_设计链表_双向链表 {
          */
         public void addAtIndex(int index, int val) {
             if (index <= 0) {
-                addAtHead(val);
-                return;
+                ListNode oldFirst = this.first;
+                this.first = new ListNode(null, val, oldFirst);
+                if (size == 0) {
+                    last = first;
+                } else {
+                    oldFirst.prev = first;
+                }
             } else if (index > size) {
                 return;
-            }
-            ListNode node = node(index - 1);
-            if (node == last) {
-                last = new ListNode(node, val, node.next);
-                node.next = last;
             } else {
-                node.next = new ListNode(node, val, node.next);
+                ListNode node = node(index - 1);
+                ListNode oldNextNode = node.next;
+                node.next = new ListNode(node, val, oldNextNode);
+                // 如果index == size -1, 那么oldNextNode == null
+                if (oldNextNode != null) {
+                    oldNextNode.prev = node.next;
+                } else {
+                    last = node.next;
+                }
             }
             size++;
         }
@@ -110,55 +100,53 @@ public class _707_设计链表_双向链表 {
                 return;
             }
             if (index == 0) {
-                first = first.next;
                 if (size == 1) {
+                    first = null;
                     last = null;
                 } else {
+                    ListNode oldFirst = this.first;
+                    this.first = oldFirst.next;
                     first.prev = null;
                 }
             } else {
-                // 要删除结点的前一个结点
-                ListNode node = node(index - 1);
-
-                ListNode delNode = node.next;
-                node.next = delNode.next;
+                ListNode node = node(index);
+                ListNode prevNode = node.prev;
+                prevNode.next = node.next;
+                node.prev = null;
                 if (index == size - 1) {
-                    last = node;
+                    last = prevNode;
                 } else {
-                    delNode.next.prev = node;
+                    node.next.prev = prevNode;
                 }
             }
+
             size--;
         }
 
+        /**
+         * 这里的循环查找有点搞人，浪费了太多时间
+         * @param index
+         * @return
+         */
         private ListNode node(int index) {
             int mid = size >> 1;
-            if (index > mid) {
-                // 从尾部往头部遍历
+            if (index >= mid) {
                 ListNode node = last;
-                for (int i = size - 1; i >= index; i--) {
-                    if (index == size - 1) {
-                        return node;
-                    } else {
-                        if (index == i) {
-                            return node;
-                        }
-                        node = node.prev;
-                    }
+                if (index == size - 1) {
+                    return node;
+                }
+                // 注意：开始循环时， 就已经执行了一次  node = node.prev;
+                for (int i = size - 1; i > index; i--) {
+                    node = node.prev;
                 }
                 return node;
             } else {
-                // 从头外尾部 遍历
                 ListNode node = first;
-                for (int i = 0; i <= index; i++) {
-                    if (index == 0) {
-                        return node;
-                    } else {
-                        if (index == i) {
-                            return node;
-                        }
-                        node = node.next;
-                    }
+                if (index == 0) {
+                    return node;
+                }
+                for (int i = 1; i <= index; i++) {
+                    node = node.next;
                 }
                 return node;
             }
