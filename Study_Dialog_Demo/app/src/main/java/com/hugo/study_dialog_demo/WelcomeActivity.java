@@ -11,6 +11,7 @@ import android.view.Window;
 import com.blankj.utilcode.util.LogUtils;
 import com.hugo.study_dialog_demo.algo._707_设计链表_双向链表;
 import com.hugo.study_dialog_demo.algo.link.LRUCache;
+import com.hugo.study_dialog_demo.algo.stack._150_逆波兰表达式求值;
 import com.hugo.study_dialog_demo.databinding.ActivityWelcomeBinding;
 import com.hugo.study_dialog_demo.utils.MyViewModel;
 
@@ -49,11 +50,6 @@ public class WelcomeActivity extends AppCompatActivity {
         //        ViewModelProviders弃用后最新用法
         MyViewModel viewModelWithliveData = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(MyViewModel.class);
 
-        LRUCache lruCache = new LRUCache(2);
-        lruCache.put(1,1);
-        lruCache.put(2,2);
-        LogUtils.e(lruCache.get(1));
-        lruCache.put(3,3);
-        LogUtils.e(lruCache.get(2));
+        _150_逆波兰表达式求值.INSTANCE.test();
     }
 }
