@@ -51,7 +51,6 @@ class Solution {
                     stackB.push(pop2)
                     stackA.push(pop3)
                 } else {
-                    stackB.pop()
                     if (plus == pop1) {
                         var i = pop2.toInt() + pop3.toInt()
                         stackA.push(i.toString())
@@ -73,6 +72,7 @@ class Solution {
                     }
                 }
             } else {
+                stackB.pop()
                 stackA.push(pop1)
             }
         }
