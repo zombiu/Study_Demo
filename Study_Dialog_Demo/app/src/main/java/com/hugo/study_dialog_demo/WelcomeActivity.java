@@ -11,6 +11,7 @@ import android.view.Window;
 import com.blankj.utilcode.util.LogUtils;
 import com.hugo.study_dialog_demo.algo._707_设计链表_双向链表;
 import com.hugo.study_dialog_demo.algo.link.LRUCache;
+import com.hugo.study_dialog_demo.algo.queue.MyCircularDeque;
 import com.hugo.study_dialog_demo.algo.queue.MyCircularQueue;
 import com.hugo.study_dialog_demo.algo.stack._150_逆波兰表达式求值;
 import com.hugo.study_dialog_demo.databinding.ActivityWelcomeBinding;
@@ -51,15 +52,9 @@ public class WelcomeActivity extends AppCompatActivity {
         //        ViewModelProviders弃用后最新用法
         MyViewModel viewModelWithliveData = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(MyViewModel.class);
 
-        MyCircularQueue myCircularQueue = new MyCircularQueue(8);
-        myCircularQueue.enQueue(3);
-        myCircularQueue.enQueue(9);
-        myCircularQueue.enQueue(5);
-        myCircularQueue.enQueue(0);
-        myCircularQueue.deQueue();
-        LogUtils.e("-->>", myCircularQueue.toString());
-        myCircularQueue.deQueue();
-        LogUtils.e("-->>", myCircularQueue.toString());
-
+        MyCircularDeque myCircularDeque = new MyCircularDeque(52);
+        myCircularDeque.insertFront(80);
+        myCircularDeque.insertFront(27);
+        myCircularDeque.deleteLast();
     }
 }
