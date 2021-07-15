@@ -36,5 +36,33 @@ class _104_二叉树的最大深度 {
             }
             return depth
         }
+
+        fun maxDepth2(root: TreeNode?): Int {
+            if (root == null) {
+                return 0
+            }
+            var depth = 0
+            var queueA: Queue<TreeNode> = LinkedList()
+            queueA.offer(root)
+            // 记录每层的结点数量 第一层 只有一个根结点 数量为1
+            var size = 1
+            while (!queueA.isEmpty()) {
+                var poll = queueA.poll()
+                size--
+
+                poll.left?.let {
+                    queueA.offer(it)
+                }
+                poll.right?.let {
+                    queueA.offer(it)
+                }
+                // 当前层数 的结点已遍历完 深度+1 记录下一层结点的数量
+                if (size == 0) {
+                    size = queueA.size
+                    depth++
+                }
+            }
+            return depth
+        }
     }
 }
