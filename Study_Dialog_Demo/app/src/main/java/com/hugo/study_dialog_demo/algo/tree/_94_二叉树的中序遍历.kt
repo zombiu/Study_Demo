@@ -56,9 +56,6 @@ class _94_二叉树的中序遍历 {
                 } else {
                     var pop = stack.pop()
                     node = pop.right
-                    node?.let{
-                        stack.push(it)
-                    }
                     list.add(pop.`val`)
                 }
             }

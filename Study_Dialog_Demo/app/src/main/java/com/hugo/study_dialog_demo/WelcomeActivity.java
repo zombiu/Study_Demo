@@ -17,6 +17,7 @@ import com.hugo.study_dialog_demo.algo.stack._150_逆波兰表达式求值;
 import com.hugo.study_dialog_demo.algo.tree.TreeNode;
 import com.hugo.study_dialog_demo.algo.tree._297_二叉树的序列化与反序列化;
 import com.hugo.study_dialog_demo.algo.tree._98_验证二叉搜索树;
+import com.hugo.study_dialog_demo.algo.tree._99_恢复二叉搜索树;
 import com.hugo.study_dialog_demo.databinding.ActivityWelcomeBinding;
 import com.hugo.study_dialog_demo.utils.MyViewModel;
 
@@ -55,17 +56,16 @@ public class WelcomeActivity extends AppCompatActivity {
         //        ViewModelProviders弃用后最新用法
         MyViewModel viewModelWithliveData = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(MyViewModel.class);
 
-        TreeNode treeNode1 = new TreeNode(5);
+        TreeNode treeNode1 = new TreeNode(3);
         TreeNode treeNode2 = new TreeNode(1);
         TreeNode treeNode3 = new TreeNode(4);
-        TreeNode treeNode4 = new TreeNode(3);
-        TreeNode treeNode5 = new TreeNode(6);
+        TreeNode treeNode4 = new TreeNode(2);
+
         treeNode1.setLeft(treeNode2);
         treeNode1.setRight(treeNode3);
         treeNode3.setLeft(treeNode4);
-        treeNode3.setRight(treeNode5);
 
-        _98_验证二叉搜索树.Solution solution = new _98_验证二叉搜索树.Solution();
-        solution.isValidBST(treeNode1);
+        _99_恢复二叉搜索树.Solution solution = new _99_恢复二叉搜索树.Solution();
+        solution.recoverTree(treeNode1);
     }
 }
