@@ -3,6 +3,7 @@
     package="com.hugo.study_dialog_demo">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name="App"

@@ -21,6 +21,9 @@ import com.hugo.study_dialog_demo.algo.tree._99_恢复二叉搜索树;
 import com.hugo.study_dialog_demo.databinding.ActivityWelcomeBinding;
 import com.hugo.study_dialog_demo.utils.MyViewModel;
 
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+
 /**
  * 闪屏页处理
  */
@@ -67,5 +70,15 @@ public class WelcomeActivity extends AppCompatActivity {
 
         _99_恢复二叉搜索树.Solution solution = new _99_恢复二叉搜索树.Solution();
         solution.recoverTree(treeNode1);
+
+//        BasicHttpParams basicHttpParams = new BasicHttpParams();
+//        DefaultHttpClient httpClient = new DefaultHttpClient();
+        String s = new String();
+        try {
+            // https://blog.csdn.net/u013270444/article/details/99318797 从Android P开始，org.apache.http.legacy 库将从 bootclasspath 中删除。 https://www.cnblogs.com/renhui/p/9798335.html
+            Class<?> aClass = s.getClass().getClassLoader().loadClass("org.apache.http.params.BasicHttpParams");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
