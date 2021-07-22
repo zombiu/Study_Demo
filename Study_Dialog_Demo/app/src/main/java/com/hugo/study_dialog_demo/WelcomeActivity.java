@@ -15,6 +15,7 @@ import com.hugo.study_dialog_demo.algo.queue.MyCircularDeque;
 import com.hugo.study_dialog_demo.algo.queue.MyCircularQueue;
 import com.hugo.study_dialog_demo.algo.stack._150_逆波兰表达式求值;
 import com.hugo.study_dialog_demo.algo.tree.TreeNode;
+import com.hugo.study_dialog_demo.algo.tree._138_复制带随机指针的链表;
 import com.hugo.study_dialog_demo.algo.tree._297_二叉树的序列化与反序列化;
 import com.hugo.study_dialog_demo.algo.tree._958_二叉树的完全性检验;
 import com.hugo.study_dialog_demo.algo.tree._98_验证二叉搜索树;
@@ -94,5 +95,15 @@ public class WelcomeActivity extends AppCompatActivity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        _138_复制带随机指针的链表.Node node1 = new _138_复制带随机指针的链表.Node(3);
+        _138_复制带随机指针的链表.Node node2 = new _138_复制带随机指针的链表.Node(3);
+        _138_复制带随机指针的链表.Node node3 = new _138_复制带随机指针的链表.Node(3);
+        node1.setNext(node2);
+        node2.setNext(node3);
+        node2.setRandom(node1);
+
+        _138_复制带随机指针的链表.Solution solution1 = new _138_复制带随机指针的链表.Solution();
+        solution1.copyRandomList(node1);
     }
 }
