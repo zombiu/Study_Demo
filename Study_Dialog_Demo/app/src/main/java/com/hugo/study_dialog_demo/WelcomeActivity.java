@@ -15,6 +15,7 @@ import com.hugo.study_dialog_demo.algo.queue.MyCircularDeque;
 import com.hugo.study_dialog_demo.algo.queue.MyCircularQueue;
 import com.hugo.study_dialog_demo.algo.stack._150_逆波兰表达式求值;
 import com.hugo.study_dialog_demo.algo.tree.TreeNode;
+import com.hugo.study_dialog_demo.algo.tree._101_对称二叉树;
 import com.hugo.study_dialog_demo.algo.tree._138_复制带随机指针的链表;
 import com.hugo.study_dialog_demo.algo.tree._297_二叉树的序列化与反序列化;
 import com.hugo.study_dialog_demo.algo.tree._958_二叉树的完全性检验;
@@ -70,7 +71,7 @@ public class WelcomeActivity extends AppCompatActivity {
         //        ViewModelProviders弃用后最新用法
         MyViewModel viewModelWithliveData = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(MyViewModel.class);
 
-        TreeNode treeNode1 = new TreeNode(1);
+        /*TreeNode treeNode1 = new TreeNode(1);
         TreeNode treeNode2 = new TreeNode(2);
         TreeNode treeNode3 = new TreeNode(3);
         TreeNode treeNode4 = new TreeNode(4);
@@ -84,7 +85,7 @@ public class WelcomeActivity extends AppCompatActivity {
         treeNode3.setRight(treeNode7);
 
         _958_二叉树的完全性检验.Solution solution = new _958_二叉树的完全性检验.Solution();
-        LogUtils.e("-->>" + solution.isCompleteTree(treeNode1));
+        LogUtils.e("-->>" + solution.isCompleteTree(treeNode1));*/
 
 //        BasicHttpParams basicHttpParams = new BasicHttpParams();
 //        DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -105,5 +106,21 @@ public class WelcomeActivity extends AppCompatActivity {
 
         _138_复制带随机指针的链表.Solution solution1 = new _138_复制带随机指针的链表.Solution();
         solution1.copyRandomList(node1);
+
+        TreeNode treeNode1 = new TreeNode(1);
+        TreeNode treeNode2 = new TreeNode(2);
+        TreeNode treeNode3 = new TreeNode(2);
+        TreeNode treeNode4 = new TreeNode(3);
+        TreeNode treeNode5 = new TreeNode(4);
+        TreeNode treeNode7 = new TreeNode(4);
+        TreeNode treeNode8 = new TreeNode(3);
+        treeNode1.setLeft(treeNode2);
+        treeNode1.setRight(treeNode3);
+        treeNode2.setLeft(treeNode4);
+        treeNode2.setRight(treeNode5);
+        treeNode3.setLeft(treeNode7);
+        treeNode3.setRight(treeNode8);
+        _101_对称二叉树.Solution solution2 = new _101_对称二叉树.Solution();
+        solution2.isSymmetric(treeNode1);
     }
 }
