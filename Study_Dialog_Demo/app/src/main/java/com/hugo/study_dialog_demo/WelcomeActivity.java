@@ -10,6 +10,9 @@ import android.view.Window;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.hugo.study_dialog_demo.algo._707_设计链表_双向链表;
+import com.hugo.study_dialog_demo.algo.dp._118_杨辉三角;
+import com.hugo.study_dialog_demo.algo.dp._518_零钱兑换_II;
+import com.hugo.study_dialog_demo.algo.dp._63_不同路径_II;
 import com.hugo.study_dialog_demo.algo.link.LRUCache;
 import com.hugo.study_dialog_demo.algo.queue.MyCircularDeque;
 import com.hugo.study_dialog_demo.algo.queue.MyCircularQueue;
@@ -122,5 +125,9 @@ public class WelcomeActivity extends AppCompatActivity {
         treeNode3.setRight(treeNode8);
         _101_对称二叉树.Solution solution2 = new _101_对称二叉树.Solution();
         solution2.isSymmetric(treeNode1);
+
+        _63_不同路径_II.Solution solution = new _63_不同路径_II.Solution();
+        int[][] arrArr = new int[][]{{0, 0, 0}, {0, 1, 0}, {0, 0, 0}};
+        solution.uniquePathsWithObstacles(arrArr);
     }
 }
