@@ -11,6 +11,7 @@ import android.view.Window;
 import com.blankj.utilcode.util.LogUtils;
 import com.hugo.study_dialog_demo.algo._707_设计链表_双向链表;
 import com.hugo.study_dialog_demo.algo.dp._118_杨辉三角;
+import com.hugo.study_dialog_demo.algo.dp._213_打家劫舍_II;
 import com.hugo.study_dialog_demo.algo.dp._518_零钱兑换_II;
 import com.hugo.study_dialog_demo.algo.dp._63_不同路径_II;
 import com.hugo.study_dialog_demo.algo.link.LRUCache;
@@ -27,8 +28,8 @@ import com.hugo.study_dialog_demo.algo.tree._99_恢复二叉搜索树;
 import com.hugo.study_dialog_demo.databinding.ActivityWelcomeBinding;
 import com.hugo.study_dialog_demo.utils.MyViewModel;
 
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
+//import org.apache.http.impl.client.DefaultHttpClient;
+//import org.apache.http.params.BasicHttpParams;
 
 /**
  * 闪屏页处理
@@ -126,8 +127,8 @@ public class WelcomeActivity extends AppCompatActivity {
         _101_对称二叉树.Solution solution2 = new _101_对称二叉树.Solution();
         solution2.isSymmetric(treeNode1);
 
-        _63_不同路径_II.Solution solution = new _63_不同路径_II.Solution();
-        int[][] arrArr = new int[][]{{0, 0, 0}, {0, 1, 0}, {0, 0, 0}};
-        solution.uniquePathsWithObstacles(arrArr);
+        _213_打家劫舍_II.Solution solution = new _213_打家劫舍_II.Solution();
+        int[] arr = new int[]{1,2,3,1};
+        solution.rob(arr);
     }
 }
