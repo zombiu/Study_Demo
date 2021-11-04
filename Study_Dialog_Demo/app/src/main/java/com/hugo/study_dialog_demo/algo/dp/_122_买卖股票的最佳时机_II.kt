@@ -7,7 +7,7 @@ package com.hugo.study_dialog_demo.algo.dp
 class _122_买卖股票的最佳时机_II {
     // dp[i] 表示 以i结尾的 连续上升子串 的利润
     class Solution {
-        // 测试用例 6,1,3,2,4,7
+        // 测试用例 [6,1,3,2,4,7]
         fun maxProfit(prices: IntArray): Int {
             var n = prices.size
             var dp = IntArray(n)
