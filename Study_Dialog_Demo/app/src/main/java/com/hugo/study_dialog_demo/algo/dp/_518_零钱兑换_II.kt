@@ -10,26 +10,33 @@ import java.util.*
 class _518_零钱兑换_II {
     class Solution {
         fun change(amount: Int, coins: IntArray): Int {
-            Arrays.sort(coins)
-            // 确定状态 dp[i] 表示 凑够总额i 一共有多少种方法
-            // 状态转移方程 f(x) = f(x - 5) + f(x -2)
-            var dp = IntArray(amount + 1)
-//            // 初始化 凑够总额0 有一种方法
-//            dp[0] = 1
-            for (i in 1 until dp.size) {
-                var num = 0
-                for (j in coins.indices) {
-                    if (i < coins[j]) {
-                        dp[i] = 0
-                    } else if (i == coins[j]) {
-                        num += 1
-                    } else if (i > coins[j]) {
-                        num += dp[i - coins[j]]
-                    }
-                }
-                dp[i] = num
+            if (amount == 0) {
+                return 1
             }
-            return dp[amount]
+            Arrays.sort(coins)
+            // 确定状态 dp[i][j] 表示 使用前i个面值的硬币，凑够总额j 一共有多少种方法
+            // 这里有三种情况
+            // 1.第i个硬币面值大于需要凑够的总额j，那么就不能选第i个硬币，前i个硬币凑够总额j的方法数就等于前i-1个硬币的方法数
+            // 2.第i个硬币面值等于需要凑够的总额j，那么前i个硬币凑够总额j的方法数就等于前i-1个硬币的方法数 再加1
+            // 3.第i个硬币面值小于需要凑够的总额j,那么    dp[i][j] = dp[i - 1][j] + dp[i][j - coins[i - 1]]
+            var m = coins.size
+            var dp = Array(m + 1) {
+                IntArray(amount + 1)
+            }
+            for (i in 1 .. m) {
+                for (j in 1..amount) {
+                    if (coins[i - 1] == j) {
+                        dp[i][j] = dp[i - 1][j] + 1
+                    } else if (j > coins[i -1]) {
+                        dp[i][j] = dp[i - 1][j] + dp[i][j - coins[i - 1]]
+                    } else {
+//                        j < coins[i])
+                        dp[i][j] = dp[i - 1][j]
+                    }
+
+                }
+            }
+            return dp[m][amount]
         }
     }
 }
