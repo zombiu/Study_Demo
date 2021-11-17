@@ -23,11 +23,11 @@ class _518_零钱兑换_II {
             var dp = Array(m + 1) {
                 IntArray(amount + 1)
             }
-            for (i in 1 .. m) {
+            for (i in 1..m) {
                 for (j in 1..amount) {
                     if (coins[i - 1] == j) {
                         dp[i][j] = dp[i - 1][j] + 1
-                    } else if (j > coins[i -1]) {
+                    } else if (j > coins[i - 1]) {
                         dp[i][j] = dp[i - 1][j] + dp[i][j - coins[i - 1]]
                     } else {
 //                        j < coins[i])
@@ -39,4 +39,5 @@ class _518_零钱兑换_II {
             return dp[m][amount]
         }
     }
+
 }
