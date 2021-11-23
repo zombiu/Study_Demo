@@ -9,7 +9,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -33,12 +33,15 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
 
+
 // copy类型
-/*task makeJar(type: Copy) {
+// 路径有可能是 build/intermediates/packaged-classes/release
+// 也有可能是 build/intermediates/aar_main_jar/release 要看具体的gradle版本 然后进行修改
+task copyJar(type: Copy) {
     //删除存在的
     delete 'build/libs/mysdk.jar'
     //设置拷贝的文件
-    from('build/intermediates/packaged-classes/debug/classes.jar')
+    from('build/intermediates/aar_main_jar/release')
     //打进jar包后的文件目录
     into('build/libs/')
     //将classes.jar放入build/libs/目录下
@@ -46,14 +49,14 @@ dependencies {
     //（我们只关心classes.jar这个文件）
     include('classes.jar')
     //重命名
-    rename ('classes.jar', 'mysdk.jar')
+    rename ('classes.jar', "mySdk_${android.defaultConfig.versionName}.jar")
 }
 
-makeJar.dependsOn(build)*/
+copyJar.dependsOn(build)
 
 // type 这里将 Copy 改成了 Jar
 task makeJar(type: Jar) {
-    archiveName = 'mysdk.jar'
+    archiveName = "mySdk_${android.defaultConfig.versionName}.jar"
     //删除存在的
     delete 'build/libs/mysdk.jar'
     //设置拷贝的文件
