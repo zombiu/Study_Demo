@@ -32,3 +32,54 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
+
+// copy类型
+/*task makeJar(type: Copy) {
+    //删除存在的
+    delete 'build/libs/mysdk.jar'
+    //设置拷贝的文件
+    from('build/intermediates/packaged-classes/debug/classes.jar')
+    //打进jar包后的文件目录
+    into('build/libs/')
+    //将classes.jar放入build/libs/目录下
+    //include ,exclude参数来设置过滤
+    //（我们只关心classes.jar这个文件）
+    include('classes.jar')
+    //重命名
+    rename ('classes.jar', 'mysdk.jar')
+}
+
+makeJar.dependsOn(build)*/
+
+// type 这里将 Copy 改成了 Jar
+task makeJar(type: Jar) {
+    archiveName = 'mysdk.jar'
+    //删除存在的
+    delete 'build/libs/mysdk.jar'
+    //设置拷贝的文件
+    from('build/intermediates/javac/release/classes')
+    destinationDir = file('build/libs')
+}
+makeJar.dependsOn(build)
+
+
+//task jarMyLib(type: Jar, dependsOn: ['build']) {
+//    archiveName = 'smarter.jar'
+//    from('build/intermediates/javac/release/classes')
+//    destinationDir = file('build/libs')
+////    exclude('android')//去掉android这个文件夹
+////    exclude('com/smarter/mylibrary/BuildConfig.class')
+////    exclude('com/smarter/mylibrary/BuildConfig\$*.class')
+////    exclude('**/R.class')
+////    exclude('**/R\$*.class')
+//    /*manifest {
+//        attributes(
+//                'Implementation-Title': "${project.name}",
+//                'Implementation-Version': "${version}",
+//                'Built-Date': new Date().getDateTimeString(),
+//                'Built-With':
+//                        "gradle-${project.getGradle().getGradleVersion()},groovy-${GroovySystem.getVersion()}",
+//                'Created-By':
+//                        'Java ' + System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')')
+//    }*/
+//}

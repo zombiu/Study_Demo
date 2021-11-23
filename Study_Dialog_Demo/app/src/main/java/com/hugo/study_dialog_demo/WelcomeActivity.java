@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
@@ -13,6 +14,7 @@ import com.hugo.study_dialog_demo.algo._707_设计链表_双向链表;
 import com.hugo.study_dialog_demo.algo.dp._118_杨辉三角;
 import com.hugo.study_dialog_demo.algo.dp._213_打家劫舍_II;
 import com.hugo.study_dialog_demo.algo.dp._518_零钱兑换_II;
+import com.hugo.study_dialog_demo.algo.dp._5_最长回文子串;
 import com.hugo.study_dialog_demo.algo.dp._63_不同路径_II;
 import com.hugo.study_dialog_demo.algo.link.LRUCache;
 import com.hugo.study_dialog_demo.algo.queue.MyCircularDeque;
@@ -130,5 +132,8 @@ public class WelcomeActivity extends AppCompatActivity {
         _213_打家劫舍_II.Solution solution = new _213_打家劫舍_II.Solution();
         int[] arr = new int[]{1,2,3,1};
         solution.rob(arr);
+
+        _5_最长回文子串.Solution solution3 = new _5_最长回文子串.Solution();
+        Log.e("-->>","--" + solution3.longestPalindrome("aacabdkacaa"));
     }
 }
