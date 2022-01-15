@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-import android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationSet
@@ -26,8 +25,9 @@ import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.gyf.immersionbar.ImmersionBar
 import com.hugo.study_dialog_demo.databinding.ActivityMainBinding
+import com.hugo.study_dialog_demo.proxy.CallBox
+import com.hugo.study_dialog_demo.proxy.Callback
 import com.hugo.study_dialog_demo.task.ActionChain
-import com.hugo.study_dialog_demo.task.RealAction
 import com.jaeger.library.StatusBarUtil
 import im.yixin.ui.dialog.CommonDialog
 
@@ -152,12 +152,30 @@ class MainActivity : AppCompatActivity() {
         binding.tv2.setOnClickListener {
             LogUtils.e("-->>点击了tv2")
             showDialog()
+            CallBox.getService(Callback::class.java).call("msg " + System.currentTimeMillis())
         }
+
+        CallBox.register(Callback::class.java, object : Callback {
+            override fun call(event: String) {
+                LogUtils.e("-->>", "回调1=$event")
+            }
+
+        })
+
+        CallBox.register(Callback::class.java, object : Callback {
+            override fun call(event: String) {
+                LogUtils.e("-->>", "回调2=$event")
+            }
+
+        })
     }
 
     private fun showNoTokenDialog() {
         //  java.lang.IllegalStateException: You need to use a Theme.AppCompat theme (or descendant) with this activity. 需要设置theme
-        var alertDialog: AlertDialog = AlertDialog.Builder(AppDelegate.getInstance().application,R.style.Theme_AppCompat_Light_Dialog_Alert)
+        var alertDialog: AlertDialog = AlertDialog.Builder(
+            AppDelegate.getInstance().application,
+            R.style.Theme_AppCompat_Light_Dialog_Alert
+        )
             .setTitle("这是标题")
             .setPositiveButton("确定", object : DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface?, which: Int) {
