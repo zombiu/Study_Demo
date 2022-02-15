@@ -29,6 +29,7 @@ import com.hugo.study_dialog_demo.algo.tree._98_验证二叉搜索树;
 import com.hugo.study_dialog_demo.algo.tree._99_恢复二叉搜索树;
 import com.hugo.study_dialog_demo.databinding.ActivityWelcomeBinding;
 import com.hugo.study_dialog_demo.proxy.Callback;
+import com.hugo.study_dialog_demo.ui.SectionActivity;
 import com.hugo.study_dialog_demo.utils.MyViewModel;
 
 //import org.apache.http.impl.client.DefaultHttpClient;
@@ -62,6 +63,13 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+            }
+        });
+
+        binding.goAppList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(WelcomeActivity.this, SectionActivity.class));
             }
         });
 

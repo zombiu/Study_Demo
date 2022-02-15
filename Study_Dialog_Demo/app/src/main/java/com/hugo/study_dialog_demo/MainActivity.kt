@@ -27,6 +27,7 @@ import com.gyf.immersionbar.ImmersionBar
 import com.hugo.study_dialog_demo.databinding.ActivityMainBinding
 import com.hugo.study_dialog_demo.proxy.CallBox
 import com.hugo.study_dialog_demo.proxy.Callback
+import com.hugo.study_dialog_demo.proxy.OnItemChildListener
 import com.hugo.study_dialog_demo.task.ActionChain
 import com.jaeger.library.StatusBarUtil
 import im.yixin.ui.dialog.CommonDialog
@@ -153,6 +154,7 @@ class MainActivity : AppCompatActivity() {
             LogUtils.e("-->>点击了tv2")
             showDialog()
             CallBox.getService(Callback::class.java).call("msg " + System.currentTimeMillis())
+//            CallBox.getService(OnItemChildListener::class.java).register()
         }
 
         CallBox.register(Callback::class.java, object : Callback {
