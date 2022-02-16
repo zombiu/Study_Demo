@@ -12,6 +12,6 @@ public class CallBox {
     }
 
     public static void unregister(Class cls, Object func) {
-        BoxCore.getInstance().register(cls, func);
+        BoxCore.getInstance().unregister(cls, func);
     }
 }

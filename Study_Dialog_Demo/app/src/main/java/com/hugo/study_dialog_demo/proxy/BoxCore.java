@@ -55,6 +55,11 @@ class BoxCore {
         proxyInvocation.addObserver(func);
     }
 
+    /**
+     * 取消注册
+     * @param cls
+     * @param func
+     */
     public synchronized void unregister(Class cls, Object func) {
         if (cls == null && func == null) {
             return;
