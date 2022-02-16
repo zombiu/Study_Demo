@@ -54,4 +54,19 @@ class BoxCore {
         }
         proxyInvocation.addObserver(func);
     }
+
+    public synchronized void unregister(Class cls, Object func) {
+        if (cls == null && func == null) {
+            return;
+        }
+        Class<?> funcClass = func.getClass();
+        if (!cls.isInstance(func)) {
+            throw new IllegalArgumentException(String.format("func must be %s type , " + "but func type is %s", cls.getName(), funcClass.getName()));
+        }
+        ProxyInvocation proxyInvocation = proxyInvocationMap.get(cls);
+        if (proxyInvocation == null) {
+            return;
+        }
+        proxyInvocation.addObserver(func);
+    }
 }

@@ -7,7 +7,11 @@ public class CallBox {
     }
 
 
-    public static synchronized void register(Class cls, Object func) {
+    public static void register(Class cls, Object func) {
+        BoxCore.getInstance().register(cls, func);
+    }
+
+    public static void unregister(Class cls, Object func) {
         BoxCore.getInstance().register(cls, func);
     }
 }

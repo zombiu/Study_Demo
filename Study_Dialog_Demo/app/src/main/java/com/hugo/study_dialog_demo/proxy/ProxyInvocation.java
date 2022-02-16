@@ -3,13 +3,15 @@ package com.hugo.study_dialog_demo.proxy;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 class ProxyInvocation implements InvocationHandler {
     Object proxyService;
     private Class cType;
-    private Set<ObjectHolder> observers = new HashSet<>();
+    private Map<Object, ObjectHolder> observers = new HashMap<>();
 
 
     public ProxyInvocation(Class interfaceType) {
@@ -19,7 +21,7 @@ class ProxyInvocation implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        for (ObjectHolder objectHolder : observers) {
+        for (ObjectHolder objectHolder : observers.values()) {
             if (cType.isInstance(objectHolder.getObserver())) {
                 try {
                     Method observerMethod = objectHolder.getMethod(method);
@@ -34,6 +36,10 @@ class ProxyInvocation implements InvocationHandler {
 
     public synchronized void addObserver(Object observer) {
         ObjectHolder objectHolder = new ObjectHolder(observer);
-        observers.add(objectHolder);
+        observers.put(observer, objectHolder);
+    }
+
+    public synchronized void removeObserver(Object observer) {
+        observers.remove(observer);
     }
 }

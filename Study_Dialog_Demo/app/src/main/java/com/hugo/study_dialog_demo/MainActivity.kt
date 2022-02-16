@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.tv2.setOnClickListener {
             LogUtils.e("-->>点击了tv2")
-            showDialog()
+//            showDialog()
             CallBox.getService(Callback::class.java).call("msg " + System.currentTimeMillis())
 //            CallBox.getService(OnItemChildListener::class.java).register()
         }
