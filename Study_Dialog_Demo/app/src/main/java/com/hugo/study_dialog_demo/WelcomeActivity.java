@@ -9,27 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
-import com.blankj.utilcode.util.LogUtils;
-import com.hugo.study_dialog_demo.algo._707_设计链表_双向链表;
-import com.hugo.study_dialog_demo.algo.dp._118_杨辉三角;
 import com.hugo.study_dialog_demo.algo.dp._213_打家劫舍_II;
-import com.hugo.study_dialog_demo.algo.dp._518_零钱兑换_II;
 import com.hugo.study_dialog_demo.algo.dp._5_最长回文子串;
-import com.hugo.study_dialog_demo.algo.dp._63_不同路径_II;
-import com.hugo.study_dialog_demo.algo.link.LRUCache;
-import com.hugo.study_dialog_demo.algo.queue.MyCircularDeque;
-import com.hugo.study_dialog_demo.algo.queue.MyCircularQueue;
-import com.hugo.study_dialog_demo.algo.stack._150_逆波兰表达式求值;
 import com.hugo.study_dialog_demo.algo.tree.TreeNode;
 import com.hugo.study_dialog_demo.algo.tree._101_对称二叉树;
 import com.hugo.study_dialog_demo.algo.tree._138_复制带随机指针的链表;
-import com.hugo.study_dialog_demo.algo.tree._297_二叉树的序列化与反序列化;
-import com.hugo.study_dialog_demo.algo.tree._958_二叉树的完全性检验;
-import com.hugo.study_dialog_demo.algo.tree._98_验证二叉搜索树;
-import com.hugo.study_dialog_demo.algo.tree._99_恢复二叉搜索树;
 import com.hugo.study_dialog_demo.databinding.ActivityWelcomeBinding;
-import com.hugo.study_dialog_demo.proxy.Callback;
-import com.hugo.study_dialog_demo.ui.SectionActivity;
+import com.hugo.study_dialog_demo.ui.section1.SectionActivity;
+import com.hugo.study_dialog_demo.ui.section2.Section2Activity;
 import com.hugo.study_dialog_demo.utils.MyViewModel;
 
 //import org.apache.http.impl.client.DefaultHttpClient;
@@ -73,6 +60,12 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
+        binding.goAppList2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(WelcomeActivity.this, Section2Activity.class));
+            }
+        });
         //第一种方式 闪屏页防止背景被拉伸的处理
         getWindow().setBackgroundDrawableResource(R.drawable.bg_welcome);
 //        getWindow().setBackgroundDrawableResource(android.R.color.darker_gray);
