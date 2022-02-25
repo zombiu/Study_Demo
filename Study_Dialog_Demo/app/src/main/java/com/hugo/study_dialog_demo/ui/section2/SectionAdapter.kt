@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.entity.SectionEntity
-import com.hugo.study_dialog_demo.databinding.ActivitySectionBinding
 import com.hugo.study_dialog_demo.databinding.DefSectionHeadBinding
 import com.hugo.study_dialog_demo.databinding.ItemSectionContentBinding
 import com.hugo.study_dialog_demo.ui.section1.MySection
@@ -13,6 +12,7 @@ import java.util.*
 
 class SectionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var data = Collections.emptyList<MySection>()
+    var onItemClickListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == SectionEntity.HEADER_TYPE) {
@@ -33,7 +33,11 @@ class SectionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
+        if (holder is Header) {
+            holder.refresh(this, position, data.get(position))
+        } else if (holder is AppType) {
+            holder.refresh(this, position)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -55,12 +59,26 @@ class SectionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class Header(var binding: DefSectionHeadBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun refresh() {
-            binding.header
+        fun refresh(sectionAdapter: SectionAdapter, position: Int, section: MySection) {
+            if (sectionAdapter.onItemClickListener != null) {
+                itemView.setOnClickListener {
+                    sectionAdapter.onItemClickListener?.onClick(it, position)
+                }
+            }
         }
     }
 
     class AppType(var binding: ItemSectionContentBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun refresh(sectionAdapter: SectionAdapter, position: Int) {
+            if (sectionAdapter.onItemClickListener != null) {
+                itemView.setOnClickListener {
+                    sectionAdapter.onItemClickListener?.onClick(it, position)
+                }
+            }
+        }
+    }
 
+    interface OnItemClickListener {
+        fun onClick(view: View, position: Int)
     }
 }

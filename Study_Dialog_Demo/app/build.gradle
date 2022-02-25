@@ -124,4 +124,9 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
 
 //    implementation "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
+    // Activity Result API 工具库
+    implementation 'com.github.DylanCaiCoding:ActivityResultLauncher:1.1.2'
+
+    // 日间/夜间模式
+    implementation "com.dolatkia:animated-theme-manager:1.1.4"
 }

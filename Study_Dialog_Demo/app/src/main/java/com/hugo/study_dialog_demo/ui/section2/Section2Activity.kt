@@ -1,9 +1,12 @@
 package com.hugo.study_dialog_demo.ui.section2
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.blankj.utilcode.util.LogUtils
 import com.hugo.study_dialog_demo.databinding.ActivitySection2Binding
+import com.hugo.study_dialog_demo.ui.UIState
 import com.hugo.study_dialog_demo.ui.section1.DataServer
 
 
@@ -32,6 +35,15 @@ class Section2Activity : AppCompatActivity() {
         binding.rvList.layoutManager = layoutManage
         binding.rvList.adapter = adapter
         adapter.setNewData(sectionData)
+
+        adapter.onItemClickListener = object : SectionAdapter.OnItemClickListener {
+            override fun onClick(view: View, position: Int) {
+                LogUtils.e("-->>", "点击了 $position")
+            }
+
+        }
+
+        UIState.success(123)
     }
 
 
