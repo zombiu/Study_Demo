@@ -119,7 +119,7 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
     }
 
-    public void startDecode() {
+    /*public void startDecode() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -171,5 +171,12 @@ public class VideoActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
             }
         }).start();
+    }*/
+
+    public void startDecode() {
+        String path = getExternalFilesDir("") + "/yazi.mp4";
+        VideoDecoder videoDecoder = new VideoDecoder();
+        videoDecoder.init(surfaceHolder.getSurface(), path);
+        new Thread(videoDecoder).start();
     }
 }
