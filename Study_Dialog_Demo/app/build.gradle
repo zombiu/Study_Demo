@@ -70,6 +70,7 @@ dependencies {
     implementation 'com.xgr.easypay:alipay:2.0.5'    // 支付宝支付，可选
     implementation 'com.xgr.easypay:unionpay:2.0.5'  // 银联支付，可选
 
+    // 此fileprovider 与 'com.github.DylanCaiCoding:ActivityResultLauncher:1.1.2' 里面的 fileprovider冲突
     implementation 'com.zhy.base:fileprovider:1.0.0'
 
     implementation 'com.github.xujiaji:happy-bubble:1.2.3'

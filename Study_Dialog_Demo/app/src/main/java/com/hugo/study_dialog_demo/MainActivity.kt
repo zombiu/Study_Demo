@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             return@setOnTouchListener false
         }
 
+        testForeach()
 
         /*actionChain = ActionChain()
         var realAction1 = RealAction("1")
@@ -170,6 +171,17 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private fun testForeach() {
+        val arr = intArrayOf(1,2,3,4,5,6,7)
+        arr.forEach continuing@{
+            if (it == 4) return@continuing
+            println("-->>value:$it")
+        }
+
+        println("this is End")
+
     }
 
     private fun showNoTokenDialog() {
@@ -285,7 +297,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onViewCreated(dialogFragment: DialogFragment) {
-                    var view = dialogFragment.view!!
+                    var view = dialogFragment.requireView()
                     var nickname_tv = view.findViewById<TextView>(R.id.nickname_tv)
                     var avatar = view.findViewById<ImageView>(R.id.avatar)
                     var close_iv = view.findViewById<ImageView>(R.id.close_iv)

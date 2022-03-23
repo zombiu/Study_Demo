@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.hugo.study_dialog_demo">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -12,6 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+
         android:theme="@style/WelcomeTheme">
         <activity android:name=".ui.section2.Section2Activity"></activity>
         <activity android:name=".ui.section1.SectionActivity" />
@@ -34,6 +36,18 @@
             </intent-filter>
             -->
         </activity>
+
+        <!-- 'com.zhy.base:fileprovider:1.0.0' 与 'com.github.DylanCaiCoding:ActivityResultLauncher:1.1.2' FileProvider 冲突  解决办法 在app module里 新建一个 设置  tools:replace="android:authorities"-->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.android7.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
