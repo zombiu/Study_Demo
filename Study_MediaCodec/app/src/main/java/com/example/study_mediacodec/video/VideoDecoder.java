@@ -25,6 +25,9 @@ public class VideoDecoder implements Runnable {
         try {
             extractor.setDataSource(videoPath);
             MediaFormat mediaFormat = chooseVideoTrack(extractor);
+            // 结果单位是ms
+            long duration = mediaFormat.getLong(MediaFormat.KEY_DURATION) / 1000;
+            Log.e(TAG,"时间为=" + duration);
             codec = createCodec(mediaFormat, surface);
         } catch (IOException e) {
             e.printStackTrace();

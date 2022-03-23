@@ -58,7 +58,7 @@ public class AudioDecoder implements Runnable {
         MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
         int sampleRate = mediaFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
         int channelCount = mediaFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
-
+        //  声道数，分为单声道（AudioFormat.CHANNEL_IN_MONO）和立体声（AudioFormat.CHANNEL_STEREO）
         int bufferSize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
         AudioTrack audioTrack = new AudioTrack(
                 AudioManager.STREAM_MUSIC,
@@ -72,6 +72,7 @@ public class AudioDecoder implements Runnable {
             int inputBufferId = decoder.dequeueInputBuffer(0);
             if (inputBufferId >= 0) {
                 ByteBuffer buffer = decoder.getInputBuffer(inputBufferId);
+                // 把指定通道中的数据按偏移量读取到ByteBuffer中
                 int sampleSize = extractor.readSampleData(buffer, 0);
                 if (sampleSize < 0) {
                     decoder.queueInputBuffer(inputBufferId, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
