@@ -42,7 +42,7 @@ public class VideoDecoder implements Runnable {
         codec.start();
         while (!isEOS) {
             // 初始化 时间戳
-            if (playBaselineTimestamp == -1L) {
+            if (playBaselineTimestamp == 0) {
                 playBaselineTimestamp = System.currentTimeMillis();
             }
 
