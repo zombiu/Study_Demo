@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Study_MediaCodec">
         <activity
+            android:name=".video.AVActivity"
+            android:exported="false" />
+        <activity
             android:name=".video.AudioActivity"
             android:exported="false" />
         <activity

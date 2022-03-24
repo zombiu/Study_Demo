@@ -18,6 +18,10 @@ public class VideoDecoder implements Runnable {
     private boolean isEOS;
     private Surface surface;
     private static long TIME_OUT_US = 1000L;
+    // 自己维护的 播放速度的 时间戳
+    private long playBaselineTimestamp = -1;
+    private long curSimpleTimestamp = 0;
+
 
     public void init(Surface surface, String videoPath) {
         this.surface = surface;
@@ -40,17 +44,27 @@ public class VideoDecoder implements Runnable {
         long startTime = 0l;
         boolean first = false;
         while (!isEOS) {
+            // 初始化 时间戳
+            if (playBaselineTimestamp == -1L) {
+                playBaselineTimestamp = System.currentTimeMillis();
+            }
+
             int inputBufferId = codec.dequeueInputBuffer(0);
             if (inputBufferId >= 0) {
                 ByteBuffer buffer = codec.getInputBuffer(inputBufferId);
                 int sampleSize = extractor.readSampleData(buffer, 0);
                 if (sampleSize < 0) {
+                    //如果数据已经取完，压入数据结束标志：MediaCodec.BUFFER_FLAG_END_OF_STREAM
                     codec.queueInputBuffer(inputBufferId, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
                     isEOS = true;
                 } else {
                     long sampleTime = extractor.getSampleTime();
-                    codec.queueInputBuffer(inputBufferId, 0, sampleSize, sampleTime, 0);
+                    Log.e("-->>", "从提取器获取到的时间戳=" + sampleTime);
+                    // 保存当前数据帧的 时间戳
+                    curSimpleTimestamp = sampleTime;
+                    // 通知提取下一帧数据
                     extractor.advance();
+                    codec.queueInputBuffer(inputBufferId, 0, sampleSize, sampleTime, 0);
                 }
             }
 
@@ -72,9 +86,12 @@ public class VideoDecoder implements Runnable {
                         first = true;
                         startTime = System.currentTimeMillis();
                     }
-
+                    Log.e("-->>", "从MediaCodec.BufferInfo获取到的时间戳=" + bufferInfo.presentationTimeUs);
                     // PTS全称：Presentation Time Stamp(以微秒为单位)。用于标示解码后的视频帧什么时候被显示出来。 在没有B帧的情况下，DTS和PTS的输出顺序是一样的，一旦存在B帧，PTS和DTS则会不同。
                     // 如果解码过快，这里控制一下播放速度，跟pts保持一致
+                    // (System.currentTimeMillis() - startTime) 从解码开始到现在 经过的时间
+                    // bufferInfo.presentationTimeUs / 1000 当前正准备渲染帧的时间
+                    // 如果渲染的时间线 比 正常经过的时间线 要快 就需要暂缓播放速度
                     long sleepTime = bufferInfo.presentationTimeUs / 1000 - (System.currentTimeMillis() - startTime);
                     if (sleepTime > 0) {
                         try {
