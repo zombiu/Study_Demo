@@ -19,7 +19,7 @@ public class VideoDecoder implements Runnable {
     private Surface surface;
     private static long TIME_OUT_US = 1000L;
     // 自己维护的 播放速度的 时间戳
-    private long curPlayTimestamp = -1;
+    private long playBaselineTimestamp = -1;
     private long curSimpleTimestamp = 0;
 
 
@@ -42,8 +42,8 @@ public class VideoDecoder implements Runnable {
         boolean first = false;
         while (!isEOS) {
             // 初始化 时间戳
-            if (curPlayTimestamp == -1L) {
-                curPlayTimestamp = System.currentTimeMillis();
+            if (playBaselineTimestamp == -1L) {
+                playBaselineTimestamp = System.currentTimeMillis();
             }
 
             int inputBufferId = codec.dequeueInputBuffer(0);
@@ -86,6 +86,9 @@ public class VideoDecoder implements Runnable {
                     Log.e("-->>", "从MediaCodec.BufferInfo获取到的时间戳=" + bufferInfo.presentationTimeUs);
                     // PTS全称：Presentation Time Stamp(以微秒为单位)。用于标示解码后的视频帧什么时候被显示出来。 在没有B帧的情况下，DTS和PTS的输出顺序是一样的，一旦存在B帧，PTS和DTS则会不同。
                     // 如果解码过快，这里控制一下播放速度，跟pts保持一致
+                    // (System.currentTimeMillis() - startTime) 从解码开始到现在 经过的时间
+                    // bufferInfo.presentationTimeUs / 1000 当前正准备渲染帧的时间
+                    // 如果渲染的时间线 比 正常经过的时间线 要快 就需要暂缓播放速度
                     long sleepTime = bufferInfo.presentationTimeUs / 1000 - (System.currentTimeMillis() - startTime);
                     if (sleepTime > 0) {
                         try {
