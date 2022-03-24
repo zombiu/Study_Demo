@@ -58,8 +58,12 @@ public class AudioDecoder implements Runnable {
         MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
         int sampleRate = mediaFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
         int channelCount = mediaFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
+        int CHANNEL_TYPE = AudioFormat.CHANNEL_IN_MONO;
+        if (channelCount != 1) {
+            CHANNEL_TYPE = AudioFormat.CHANNEL_OUT_STEREO;
+        }
         //  声道数，分为单声道（AudioFormat.CHANNEL_IN_MONO）和立体声（AudioFormat.CHANNEL_STEREO）
-        int bufferSize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
+        int bufferSize = AudioTrack.getMinBufferSize(sampleRate, CHANNEL_TYPE, AudioFormat.ENCODING_PCM_16BIT);
         AudioTrack audioTrack = new AudioTrack(
                 AudioManager.STREAM_MUSIC,
                 sampleRate, AudioFormat.CHANNEL_OUT_STEREO,
