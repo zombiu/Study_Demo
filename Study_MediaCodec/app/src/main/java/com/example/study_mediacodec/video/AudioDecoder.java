@@ -64,6 +64,8 @@ public class AudioDecoder implements Runnable {
                 AudioManager.STREAM_MUSIC,
                 sampleRate, AudioFormat.CHANNEL_OUT_STEREO,
                 AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
+        int state = audioTrack.getState();
+        Log.e("-->>", "查询音频渲染器状态=" + state);
         audioTrack.play();
 
         long startTime = 0l;
