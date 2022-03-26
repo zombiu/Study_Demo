@@ -19,7 +19,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>-->
 
-    <com.example.study_touchevent.MyTouchView2
+    <!--<com.example.study_touchevent.MyTouchView2
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>-->
+
+    <com.example.study_touchevent.MyTouchView3
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

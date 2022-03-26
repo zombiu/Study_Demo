@@ -26,8 +26,6 @@ public class MyTouchView3 extends View {
     private int downX;
     private int downY;
 
-    private int actionIndex;
-
     public MyTouchView3(Context context) {
         this(context, null);
     }
@@ -69,33 +67,56 @@ public class MyTouchView3 extends View {
         int actionMasked = event.getActionMasked();
         switch (actionMasked) {
             case MotionEvent.ACTION_DOWN: {
-                Log.e("-->>", "ACTION_DOWN");
-                downX = (int) event.getX();
-                downY = (int) event.getY();
+                Log.e("-->>", "ACTION_DOWN " + event.getActionIndex());
+                // 计算事件中心点
+                int focusX = 0;
+                int focusY = 0;
+                for (int i = 0; i < event.getPointerCount(); i++) {
+                    focusX += event.getX(i);
+                    focusY += event.getY(i);
+                }
+                focusX = focusX / event.getPointerCount();
+                focusY = focusY / event.getPointerCount();
+
+
+                downX = focusX;
+                downY = focusY;
                 // 需要返回true 告诉父view  我要消费这个事件
                 return true;
             }
             case MotionEvent.ACTION_POINTER_DOWN: {
-                // 保存多点触控场景下，此事件的手指 索引
-                actionIndex = event.getActionIndex();
-                Log.e("-->>", "pointer index=" + actionIndex);
+                Log.e("-->>", "ACTION_POINTER_DOWN pointer index=");
                 // 更新此次事件的x y
-                downX = (int) event.getX(actionIndex);
-                downY = (int) event.getY(actionIndex);
+                // 计算事件中心点
+                int focusX = 0;
+                int focusY = 0;
+                for (int i = 0; i < event.getPointerCount(); i++) {
+                    focusX += event.getX(i);
+                    focusY += event.getY(i);
+                }
+                downX = focusX / event.getPointerCount();
+                downY = focusY / event.getPointerCount();
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
                 // 重要：move事件里面 getActionIndex 为 0  这里不能使用getActionIndex去进行判断
 //                Log.e("-->>", "ACTION_MOVE x=" + event.getX() + ", y=" + event.getY());
-                // 这里计算出 与上次move相比 手指移动的偏移量
-                int x = (int) (event.getX(actionIndex) - downX);
-                int y = (int) (event.getY(actionIndex) - downY);
+                // 计算事件中心点
+                int focusX = 0;
+                int focusY = 0;
+                for (int i = 0; i < event.getPointerCount(); i++) {
+                    focusX += event.getX(i);
+                    focusY += event.getY(i);
+                }
+                focusX = focusX / event.getPointerCount();
+                focusY = focusY / event.getPointerCount();
+
                 // 这里计算出 整个图片的偏移量
-                bitmapOffsetX += x;
-                bitmapOffsetY += y;
-                // 更新此次事件的x y
-                downX = (int) event.getX(actionIndex);
-                downY = (int) event.getY(actionIndex);
+                bitmapOffsetX += focusX - downX;
+                bitmapOffsetY += focusY - downY;
+
+                downX = focusX;
+                downY = focusY;
                 invalidate();
                 break;
             }
@@ -104,22 +125,14 @@ public class MyTouchView3 extends View {
                 break;
             }
             case MotionEvent.ACTION_POINTER_UP: {
-                Log.e("-->>", "ACTION_UP pointerCount=" + event.getPointerCount());
-                if (event.getActionIndex() == actionIndex) {
-                    // 获取 对应索引的id
-//                    int pointerId = event.getPointerId(actionIndex);
-//                    int pointerIndex = event.findPointerIndex(pointerId);
-                    // 当前处理事件的手指 抬起时，需要计算剩下手指中，应该去处理事件的手指 的索引
-                    if (actionIndex == event.getPointerCount() - 1) {
-                        actionIndex = actionIndex - 1;
-                    } else {
-                        actionIndex = actionIndex - 2;
-                    }
+                // 某些事件 可能连续触发 比如 ACTION_POINTER_UP 还需要兼容
+                Log.e("-->>", "ACTION_POINTER_UP getActionIndex=" + event.getActionIndex());
+                // 获取 对应索引的id
+//                int pointerId = event.getPointerId(actionIndex);
+//                int pointerIndex = event.findPointerIndex(pointerId);
 
-                    // 注意 这里需要重置一下 偏移量到 新手指上
-                    downX = (int) event.getX(actionIndex);
-                    downY = (int) event.getY(actionIndex);
-                }
+
+                Log.e("-->>", "ACTION_POINTER_UP 之后处理事件的索引=");
                 break;
             }
         }
