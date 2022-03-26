@@ -1,7 +1,6 @@
 package com.example.study_touchevent;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -13,34 +12,31 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import java.io.InputStream;
-
 /**
  * 自定义触摸反馈的view
- * 单点触控
+ * 多点触控
  */
-public class MyTouchView1 extends View {
+public class MyTouchView2 extends View {
     private Paint paint = new Paint();
     private Bitmap bitmap;
 
     private int bitmapOffsetX;
     private int bitmapOffsetY;
 
-    private int offsetX;
-    private int offsetY;
-
     private int downX;
     private int downY;
 
-    public MyTouchView1(Context context) {
+    private int actionIndex;
+
+    public MyTouchView2(Context context) {
         this(context, null);
     }
 
-    public MyTouchView1(Context context, @Nullable AttributeSet attrs) {
+    public MyTouchView2(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MyTouchView1(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MyTouchView2(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         init();
@@ -70,7 +66,7 @@ public class MyTouchView1 extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int actionMasked = event.getAction();
+        int actionMasked = event.getActionMasked();
         switch (actionMasked) {
             case MotionEvent.ACTION_DOWN: {
                 Log.e("-->>", "ACTION_DOWN");
@@ -79,22 +75,51 @@ public class MyTouchView1 extends View {
                 // 需要返回true 告诉父view  我要消费这个事件
                 return true;
             }
+            case MotionEvent.ACTION_POINTER_DOWN: {
+                // 保存多点触控场景下，此事件的手指 索引
+                actionIndex = event.getActionIndex();
+                Log.e("-->>", "pointer index=" + actionIndex);
+                // 更新此次事件的x y
+                downX = (int) event.getX(actionIndex);
+                downY = (int) event.getY(actionIndex);
+                break;
+            }
             case MotionEvent.ACTION_MOVE: {
-                Log.e("-->>", "ACTION_MOVE x=" + event.getX() + ", y=" + event.getY());
+                // 重要：move事件里面 getActionIndex 为 0  这里不能使用getActionIndex去进行判断
+//                Log.e("-->>", "ACTION_MOVE x=" + event.getX() + ", y=" + event.getY());
                 // 这里计算出 与上次move相比 手指移动的偏移量
-                int x = (int) (event.getX() - downX);
-                int y = (int) (event.getY() - downY);
+                int x = (int) (event.getX(actionIndex) - downX);
+                int y = (int) (event.getY(actionIndex) - downY);
                 // 这里计算出 整个图片的偏移量
                 bitmapOffsetX += x;
                 bitmapOffsetY += y;
                 // 更新此次事件的x y
-                downX = (int) event.getX();
-                downY = (int) event.getY();
+                downX = (int) event.getX(actionIndex);
+                downY = (int) event.getY(actionIndex);
                 invalidate();
                 break;
             }
             case MotionEvent.ACTION_UP: {
                 Log.e("-->>", "ACTION_UP x=" + event.getX() + ", y=" + event.getY());
+                break;
+            }
+            case MotionEvent.ACTION_POINTER_UP: {
+                Log.e("-->>", "ACTION_UP pointerCount=" + event.getPointerCount());
+                if (event.getActionIndex() == actionIndex) {
+                    // 获取 对应索引的id
+//                    int pointerId = event.getPointerId(actionIndex);
+//                    int pointerIndex = event.findPointerIndex(pointerId);
+                    // 当前处理事件的手指 抬起时，需要计算剩下手指中，应该去处理事件的手指 的索引
+                    if (actionIndex == event.getPointerCount() - 1) {
+                        actionIndex = actionIndex - 1;
+                    } else {
+                        actionIndex = actionIndex - 2;
+                    }
+
+                    // 注意 这里需要重置一下 偏移量到 新手指上
+                    downX = (int) event.getX(actionIndex);
+                    downY = (int) event.getY(actionIndex);
+                }
                 break;
             }
         }
