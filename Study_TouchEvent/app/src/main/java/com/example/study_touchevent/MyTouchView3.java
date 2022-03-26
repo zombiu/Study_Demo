@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
  * 自定义触摸反馈的view
  * 多点触控
  */
-public class MyTouchView2 extends View {
+public class MyTouchView3 extends View {
     private Paint paint = new Paint();
     private Bitmap bitmap;
 
@@ -28,15 +28,15 @@ public class MyTouchView2 extends View {
 
     private int actionIndex;
 
-    public MyTouchView2(Context context) {
+    public MyTouchView3(Context context) {
         this(context, null);
     }
 
-    public MyTouchView2(Context context, @Nullable AttributeSet attrs) {
+    public MyTouchView3(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MyTouchView2(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MyTouchView3(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         init();
@@ -78,7 +78,7 @@ public class MyTouchView2 extends View {
             case MotionEvent.ACTION_POINTER_DOWN: {
                 // 保存多点触控场景下，此事件的手指 索引
                 actionIndex = event.getActionIndex();
-                Log.e("-->>", "ACTION_POINTER_DOWN pointer index=" + actionIndex);
+                Log.e("-->>", "pointer index=" + actionIndex);
                 // 更新此次事件的x y
                 downX = (int) event.getX(actionIndex);
                 downY = (int) event.getY(actionIndex);
@@ -87,8 +87,6 @@ public class MyTouchView2 extends View {
             case MotionEvent.ACTION_MOVE: {
                 // 重要：move事件里面 getActionIndex 为 0  这里不能使用getActionIndex去进行判断
 //                Log.e("-->>", "ACTION_MOVE x=" + event.getX() + ", y=" + event.getY());
-                Log.e("-->>", "ACTION_MOVE pointerCount=" + event.getPointerCount());
-                Log.e("-->>", "ACTION_MOVE pointer index=" + actionIndex);
                 // 这里计算出 与上次move相比 手指移动的偏移量
                 int x = (int) (event.getX(actionIndex) - downX);
                 int y = (int) (event.getY(actionIndex) - downY);
@@ -106,36 +104,22 @@ public class MyTouchView2 extends View {
                 break;
             }
             case MotionEvent.ACTION_POINTER_UP: {
-                Log.e("-->>", "ACTION_POINTER_UP getActionIndex=" + event.getActionIndex());
-                // 获取 对应索引的id
-//                int pointerId = event.getPointerId(actionIndex);
-//                int pointerIndex = event.findPointerIndex(pointerId);
-
-                //  当0号索引的手指 从屏幕上抬起时， 触发 ACTION_POINTER_UP actionIndex需要-1
-                if (event.getActionIndex() == 0) {
-                    if (event.getActionIndex() == actionIndex) {
-                        actionIndex = event.getPointerCount() - 2;
-
-                        // 注意 这里需要重置一下 偏移量到 新手指上
-                        downX = (int) event.getX(actionIndex);
-                        downY = (int) event.getY(actionIndex);
-                    } else {
+                Log.e("-->>", "ACTION_UP pointerCount=" + event.getPointerCount());
+                if (event.getActionIndex() == actionIndex) {
+                    // 获取 对应索引的id
+//                    int pointerId = event.getPointerId(actionIndex);
+//                    int pointerIndex = event.findPointerIndex(pointerId);
+                    // 当前处理事件的手指 抬起时，需要计算剩下手指中，应该去处理事件的手指 的索引
+                    if (actionIndex == event.getPointerCount() - 1) {
                         actionIndex = actionIndex - 1;
-                    }
-                } else {
-                    if (event.getActionIndex() == actionIndex) {
-                        actionIndex = actionIndex - 1;
-
-                        // 注意 这里需要重置一下 偏移量到 新手指上
-                        downX = (int) event.getX(actionIndex);
-                        downY = (int) event.getY(actionIndex);
                     } else {
-                        // 当actionIndex = 0 并且 抬起的不是0号索引手指时， 什么也不做
-                        Log.e("-->>", "什么也不做");
+                        actionIndex = actionIndex - 2;
                     }
+
+                    // 注意 这里需要重置一下 偏移量到 新手指上
+                    downX = (int) event.getX(actionIndex);
+                    downY = (int) event.getY(actionIndex);
                 }
-
-                Log.e("-->>", "ACTION_POINTER_UP 之后处理事件的索引=" + actionIndex);
                 break;
             }
         }
