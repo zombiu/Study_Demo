@@ -7,6 +7,7 @@ import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
 import android.media.MediaRecorder;
+import android.os.Environment;
 import android.text.TextUtils;
 
 import com.example.study_mediacodec.utils.IOUtil;
@@ -58,7 +59,13 @@ public class AudioRecorder implements Runnable {
 
     @Override
     public void run() {
-        startEncode("");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                startEncode("");
+            }
+        }).start();
         audioRecord.startRecording();
         byte[] buffer = new byte[2048];
         while (!stop) {
@@ -73,7 +80,7 @@ public class AudioRecorder implements Runnable {
         }
     }
 
-    private void startEncode(String path) {
+    public void startEncode(String path) {
         if (TextUtils.isEmpty(path)) {
             return;
         }

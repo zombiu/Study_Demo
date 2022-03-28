@@ -11,10 +11,18 @@ import android.widget.Button;
 
 import com.example.study_mediacodec.R;
 
+import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class RecordAudioActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btn_record_audio;
     private Button btn_stop_record_audio;
     private Button btn_play_audio;
+
+    private AudioRecorder audioRecorder;
+
+    private ExecutorService executorService;
 
 
     @Override
@@ -43,17 +51,29 @@ public class RecordAudioActivity extends AppCompatActivity implements View.OnCli
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
+        executorService = Executors.newFixedThreadPool(2);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_record_audio: {
+                audioRecorder = new AudioRecorder();
+                audioRecorder.init();
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        String accFile = getExternalCacheDir().getAbsolutePath() + File.separator + System.currentTimeMillis() + ".acc";
+                        audioRecorder.startEncode(accFile);
+                    }
+                });
 
+                executorService.submit(audioRecorder);
                 break;
             }
             case R.id.btn_stop_record_audio: {
-
+                audioRecorder.stop();
                 break;
             }
             case R.id.btn_play_audio: {

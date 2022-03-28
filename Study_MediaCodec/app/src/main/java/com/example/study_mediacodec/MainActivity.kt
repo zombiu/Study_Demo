@@ -3,6 +3,7 @@ package com.example.study_mediacodec
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.study_mediacodec.audio.RecordAudioActivity
 import com.example.study_mediacodec.databinding.ActivityMainBinding
 import com.example.study_mediacodec.video.AVActivity
 import com.example.study_mediacodec.video.AudioActivity
@@ -25,6 +26,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.tv3.setOnClickListener {
             startActivity(Intent(this, AVActivity::class.java))
+        }
+
+        binding.tv4.setOnClickListener {
+            startActivity(Intent(this, RecordAudioActivity::class.java))
         }
     }
 }
