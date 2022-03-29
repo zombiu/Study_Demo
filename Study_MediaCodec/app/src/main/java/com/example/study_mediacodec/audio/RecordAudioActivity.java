@@ -6,10 +6,13 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.study_mediacodec.R;
+import com.example.study_mediacodec.video.AudioDecoder;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
@@ -23,6 +26,8 @@ public class RecordAudioActivity extends AppCompatActivity implements View.OnCli
     private AudioRecorder audioRecorder;
 
     private ExecutorService executorService;
+
+    private String accFile;
 
 
     @Override
@@ -64,7 +69,7 @@ public class RecordAudioActivity extends AppCompatActivity implements View.OnCli
                 executorService.submit(new Runnable() {
                     @Override
                     public void run() {
-                        String accFile = getExternalCacheDir().getAbsolutePath() + File.separator + System.currentTimeMillis() + ".acc";
+                        accFile = getExternalCacheDir().getAbsolutePath() + File.separator + System.currentTimeMillis() + ".acc";
                         audioRecorder.startEncode(accFile);
                     }
                 });
@@ -77,9 +82,24 @@ public class RecordAudioActivity extends AppCompatActivity implements View.OnCli
                 break;
             }
             case R.id.btn_play_audio: {
-
+                if (TextUtils.isEmpty(accFile)) {
+                    Log.e("-->>", "acc文件未找到");
+                    return;
+                }
+                File acc = new File(this.accFile);
+                if (acc.exists()) {
+                    playAudio(acc);
+                } else {
+                    Log.e("-->>", "acc文件未找到");
+                }
                 break;
             }
         }
+    }
+
+    private void playAudio(File accFile) {
+        AudioDecoder audioDecoder = new AudioDecoder();
+        audioDecoder.init(accFile.getAbsolutePath());
+        executorService.submit(audioDecoder);
     }
 }

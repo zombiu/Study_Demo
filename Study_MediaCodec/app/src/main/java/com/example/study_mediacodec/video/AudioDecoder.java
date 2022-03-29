@@ -10,6 +10,9 @@ import android.media.MediaFormat;
 import android.util.Log;
 import android.view.Surface;
 
+import com.blankj.utilcode.util.GsonUtils;
+import com.blankj.utilcode.util.LogUtils;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -40,6 +43,7 @@ public class AudioDecoder implements Runnable {
         if (mediaFormat == null) {
             return;
         }
+        LogUtils.e("-->>" + GsonUtils.toJson(mediaFormat));
         initAudioParams(mediaFormat);
         try {
             decoder = createCodec(mediaFormat, null);
@@ -66,8 +70,9 @@ public class AudioDecoder implements Runnable {
         int bufferSize = AudioTrack.getMinBufferSize(sampleRate, CHANNEL_TYPE, AudioFormat.ENCODING_PCM_16BIT);
         AudioTrack audioTrack = new AudioTrack(
                 AudioManager.STREAM_MUSIC,
-                sampleRate, AudioFormat.CHANNEL_OUT_STEREO,
+                sampleRate, CHANNEL_TYPE,
                 AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
+        Log.e("-->>", "查询音频mediaFormat=" + GsonUtils.toJson(mediaFormat));
         int state = audioTrack.getState();
         Log.e("-->>", "查询音频渲染器状态=" + state);
         audioTrack.play();

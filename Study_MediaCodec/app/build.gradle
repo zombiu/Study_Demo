@@ -48,4 +48,6 @@ dependencies {
 
     // 权限请求框架：https://github.com/getActivity/XXPermissions
     implementation 'com.github.getActivity:XXPermissions:13.5'
+
+    implementation 'com.blankj:utilcodex:1.31.0'
 }
