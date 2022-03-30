@@ -10,7 +10,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.example.study_mediacodec.R;
 import com.example.study_mediacodec.video.AudioDecoder;
 
@@ -54,6 +56,8 @@ public class RecordAudioActivity extends AppCompatActivity implements View.OnCli
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+            ToastUtils.showLong("没有录音相关权限");
+            finish();
             return;
         }
 

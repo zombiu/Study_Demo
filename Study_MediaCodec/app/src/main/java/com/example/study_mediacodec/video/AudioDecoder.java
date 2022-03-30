@@ -80,9 +80,16 @@ public class AudioDecoder implements Runnable {
         long startTime = 0l;
         boolean first = false;
         while (!isEOS) {
+            if (!first) {
+                first = true;
+                startTime = System.currentTimeMillis();
+            }
+
             int inputBufferId = decoder.dequeueInputBuffer(0);
             if (inputBufferId >= 0) {
                 ByteBuffer buffer = decoder.getInputBuffer(inputBufferId);
+                // 清除缓冲区，否则将得到与最后一个缓冲区相同的缓冲区
+                buffer.clear();
                 // 把指定通道中的数据按偏移量读取到ByteBuffer中
                 int sampleSize = extractor.readSampleData(buffer, 0);
                 if (sampleSize < 0) {
@@ -108,12 +115,8 @@ public class AudioDecoder implements Runnable {
                     Log.i(TAG, "run: output buffer changed");
                     break;
                 default: {
-                    if (!first) {
-                        first = true;
-                        startTime = System.currentTimeMillis();
-                    }
-
                     ByteBuffer outputBuffer = decoder.getOutputBuffer(outIndex);
+                    // 这里可以使用  short array  一个音频采样如果是16bit的话正好就是一个short的大小
                     byte[] chunk = new byte[bufferInfo.size];
                     // 将解码后的音频数据 拷贝到 chunk中
                     outputBuffer.get(chunk);
@@ -123,6 +126,7 @@ public class AudioDecoder implements Runnable {
                     long sleepTime = bufferInfo.presentationTimeUs / 1000 - (System.currentTimeMillis() - startTime);
                     if (sleepTime > 0) {
                         try {
+                            Log.e("-->>", "audio 休眠时间 =" + sleepTime);
                             Thread.sleep(sleepTime);
                         } catch (InterruptedException e) {
                             e.printStackTrace();

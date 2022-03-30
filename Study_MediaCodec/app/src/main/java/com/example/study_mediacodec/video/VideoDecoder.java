@@ -49,6 +49,8 @@ public class VideoDecoder implements Runnable {
             int inputBufferId = codec.dequeueInputBuffer(0);
             if (inputBufferId >= 0) {
                 ByteBuffer buffer = codec.getInputBuffer(inputBufferId);
+                // 清除缓冲区，否则将得到与最后一个缓冲区相同的缓冲区
+                buffer.clear();
                 // 提取器 开始提取数据 到缓冲区
                 int sampleSize = extractor.readSampleData(buffer, 0);
                 if (sampleSize < 0) {
@@ -58,6 +60,7 @@ public class VideoDecoder implements Runnable {
                 } else {
                     // 保存当前数据帧的 时间戳
                     long sampleTime = extractor.getSampleTime();
+                    Log.i(TAG, "当前帧的类型=" + extractor.getSampleFlags());
                     Log.e("-->>", "从提取器获取到的时间戳=" + sampleTime);
                     // 通知提取下一帧数据
                     extractor.advance();
@@ -91,6 +94,7 @@ public class VideoDecoder implements Runnable {
                     long sleepTime = bufferInfo.presentationTimeUs / 1000 - (System.currentTimeMillis() - playBaselineTimestamp);
                     if (sleepTime > 0) {
                         try {
+                            Log.e("-->>", "video 休眠时间 =" + sleepTime);
                             Thread.sleep(sleepTime);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
