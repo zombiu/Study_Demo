@@ -102,7 +102,7 @@ public class RecordAudioActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void playAudio(File accFile) {
-        AudioDecoder audioDecoder = new AudioDecoder();
+        AudioDecoder2 audioDecoder = new AudioDecoder2();
         audioDecoder.init(accFile.getAbsolutePath());
         executorService.submit(audioDecoder);
     }

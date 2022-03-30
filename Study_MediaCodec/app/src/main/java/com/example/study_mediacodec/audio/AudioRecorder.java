@@ -26,6 +26,7 @@ public class AudioRecorder implements Runnable {
     public final static int DEFAULT_SAMPLE_RATE_IN_HZ = 44_100;
     public final static int DEFAULT_CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO;
     public final static int DEFAULT_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
+    private int MAX_BUFFER_SIZE = 8192;
 
 
     private AudioRecord audioRecord;
@@ -39,24 +40,25 @@ public class AudioRecorder implements Runnable {
     public void init() {
         int minBufferSize = AudioRecord.getMinBufferSize(DEFAULT_SAMPLE_RATE_IN_HZ, DEFAULT_CHANNEL_CONFIG, DEFAULT_ENCODING);
         LogUtils.e("-->>", "最小缓冲区=" + minBufferSize);
+        minBufferSize = Math.max(minBufferSize, 2048);
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, DEFAULT_SAMPLE_RATE_IN_HZ, DEFAULT_CHANNEL_CONFIG, AudioFormat.ENCODING_PCM_16BIT, minBufferSize);
 
         try {
             encoder = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_AUDIO_AAC);
+
+            //指定创建的MediaCodec类型 单声道
+            MediaFormat format = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_AAC, DEFAULT_SAMPLE_RATE_IN_HZ, 1);
+            format.setString(MediaFormat.KEY_MIME, MediaFormat.MIMETYPE_AUDIO_AAC);
+            // 封装可用于编解码器组件的配置文件
+            format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
+            //码率：声音中的比特率是指将模拟声音信号转换成数字声音信号后，单位时间内的二进制数据量，是间接衡量音频质量的一个指标
+            format.setInteger(MediaFormat.KEY_BIT_RATE, 96000);//传入的数据最大值，可以修改
+            format.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, MAX_BUFFER_SIZE);
+            // MediaCodec.CONFIGURE_FLAG_ENCODE 编码标记
+            encoder.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        //指定创建的MediaCodec类型
-        MediaFormat format = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_AAC, DEFAULT_SAMPLE_RATE_IN_HZ, 1);
-        format.setString(MediaFormat.KEY_MIME, MediaFormat.MIMETYPE_AUDIO_AAC);
-        // 封装可用于编解码器组件的配置文件
-        format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
-        //码率：声音中的比特率是指将模拟声音信号转换成数字声音信号后，单位时间内的二进制数据量，是间接衡量音频质量的一个指标
-        format.setInteger(MediaFormat.KEY_BIT_RATE, 96000);//传入的数据最大值，可以修改
-        format.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, minBufferSize * 2);
-        // MediaCodec.CONFIGURE_FLAG_ENCODE 编码标记
-        encoder.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
     }
 
     @Override
