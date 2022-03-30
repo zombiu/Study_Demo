@@ -131,12 +131,13 @@ public class AudioDecoder2 implements Runnable {
                     // 如果解码过快，这里控制一下播放速度，跟pts保持一致
                     long sleepTime = bufferInfo.presentationTimeUs / 1000 - (System.currentTimeMillis() - startTime);
                     if (sleepTime > 0) {
-                        try {
+                        // 特别奇怪 如果这里休眠 质量会有点问题
+                        /*try {
                             Log.e("-->>", "audio 休眠时间 =" + sleepTime);
-                            Thread.sleep(sleepTime);
+                            Thread.sleep(0);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
-                        }
+                        }*/
                     }
                     audioTrack.write(chunk, bufferInfo.offset, bufferInfo.offset + bufferInfo.size);
                     decoder.releaseOutputBuffer(outIndex, true);
