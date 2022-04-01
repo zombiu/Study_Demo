@@ -128,20 +128,28 @@ public class AudioRecorder implements Runnable {
                 encoder.queueInputBuffer(inputIndex, 0, pcmData.length, 0, 0);
             }
 
+            // 获取 输出的 ByteBuffer数组索引
             outputIndex = encoder.dequeueOutputBuffer(bufferInfo, 10_000);
             while (outputIndex >= 0) {
+                // 获取输出的 ByteBuffer
                 outputBuffer = outputBuffers[outputIndex];
+                // position：对于写入模式，表示当前可写入数据的下标，对于读取模式，表示接下来可以读取的数据的下标；
+                // 这里是读取模式 从outputBuffer中读取
                 outputBuffer.position(bufferInfo.offset);
+                // limit：对于写入模式，表示当前可以写入的数组大小，默认为数组的最大长度，对于读取模式，表示当前最多可以读取的数据的位置下标；
                 outputBuffer.limit(bufferInfo.offset + bufferInfo.size);
                 aacChunk = new byte[bufferInfo.size + 7];
                 // 需要为adts帧加上头部
                 addADTStoPacket(44100, aacChunk, aacChunk.length);
+                // 从outputBuffer中将数据读到 aacChunk中
                 outputBuffer.get(aacChunk, 7, bufferInfo.size);
                 try {
+                    // 渲染数据
                     mBufferedOutputStream.write(aacChunk);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                // 释放outputBuffer
                 encoder.releaseOutputBuffer(outputIndex, false);
                 outputIndex = encoder.dequeueOutputBuffer(bufferInfo, 10_000);
             }
