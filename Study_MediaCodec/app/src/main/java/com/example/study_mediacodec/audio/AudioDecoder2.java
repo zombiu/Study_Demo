@@ -57,7 +57,8 @@ public class AudioDecoder2 implements Runnable {
         mediaFormat.setString(MediaFormat.KEY_MIME, "audio/mp4a-latm");
         mediaFormat.setInteger(MediaFormat.KEY_CHANNEL_COUNT, 1);
         mediaFormat.setInteger(MediaFormat.KEY_SAMPLE_RATE, 0);
-        mediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, 96000);
+        // 比特率 也叫码率 指的是每秒传送的数据位数。常见的单位 kbps （k bits per s） 和 mbps (m bits per s) 。帧率越大，每秒传输的帧数越大；分辨率越大，每一帧的内容大小越大；因此帧率越大，分辨率越大，码率就越大。
+        mediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, 128000);
         mediaFormat.setInteger(MediaFormat.KEY_IS_ADTS, 1);
         mediaFormat.setInteger(MediaFormat.KEY_AAC_PROFILE, 0);
     }

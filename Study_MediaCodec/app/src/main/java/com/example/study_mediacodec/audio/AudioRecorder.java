@@ -52,6 +52,7 @@ public class AudioRecorder implements Runnable {
             // 封装可用于编解码器组件的配置文件
             format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
             //码率：声音中的比特率是指将模拟声音信号转换成数字声音信号后，单位时间内的二进制数据量，是间接衡量音频质量的一个指标
+            // 比特率 也叫码率 指的是每秒传送的数据位数。常见的单位 kbps （k bits per s） 和 mbps (m bits per s) 。帧率越大，每秒传输的帧数越大；分辨率越大，每一帧的内容大小越大；因此帧率越大，分辨率越大，码率就越大。
             format.setInteger(MediaFormat.KEY_BIT_RATE, 96000);//传入的数据最大值，可以修改
             format.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, MAX_BUFFER_SIZE);
             // MediaCodec.CONFIGURE_FLAG_ENCODE 编码标记
