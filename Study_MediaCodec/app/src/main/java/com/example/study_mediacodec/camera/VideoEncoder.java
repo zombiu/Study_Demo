@@ -1,5 +1,6 @@
 package com.example.study_mediacodec.camera;
 
+import static android.media.MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420SemiPlanar;
 import static android.media.MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV422Flexible;
 
 import android.media.MediaCodec;
@@ -42,12 +43,25 @@ public class VideoEncoder implements Runnable {
         LogUtils.e("-->>初始化 " + width + " " + height + " " + fps);
         this.width = width;
         this.height = height;
+        if ((width & 1) == 1) {
+            width--;
+        }
+        if ((height & 1) == 1) {
+            height--;
+        }
+        LogUtils.e("-->>初始化 " + width + " " + height + " " + fps);
         MediaCodecInfo mediaCodecInfo = selectCodecInfo();
+        LogUtils.e("carema支持的输出格式=" + GsonUtils.toJson(mediaCodecInfo));
         colorFormat = selectColorFormat(mediaCodecInfo);
+//        colorFormat = MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420SemiPlanar;
+        // 在我的手机上 格式为21 COLOR_FormatYUV420SemiPlanar = 21;
         LogUtils.e("carema支持的输出格式=" + colorFormat);
         // 因为获取到的视频帧数据是逆时针旋转了90度的，所以这里宽高需要对调
         MediaFormat videoFormat = MediaFormat.createVideoFormat(VIDEO_MIME_TYPE, height, width);
-        int bitRate = (width * height * 3 / 2) * 8 * fps;
+        // 如果下面码率填bitRate 会在configure时崩溃 直接坛蜜oom了 为啥不能这么写呢
+//        int bitRate = (width * height * 3 / 2) * 8 * fps;
+        // 这里不知道为啥 码率填0也可以
+        int bitRate = (width * height) * 5;
         // 没有这一行会报错 configureCodec returning error -38
         videoFormat.setInteger(MediaFormat.KEY_BIT_RATE, bitRate);
         videoFormat.setInteger(MediaFormat.KEY_FRAME_RATE, fps);
@@ -70,7 +84,7 @@ public class VideoEncoder implements Runnable {
         LogUtils.e("开始录制 地址=" + h264Path);
         try {
             run();
-        }catch (Exception e) {
+        } catch (Exception e) {
             LogUtils.e("-->>" + e.getMessage());
             e.printStackTrace();
         }
@@ -150,6 +164,7 @@ public class VideoEncoder implements Runnable {
             if (!codecInfo.isEncoder()) {
                 continue;
             }
+            LogUtils.e("格式=" + GsonUtils.toJson(codecInfo));
             String[] types = codecInfo.getSupportedTypes();
             for (int j = 0; j < types.length; j++) {
                 if (types[j].equalsIgnoreCase(VIDEO_MIME_TYPE)) {
@@ -167,6 +182,7 @@ public class VideoEncoder implements Runnable {
         }
         MediaCodecInfo.CodecCapabilities capabilities = codecInfo.getCapabilitiesForType(VIDEO_MIME_TYPE);
         int[] colorFormats = capabilities.colorFormats;
+        LogUtils.e("支持的颜色格式" + GsonUtils.toJson(colorFormats));
         for (int i = 0; i < colorFormats.length; i++) {
             if (isRecognizedFormat(colorFormats[i])) {
                 return colorFormats[i];

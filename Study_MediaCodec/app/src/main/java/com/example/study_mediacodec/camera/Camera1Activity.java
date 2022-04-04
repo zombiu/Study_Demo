@@ -13,6 +13,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
+import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.example.study_mediacodec.R;
 import com.example.study_mediacodec.databinding.ActivityCamera1Binding;
@@ -82,8 +83,6 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
 
         executorService = Executors.newFixedThreadPool(1);
 
-        videoEncoder.init(DEFAULT_WIDTH, DEFAULT_HEIGHT, frameRate);
-
         surfaceHolder = binding.surfaceView.getHolder();
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -102,8 +101,13 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
                 releaseCamera();
             }
         });
+        // setParameters 获取到分辨率 帧率 之后 再init
+//        videoEncoder.init(DEFAULT_WIDTH, DEFAULT_HEIGHT, frameRate);
 
         openCamera(cameraFacing);
+
+        // setParameters 获取到分辨率 帧率 之后 再init
+        videoEncoder.init(DEFAULT_WIDTH, DEFAULT_HEIGHT, frameRate);
     }
 
     //     java.lang.RuntimeException: Camera is being used after Camera.release() was called
@@ -212,6 +216,7 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
 
         //设置预览的大小，Camera 预览的大小（分辨率）只支持内置的几种 getSupportedPreviewSizes 录像
         Camera.Size previewSize = getBestSize(DEFAULT_WIDTH, DEFAULT_HEIGHT, cameraParameters.getSupportedPreviewSizes());
+        LogUtils.e("预览画面=" + GsonUtils.toJson(previewSize));
         cameraParameters.setPreviewSize(previewSize.width, previewSize.height);
         //如果使用截图接口，还需要设置截图大小（分辨率） 拍照
         Camera.Size pictureSize = getBestSize(DEFAULT_WIDTH, DEFAULT_HEIGHT, cameraParameters.getSupportedPreviewSizes());
@@ -238,6 +243,7 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
         //设置相机预览帧率
         cameraParameters.setPreviewFpsRange(defminFps, defmaxFps);
         frameRate = defmaxFps / 1000;
+        LogUtils.e("-->>帧率=" + defmaxFps);
 
         setCameraDisplayOrientation();
 
