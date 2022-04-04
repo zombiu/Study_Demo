@@ -11,11 +11,18 @@ import android.os.Bundle;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.example.study_mediacodec.R;
 import com.example.study_mediacodec.databinding.ActivityCamera1Binding;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * API Level	Camera API	Preview View
@@ -39,6 +46,7 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
     public int frameRate;
 
     private SurfaceHolder surfaceHolder;
+    private ExecutorService executorService;
 
     private VideoEncoder videoEncoder = new VideoEncoder();
 
@@ -52,6 +60,30 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
     }
 
     private void init() {
+        binding.btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 初始化输出路径
+                String savePath = getExternalCacheDir().getAbsolutePath() + File.separator + System.currentTimeMillis() + ".h264";
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        videoEncoder.start(savePath);
+                    }
+                });
+            }
+        });
+        binding.btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                videoEncoder.stop();
+            }
+        });
+
+        executorService = Executors.newFixedThreadPool(1);
+
+        videoEncoder.init(DEFAULT_WIDTH, DEFAULT_HEIGHT, frameRate);
+
         surfaceHolder = binding.surfaceView.getHolder();
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -66,6 +98,7 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
+//                surfaceHolder.removeCallback(this);
                 releaseCamera();
             }
         });
@@ -73,7 +106,16 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
         openCamera(cameraFacing);
     }
 
+    //     java.lang.RuntimeException: Camera is being used after Camera.release() was called
+    //        at android.hardware.Camera.setHasPreviewCallback(Native Method)
+    // 这里需要    camera.setPreviewCallback(null);
     private void releaseCamera() {
+        /*try {
+            camera.setPreviewDisplay(null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        camera.setPreviewCallback(null);
         camera.stopPreview();
         camera.release();
     }
@@ -225,6 +267,14 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
 
     @Override
     public void onPreviewFrame(byte[] bytes, Camera camera) {
+//        LogUtils.e("回调视频nv21数据 " + bytes.length);
         videoEncoder.putFrameData(bytes);
+    }
+
+    @Override
+    protected void onDestroy() {
+        // 多次调用 releaseCamera会有问题
+//        releaseCamera();
+        super.onDestroy();
     }
 }
