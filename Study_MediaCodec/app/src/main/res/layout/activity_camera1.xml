@@ -13,10 +13,10 @@
         android:layout_height="500dp" />
 
     <Button
-        android:layout_marginTop="100dp"
         android:id="@+id/btn_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
         android:text="开始录制" />
 
     <Button
@@ -24,5 +24,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="结束录制" />
+
+    <Button
+        android:id="@+id/btn_go_play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="播放录制的视频" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

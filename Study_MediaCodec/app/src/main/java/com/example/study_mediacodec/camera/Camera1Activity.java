@@ -47,6 +47,7 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
     public int previewWidth;
     public int previewHeight;
     public int frameRate;
+    private String savePath;
 
     private SurfaceHolder surfaceHolder;
     private ExecutorService executorService;
@@ -67,7 +68,7 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
             @Override
             public void onClick(View view) {
                 // 初始化输出路径
-                String savePath = getExternalCacheDir().getAbsolutePath() + File.separator + System.currentTimeMillis() + ".h264";
+                savePath = getExternalCacheDir().getAbsolutePath() + File.separator + System.currentTimeMillis() + ".h264";
                 // execute会抛出异常 submit可以在future 中获取异常
                 Future<?> submit = executorService.submit(new Runnable() {
                     @Override
@@ -88,6 +89,13 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
             @Override
             public void onClick(View view) {
                 videoEncoder.stop();
+            }
+        });
+
+        binding.btnGoPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PlayVideoActivity.start(Camera1Activity.this, savePath);
             }
         });
 

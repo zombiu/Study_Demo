@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Study_MediaCodec">
         <activity
+            android:name=".camera.PlayVideoActivity"
+            android:exported="false" />
+        <activity
             android:name=".camera.Camera1Activity"
             android:exported="false" />
         <activity

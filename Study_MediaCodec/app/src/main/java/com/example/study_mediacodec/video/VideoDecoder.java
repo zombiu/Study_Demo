@@ -7,6 +7,8 @@ import android.media.MediaFormat;
 import android.util.Log;
 import android.view.Surface;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -33,6 +35,7 @@ public class VideoDecoder implements Runnable {
             Log.e(TAG,"时间为=" + duration);
             codec = createCodec(mediaFormat, surface);
         } catch (IOException e) {
+            LogUtils.e("-->>" + e.getMessage());
             e.printStackTrace();
         }
     }
