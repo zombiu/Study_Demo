@@ -21,9 +21,11 @@ import com.example.study_mediacodec.databinding.ActivityCamera1Binding;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * API Level	Camera API	Preview View
@@ -66,12 +68,20 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
             public void onClick(View view) {
                 // 初始化输出路径
                 String savePath = getExternalCacheDir().getAbsolutePath() + File.separator + System.currentTimeMillis() + ".h264";
-                executorService.submit(new Runnable() {
+                // execute会抛出异常 submit可以在future 中获取异常
+                Future<?> submit = executorService.submit(new Runnable() {
                     @Override
                     public void run() {
                         videoEncoder.start(savePath);
                     }
                 });
+                /*try {
+                    Object o = submit.get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }*/
             }
         });
         binding.btnStop.setOnClickListener(new View.OnClickListener() {
@@ -101,8 +111,6 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
                 releaseCamera();
             }
         });
-        // setParameters 获取到分辨率 帧率 之后 再init
-//        videoEncoder.init(DEFAULT_WIDTH, DEFAULT_HEIGHT, frameRate);
 
         openCamera(cameraFacing);
 
@@ -229,6 +237,10 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
 
         previewWidth = previewSize.width;
         previewHeight = previewSize.height;
+
+        // 需要使用硬件支持的分辨率进行 codec处理 不然 录的视频 会重影绿屏的现象
+        DEFAULT_WIDTH = previewWidth;
+        DEFAULT_HEIGHT = previewHeight;
 
         //set fps range.
         int defminFps = 0;
