@@ -17,7 +17,6 @@ public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolde
     private ActivityPlayVideoBinding binding;
     private String path;
     private SurfaceHolder surfaceHolder;
-    private VideoDecoder videoDecoder;
 
     public static void start(Context context, String path) {
         Intent intent = new Intent();
@@ -38,8 +37,6 @@ public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolde
     }
 
     private void initView() {
-        videoDecoder = new VideoDecoder();
-        videoDecoder.init(binding.surfaceView.getHolder().getSurface(), path);
 
         binding.surfaceView.getHolder().addCallback(this);
     }
@@ -67,8 +64,8 @@ public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolde
 
     public void startDecode() {
 //        String path = getExternalFilesDir("") + "/yazi.mp4";
-        VideoDecoder videoDecoder = new VideoDecoder();
-        videoDecoder.init(binding.surfaceView.getHolder().getSurface(), path);
-        new Thread(videoDecoder).start();
+        H264Player h264Player = new H264Player();
+        h264Player.init(this,path,surfaceHolder.getSurface(),1280,960,30);
+        new Thread(h264Player).start();
     }
 }
