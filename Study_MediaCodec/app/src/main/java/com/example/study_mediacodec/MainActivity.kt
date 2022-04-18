@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.study_mediacodec.audio.RecordAudioActivity
 import com.example.study_mediacodec.camera.Camera1Activity
+import com.example.study_mediacodec.camera.VideoRecodeActivity
 import com.example.study_mediacodec.databinding.ActivityMainBinding
 import com.example.study_mediacodec.video.AVActivity
 import com.example.study_mediacodec.video.AudioActivity
@@ -35,6 +36,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.tv5.setOnClickListener {
             startActivity(Intent(this, Camera1Activity::class.java))
+        }
+
+        binding.tv6.setOnClickListener {
+            startActivity(Intent(this, VideoRecodeActivity::class.java))
         }
     }
 }

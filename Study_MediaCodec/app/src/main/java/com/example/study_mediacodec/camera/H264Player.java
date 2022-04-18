@@ -3,6 +3,7 @@ package com.example.study_mediacodec.camera;
 import android.content.Context;
 import android.media.MediaCodec;
 import android.media.MediaFormat;
+import android.util.Log;
 import android.view.Surface;
 
 import com.blankj.utilcode.util.LogUtils;
@@ -60,6 +61,7 @@ public class H264Player implements Runnable {
         int dataLength = h264Bytes.length;
         LogUtils.e("-->>数据总长度=" + dataLength);
         MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
+        long startTime = System.currentTimeMillis() * 1000;
         while (isProgress) {
             if (startIndex >= dataLength) {
                 break;
@@ -85,6 +87,7 @@ public class H264Player implements Runnable {
                 continue;
             }
             int decodeOutIndex = mediaCodec.dequeueOutputBuffer(info, TIMEOUT_US);
+            Log.e("-->>", "从MediaCodec.BufferInfo获取到的时间戳=" + info.presentationTimeUs);
             if (decodeOutIndex >= 0) {
                 mediaCodec.releaseOutputBuffer(decodeOutIndex, true);
             } else {

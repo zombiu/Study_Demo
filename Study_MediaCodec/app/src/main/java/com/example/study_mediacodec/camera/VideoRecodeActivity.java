@@ -10,34 +10,24 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.Surface;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 
 import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.example.study_mediacodec.R;
+import com.example.study_mediacodec.camera.encoder.AudioEncoder;
+import com.example.study_mediacodec.camera.encoder.AudioRecorder;
 import com.example.study_mediacodec.camera.encoder.VideoEncoder2;
-import com.example.study_mediacodec.databinding.ActivityCamera1Binding;
+import com.example.study_mediacodec.databinding.ActivityVideoRecodeBinding;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-/**
- * API Level	Camera API	Preview View
- * 9-13	        Camera1	SurfaceView
- * 14-20	    Camera1	TextureView
- * 21-23	    Camera2	TextureView
- * 24	        Camera2	SurfaceView
- */
-public class Camera1Activity extends AppCompatActivity implements Camera.PreviewCallback {
-
-    private ActivityCamera1Binding binding;
+public class VideoRecodeActivity extends AppCompatActivity implements Camera.PreviewCallback {
+    private ActivityVideoRecodeBinding binding;
 
     private Camera camera;
     private Camera.Parameters cameraParameters;
@@ -49,17 +39,17 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
     public int previewHeight;
     public int frameRate;
     private String savePath;
+    private Mp4Recorder mp4Recorder;
 
     private SurfaceHolder surfaceHolder;
     private ExecutorService executorService;
 
-    //    private VideoEncoder videoEncoder = new VideoEncoder();
-    private VideoEncoder2 videoEncoder = new VideoEncoder2();
+    private VideoEncoder2 videoEncoder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityCamera1Binding.inflate(getLayoutInflater());
+        binding = ActivityVideoRecodeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         init();
@@ -69,35 +59,26 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
         binding.btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 初始化输出路径
-                savePath = getExternalCacheDir().getAbsolutePath() + File.separator + System.currentTimeMillis() + ".h264";
-                // execute会抛出异常 submit可以在future 中获取异常
-                Future<?> submit = executorService.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        videoEncoder.start(savePath);
-                    }
-                });
-                /*try {
-                    Object o = submit.get();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }*/
+                AudioEncoder audioEncoder = new AudioEncoder();
+                videoEncoder = new VideoEncoder2();
+                mp4Recorder = new Mp4Recorder(VideoRecodeActivity.this, audioEncoder, videoEncoder);
+                mp4Recorder.startRecording();
             }
         });
         binding.btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                videoEncoder.stop();
+                if (mp4Recorder != null) {
+                    mp4Recorder.stopRecording();
+                    mp4Recorder = null;
+                }
             }
         });
 
         binding.btnGoPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PlayVideoActivity.start(Camera1Activity.this, savePath);
+                PlayVideoActivity.start(VideoRecodeActivity.this, savePath);
             }
         });
 
@@ -123,20 +104,20 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
         });
 
         openCamera(cameraFacing);
+    }
 
-        // setParameters 获取到分辨率 帧率 之后 再init
-        videoEncoder.init(DEFAULT_WIDTH, DEFAULT_HEIGHT, frameRate);
+    private void startRecording() {
+        AudioRecorder audioRecorder = new AudioRecorder();
+        AudioEncoder audioEncoder = new AudioEncoder();
+        audioEncoder.init();
+        audioEncoder.setDataProvider(audioRecorder);
+
     }
 
     //     java.lang.RuntimeException: Camera is being used after Camera.release() was called
     //        at android.hardware.Camera.setHasPreviewCallback(Native Method)
     // 这里需要    camera.setPreviewCallback(null);
     private void releaseCamera() {
-        /*try {
-            camera.setPreviewDisplay(null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         camera.setPreviewCallback(null);
         camera.stopPreview();
         camera.release();
@@ -149,6 +130,7 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
         }
         camera = Camera.open(cameraFacing);
         setParameters(camera);
+        // 设置预览数据回调
         camera.setPreviewCallback(this);
     }
 
@@ -296,7 +278,10 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
     @Override
     public void onPreviewFrame(byte[] bytes, Camera camera) {
 //        LogUtils.e("回调视频nv21数据 " + bytes.length);
-        videoEncoder.putFrameData(bytes);
+        // 将原始视频数据 交给视频编码器处理
+        if (videoEncoder != null) {
+            videoEncoder.putFrameData(bytes);
+        }
     }
 
     @Override
