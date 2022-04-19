@@ -27,7 +27,7 @@ public class VideoEncoder2 implements Runnable {
     public int colorFormat = COLOR_FormatYUV422Flexible;
     private MediaCodec mediaCodec;
     private BlockingQueue<byte[]> mQueue = new LinkedBlockingQueue<>();
-    private volatile boolean isEncoding;
+    private volatile boolean isRunning;
     private String h264Path;
     private File file;
     private int width;
@@ -43,7 +43,7 @@ public class VideoEncoder2 implements Runnable {
     private Mp4Recorder mp4Recorder;
     public int trackIndex = -1;
     private IMediaCodecListener mediaCodecListener;
-    public volatile boolean stop;
+//    public volatile boolean stop;
 
     public void setMediaCodecListener(IMediaCodecListener mediaCodecListener) {
         this.mediaCodecListener = mediaCodecListener;
@@ -105,8 +105,7 @@ public class VideoEncoder2 implements Runnable {
 
     public void stop() {
         synchronized (this) {
-            stop = true;
-            isEncoding = false;
+            isRunning = false;
             mQueue.clear();
         }
     }
@@ -114,10 +113,10 @@ public class VideoEncoder2 implements Runnable {
     @Override
     public void run() {
         if (TextUtils.isEmpty(h264Path)) {
-            isEncoding = false;
+            isRunning = false;
             return;
         }
-        isEncoding = true;
+        isRunning = true;
         file = new File(h264Path);
         if (file.exists()) {
             file.delete();
@@ -128,7 +127,7 @@ public class VideoEncoder2 implements Runnable {
             bufferedOutputStream = new BufferedOutputStream(fileOutputStream, 2048);
         } catch (IOException e) {
             e.printStackTrace();
-            isEncoding = false;
+            isRunning = false;
             return;
         }
 
@@ -137,7 +136,7 @@ public class VideoEncoder2 implements Runnable {
 //        bufferInfo = new MediaCodec.BufferInfo();
         // 保存开始时的pts
         presentationTimeUs = System.currentTimeMillis() * 1000;
-        while (isEncoding) {
+        while (isRunning) {
             byte[] data = getFrameData();
 //            LogUtils.e("获取nv21数据 " + data);
             if (data == null) {
@@ -167,7 +166,7 @@ public class VideoEncoder2 implements Runnable {
     }
 
     public void putFrameData(byte[] data) {
-        if (data == null || !isEncoding) {
+        if (data == null || !isRunning) {
             return;
         }
         try {
@@ -341,6 +340,10 @@ public class VideoEncoder2 implements Runnable {
             bufferInfo = new MediaCodec.BufferInfo();
             outputIndex = mediaCodec.dequeueOutputBuffer(bufferInfo, TIMEOUT_US);
         }
+    }
+
+    public boolean isRunning() {
+        return isRunning;
     }
 
     private boolean isMediaMuxer() {

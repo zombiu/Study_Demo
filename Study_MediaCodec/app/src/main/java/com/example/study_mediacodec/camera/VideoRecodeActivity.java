@@ -131,6 +131,22 @@ public class VideoRecodeActivity extends AppCompatActivity implements Camera.Pre
         camera = Camera.open(cameraFacing);
         setParameters(camera);
         // 设置预览数据回调
+        // 每产生一帧都要开辟一个新的buffer，进行存储帧数据，这样不断开辟和回收内存，GC会很频繁，效率很低
+        // 使用mCamera.setPreviewCallbackWithBuffer(this)方法代替
+        /**
+         * 使用步骤：
+         *
+         * 1、先设置回调:
+         *
+         * mCamera.setPreviewCallbackWithBuffer(this)
+         *
+         * 2、增加buffer:
+         *
+         * mCamera.addCallbackBuffer(new byte[((previewWidth * previewHeight) * ImageFormat.getBitsPerPixel(ImageFormat.NV21)) / 8])
+         * ————————————————
+         * 版权声明：本文为CSDN博主「天空还是那么蓝」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+         * 原文链接：https://blog.csdn.net/w958796636/article/details/51038389
+         */
         camera.setPreviewCallback(this);
     }
 

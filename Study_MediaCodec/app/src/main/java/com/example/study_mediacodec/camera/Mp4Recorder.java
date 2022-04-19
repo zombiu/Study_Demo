@@ -46,6 +46,7 @@ public class Mp4Recorder implements IMediaCodecListener, Runnable {
     private int index = 0;
     private int videoTrackIndex = -1;
     private int audioTrackIndex = -1;
+    private AudioRecorder audioRecorder;
 
     public Mp4Recorder(Context context, AudioEncoder audioEncoder, VideoEncoder2 videoEncoder) {
         this.context = context;
@@ -57,7 +58,7 @@ public class Mp4Recorder implements IMediaCodecListener, Runnable {
         this.audioEncoder = audioEncoder;
         this.videoEncoder = videoEncoder;
         try {
-            AudioRecorder audioRecorder = new AudioRecorder();
+            audioRecorder = new AudioRecorder();
             audioRecorder.init();
             audioEncoder.setDataProvider(audioRecorder);
             audioEncoder.init();
@@ -110,6 +111,9 @@ public class Mp4Recorder implements IMediaCodecListener, Runnable {
 
     public void stopRecording() {
         isRecording = false;
+        if (audioRecorder != null) {
+            audioRecorder.stop();
+        }
         if (videoEncoder != null) {
             videoEncoder.stop();
         }
@@ -191,7 +195,7 @@ public class Mp4Recorder implements IMediaCodecListener, Runnable {
     public void onStop(int mediaType) {
         synchronized (this) {
 //            && audioEncoder.stop
-            if (videoEncoder.stop && audioEncoder.stop) {
+            if (!videoEncoder.isRunning() && !audioEncoder.isRunning()) {
                 isRecording = false;
             }
         }
@@ -225,11 +229,11 @@ public class Mp4Recorder implements IMediaCodecListener, Runnable {
         try {
             mediaMuxer.stop();
             mediaMuxer.release();
-        }catch (Exception e) {
+        } catch (Exception e) {
             LogUtils.e("-->>" + e.getMessage());
             e.printStackTrace();
         }
-//        executorService.shutdown();
+        executorService.shutdown();
     }
 
     public boolean isRecording() {

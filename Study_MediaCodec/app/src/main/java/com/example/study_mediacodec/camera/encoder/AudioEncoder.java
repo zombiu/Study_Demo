@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 用两个线程是否更有效率 一个线程编码 一个线程写入？
@@ -35,11 +36,12 @@ public class AudioEncoder implements Runnable, IDataProvider {
     // 未编码的pcm数据
 //    private BlockingQueue<byte[]> mDataQueue = new ArrayBlockingQueue<>(10);
     // 已编码的acc数据
-    private BlockingQueue<byte[]> encodedDataQueue = new ArrayBlockingQueue<>(10);
+    private BlockingQueue<byte[]> encodedDataQueue = new LinkedBlockingQueue<>();
 
     private MediaCodec mediaCodec;
     private IDataProvider provider;
-    public volatile boolean stop;
+    //    public volatile boolean stop;
+    private volatile boolean isRunning;
     private long presentationTimeUs;
     private Mp4Recorder mp4Recorder;
     private int trackIndex = -1;
@@ -88,6 +90,7 @@ public class AudioEncoder implements Runnable, IDataProvider {
         if (TextUtils.isEmpty(path)) {
             return;
         }
+        isRunning = true;
         mediaCodec.start();
         new Thread(new Runnable() {
             @Override
@@ -123,7 +126,7 @@ public class AudioEncoder implements Runnable, IDataProvider {
         presentationTimeUs = System.nanoTime() / 1000L;
 //        MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
         byte[] aacChunk;
-        while (!stop || !encodedDataQueue.isEmpty()) {
+        while (isRunning || !provider.getDataQueue().isEmpty()) {
             // 获取录制的pcm数据
             pcmData = provider.dequeueData();
             if (pcmData == null) {
@@ -216,8 +219,12 @@ public class AudioEncoder implements Runnable, IDataProvider {
 
     public void stop() {
         synchronized (this) {
-            stop = true;
+            isRunning = false;
         }
+    }
+
+    public boolean isRunning() {
+        return isRunning;
     }
 
     private boolean isMediaMuxer() {
