@@ -117,7 +117,7 @@ public class VideoEncoder2 implements Runnable {
             return;
         }
         isRunning = true;
-        file = new File(h264Path);
+        /*file = new File(h264Path);
         if (file.exists()) {
             file.delete();
         }
@@ -129,7 +129,7 @@ public class VideoEncoder2 implements Runnable {
             e.printStackTrace();
             isRunning = false;
             return;
-        }
+        }*/
 
         mediaCodec.start();
 

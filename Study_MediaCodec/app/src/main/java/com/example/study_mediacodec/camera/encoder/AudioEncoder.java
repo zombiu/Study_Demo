@@ -100,10 +100,10 @@ public class AudioEncoder implements Runnable, IDataProvider {
                 }
             }
         }).start();
-        File mFile = new File(path);
+        /*File mFile = new File(path);
         if (mFile.exists()) {
             mFile.delete();
-        }
+        }*/
         FileOutputStream mFileOutputStream = null;
         BufferedOutputStream mBufferedOutputStream = null;
         /*try {
