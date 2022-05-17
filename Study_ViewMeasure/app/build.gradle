@@ -50,4 +50,8 @@ dependencies {
     implementation 'com.github.ssseasonnn:Sange:1.1.1'
 
     implementation 'com.blankj:utilcodex:1.30.5'
+
+    //嵌套滑动布局
+    implementation 'com.github.donkingliang:ConsecutiveScroller:4.3.1'
+
 }

@@ -117,6 +117,7 @@ public class VideoEncoder2 implements Runnable {
             return;
         }
         isRunning = true;
+        // 这里犯傻了 每次因为把mp4文件删除了 还奇怪为啥生成不了mp4
         /*file = new File(h264Path);
         if (file.exists()) {
             file.delete();

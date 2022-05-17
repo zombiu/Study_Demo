@@ -53,8 +53,8 @@ public class Camera1Activity extends AppCompatActivity implements Camera.Preview
     private SurfaceHolder surfaceHolder;
     private ExecutorService executorService;
 
-    //    private VideoEncoder videoEncoder = new VideoEncoder();
-    private VideoEncoder2 videoEncoder = new VideoEncoder2();
+    private VideoEncoder videoEncoder = new VideoEncoder();
+//    private VideoEncoder2 videoEncoder = new VideoEncoder2();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

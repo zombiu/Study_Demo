@@ -25,7 +25,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * 用两个线程是否更有效率 一个线程编码 一个线程写入？
  */
-public class AudioEncoder implements Runnable, IDataProvider {
+public class AudioEncoder implements Runnable {
     private int type = 1;
     public final static int DEFAULT_INPUT = MediaRecorder.AudioSource.MIC;
     public final static int DEFAULT_SAMPLE_RATE_IN_HZ = 44_100;
@@ -36,7 +36,7 @@ public class AudioEncoder implements Runnable, IDataProvider {
     // 未编码的pcm数据
 //    private BlockingQueue<byte[]> mDataQueue = new ArrayBlockingQueue<>(10);
     // 已编码的acc数据
-    private BlockingQueue<byte[]> encodedDataQueue = new LinkedBlockingQueue<>();
+//    private BlockingQueue<byte[]> encodedDataQueue = new LinkedBlockingQueue<>();
 
     private MediaCodec mediaCodec;
     private IDataProvider provider;
