@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getNames(): List<String> {
-        return arrayListOf("碧海鱼龙", "181000000", "江湖有鱼", "无妄山海", "元神")
+//        return arrayListOf("碧海鱼龙", "181000000", "江湖有鱼", "无妄山海", "元神")
+        return arrayListOf("碧海鱼龙", "181000000", "江湖有鱼", )
     }
 
     inner class NotifyAdapter : RecyclerView.Adapter<NotifyHolder>() {
@@ -65,8 +66,12 @@ class MainActivity : AppCompatActivity() {
                     .append("、")
             }
             binding.members.setText(stringBuilder)
-
-            if (binding.members.measuredWidth <= 0) {
+            MeasureUtils.measureWrapContent(binding.members)
+            LogUtils.e("-->>手动测量 宽=" + binding.members.measuredWidth)
+            binding.members.post {
+                LogUtils.e("-->>自动测量 宽=" + binding.members.width)
+            }
+            /*if (binding.members.measuredWidth <= 0) {
                 //这种是最准的
                 binding.members.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
                     override fun onLayoutChange(
@@ -90,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
                 })
 
-                binding.root.addOnLayoutChangeListener(object :View.OnLayoutChangeListener{
+                binding.root.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
                     override fun onLayoutChange(
                         v: View,
                         left: Int,
@@ -111,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
             measureItem1()
 
-            measureItem2()
+            measureItem2()*/
         }
 
         /**

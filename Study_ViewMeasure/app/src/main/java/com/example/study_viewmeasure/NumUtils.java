@@ -11,7 +11,7 @@ public class NumUtils {
         DecimalFormat df = new DecimalFormat("0.00");
         df.setRoundingMode(RoundingMode.DOWN);
         String s = df.format(count / 10000d) + "万";
-        LogUtils.e("--<< " + s);
+//        LogUtils.e("--<< " + s);
     }
 }
 
