@@ -26,6 +26,8 @@ public class ImageSpanTextView extends View {
     private int width = ConvertUtils.dp2px(100);
     private int height = ConvertUtils.dp2px(100);
 
+    private int imageTopOffset = ConvertUtils.dp2px(80);
+
     private Bitmap squareBitmap;
 
     public ImageSpanTextView(Context context) {
@@ -57,7 +59,8 @@ public class ImageSpanTextView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawBitmap(squareBitmap, getWidth() - ConvertUtils.dp2px(100), ConvertUtils.dp2px(80), paint);
+        LogUtils.e("字体范围=" + GsonUtils.toJson(fontMetrics));
+        canvas.drawBitmap(squareBitmap, getWidth() - ConvertUtils.dp2px(100), imageTopOffset, paint);
         paint.setColor(Color.parseColor("#000000"));
         float[] measuredTextWidth = new float[1];
         int startIndex = 0;
@@ -65,11 +68,15 @@ public class ImageSpanTextView extends View {
         int width = 0;
         int verticalOffset = (int) -paint.getFontMetrics().top;
         while (startIndex < content.length()) {
-            /*if (verticalOffset < ConvertUtils.dp2px(50) || verticalOffset + ConvertUtils.dp2px(100) > ConvertUtils.dp2px(50) + ConvertUtils.dp2px(100)) {
+            // 计算当前行文字 所占的top和bottom
+            int top = (int) (verticalOffset + fontMetrics.top);
+            int bottom = (int) (verticalOffset + fontMetrics.bottom);
+
+            if (bottom < imageTopOffset || top > imageTopOffset + ConvertUtils.dp2px(100)) {
                 width = getWidth();
             } else {
                 width = getWidth() - ConvertUtils.dp2px(100);
-            }*/
+            }
             count = textPaint.breakText(content, startIndex, content.length(), true, width, measuredTextWidth);
             LogUtils.e("-->>" + count + " content=" + content.subSequence(0, count));
             canvas.drawText(content, startIndex, startIndex + count, 0, verticalOffset, paint);
