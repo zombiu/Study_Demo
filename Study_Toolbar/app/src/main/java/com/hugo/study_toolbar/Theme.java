@@ -49,8 +49,8 @@ public class Theme {
         }
     }
 
-    public static Drawable getRoundRectSelectorDrawable(int corner, int normalColor, int pressedColor) {
-        if (Build.VERSION.SDK_INT >= 21) {
+    public static Drawable getRoundRectSelectorDrawable(int corner, int normalColor, int pressedColor, boolean isRipple) {
+        if (Build.VERSION.SDK_INT >= 21 && isRipple) {
             Drawable maskDrawable = createRoundRectDrawable(ConvertUtils.dp2px(10), 0xffffffff);
             Drawable contentDrawable = createRoundRectDrawable(ConvertUtils.dp2px(10), normalColor);
             ColorStateList colorStateList = new ColorStateList(
@@ -60,14 +60,15 @@ public class Theme {
             // mask 直译过来有遮罩的意思，它会限定水波纹的范围
             return new RippleDrawable(colorStateList, contentDrawable, maskDrawable);
         } else {
+            // 00表示不透明度为0  ffffff表示白色
             int i = pressedColor & 0x00ffffff;
             LogUtils.e("-->>原始颜色=" + pressedColor);
             LogUtils.e("-->>颜色&结果=" + i);
             StateListDrawable stateListDrawable = new StateListDrawable();
-            stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, createRoundRectDrawable(dp2px(5), (pressedColor)));
-            stateListDrawable.addState(new int[]{android.R.attr.state_selected}, createRoundRectDrawable(dp2px(5), (pressedColor)));
-            // StateSet.WILD_CARD 通配符,一个状态规范，将被所有的states匹配。本质上是空状态数组
-            stateListDrawable.addState(StateSet.WILD_CARD, createRoundRectDrawable(dp2px(5), normalColor));
+            stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, createRoundRectDrawable(dp2px(corner), (pressedColor)));
+            stateListDrawable.addState(new int[]{android.R.attr.state_selected}, createRoundRectDrawable(dp2px(corner), (pressedColor)));
+            // StateSet.WILD_CARD 通配符,一个状态规范，将被所有的states匹配。本质上是空状态数组  这里是默认状态 也就是未点击时的状态
+            stateListDrawable.addState(StateSet.WILD_CARD, createRoundRectDrawable(dp2px(corner), normalColor));
             return stateListDrawable;
         }
     }

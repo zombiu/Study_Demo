@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.toolbar.addView(centeredTitleTextView)
 
-        var cardView:MaterialCardView
+        var cardView: MaterialCardView
         centeredTitleTextView.setText("我是标题我是标题我是标题我是标题我是标题我是标题我是标题")
 
         // 在activity上设置 android:theme="@style/AppTheme.ToolbarHeight" 控制宽度
@@ -53,9 +53,11 @@ class MainActivity : AppCompatActivity() {
         }
 
 //        binding.tv1.background = Theme.getRoundRectSelectorDrawable(R.color.design_default_color_error)
-        binding.tv1.background = Theme.getRoundRectSelectorDrawable(10,
-            ContextCompat.getColor(this,android.R.color.darker_gray),
-            ContextCompat.getColor(this,android.R.color.holo_red_light)
+        binding.tv1.background = Theme.getRoundRectSelectorDrawable(
+            10,
+            ContextCompat.getColor(this, android.R.color.darker_gray),
+            ContextCompat.getColor(this, android.R.color.holo_red_light),
+            false
         )
         binding.tv1.setOnClickListener {
             LogUtils.e("-->>点击了tv1")
@@ -90,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
         var cancel: TextView = searchItem.actionView.findViewById(R.id.cancel)
         cancel.setOnClickListener {
-            searchView.setQuery("",false)
+            searchView.setQuery("", false)
             // 处于收缩状态
             searchView.setIconified(true)
             cancel.visibility = View.GONE
