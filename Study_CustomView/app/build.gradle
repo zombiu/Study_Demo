@@ -5,7 +5,10 @@ plugins {
 
 android {
     compileSdk 32
-
+    //开启viewBinding
+    viewBinding {
+        enabled = true
+    }
     defaultConfig {
         applicationId "com.example.study_customview"
         minSdk 21

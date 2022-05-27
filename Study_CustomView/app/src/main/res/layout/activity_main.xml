@@ -23,4 +23,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <com.example.study_customview.widget.CameraRotateView
+        android:id="@+id/cameraRotateView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
