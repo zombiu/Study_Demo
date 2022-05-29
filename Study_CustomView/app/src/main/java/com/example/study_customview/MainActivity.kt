@@ -1,6 +1,7 @@
 package com.example.study_customview
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.study_customview.databinding.ActivityMainBinding
@@ -16,5 +17,9 @@ class MainActivity : AppCompatActivity() {
         objectAnimator.setDuration(2000)
         objectAnimator.startDelay = 2000
         objectAnimator.start()*/
+
+        binding.tv1.setOnClickListener {
+            startActivity(Intent(this, CustomViewActivity::class.java))
+        }
     }
 }

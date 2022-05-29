@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuItemCompat
 import com.blankj.utilcode.util.LogUtils
+import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.hugo.study_toolbar.databinding.ActivityMainBinding
 
@@ -62,6 +63,9 @@ class MainActivity : AppCompatActivity() {
         binding.tv1.setOnClickListener {
             LogUtils.e("-->>点击了tv1")
         }
+
+        var img = "https://t7.baidu.com/it/u=2621658848,3952322712&fm=193&f=GIF"
+        Glide.with(this).load(img).into(binding.iv1)
     }
 
     var expandListener: MenuItem.OnActionExpandListener = object : MenuItem.OnActionExpandListener {
