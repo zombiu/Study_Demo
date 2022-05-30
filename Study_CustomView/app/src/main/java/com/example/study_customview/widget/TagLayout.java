@@ -55,12 +55,16 @@ public class TagLayout extends ViewGroup {
             if (i >= rectList.size()) {
                 rectList.add(new Rect());
             }
+            MarginLayoutParams layoutParams = (MarginLayoutParams) child.getLayoutParams();
+            int marginHorizontal = layoutParams.getMarginStart() + layoutParams.getMarginEnd();
+            int marginVertical = layoutParams.topMargin + layoutParams.bottomMargin;
             // 计算该子view的摆放位置和宽高  todo 需要处理一下margin
-            rectList.get(i).set(lineWidthUse, maxHeight, lineWidthUse + child.getMeasuredWidth(), maxHeight + child.getMeasuredHeight());
+            rectList.get(i).set(lineWidthUse, maxHeight, lineWidthUse + child.getMeasuredWidth() + marginHorizontal,
+                    maxHeight + child.getMeasuredHeight() + marginVertical);
             // 计算当前行占用的 最大宽度
-            lineWidthUse += child.getMeasuredWidth();
+            lineWidthUse += child.getMeasuredWidth() + marginHorizontal;
             // 计算当前行 占用的最大高度
-            lineHeightUse = Math.max(lineHeightUse, child.getMeasuredHeight());
+            lineHeightUse = Math.max(lineHeightUse, child.getMeasuredHeight() + marginVertical);
 
             // 计算最大宽度，父view需要以此计算自己的宽度
             maxWidth = Math.max(maxWidth, lineWidthUse);
@@ -76,7 +80,10 @@ public class TagLayout extends ViewGroup {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         for (int i = 0; i < getChildCount(); i++) {
             Rect rect = rectList.get(i);
-            getChildAt(i).layout(rect.left, rect.top, rect.right, rect.bottom);
+            View child = getChildAt(i);
+            MarginLayoutParams layoutParams = (MarginLayoutParams) child.getLayoutParams();
+            // 布局时 去除margin
+            child.layout(rect.left + layoutParams.getMarginStart(), rect.top + layoutParams.topMargin, rect.right - layoutParams.getMarginEnd(), rect.bottom - layoutParams.bottomMargin);
         }
     }
 
