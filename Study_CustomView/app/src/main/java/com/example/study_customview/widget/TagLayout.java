@@ -55,7 +55,7 @@ public class TagLayout extends ViewGroup {
             if (i >= rectList.size()) {
                 rectList.add(new Rect());
             }
-            // 计算该子view的摆放位置和宽高
+            // 计算该子view的摆放位置和宽高  todo 需要处理一下margin
             rectList.get(i).set(lineWidthUse, maxHeight, lineWidthUse + child.getMeasuredWidth(), maxHeight + child.getMeasuredHeight());
             // 计算当前行占用的 最大宽度
             lineWidthUse += child.getMeasuredWidth();
@@ -78,5 +78,11 @@ public class TagLayout extends ViewGroup {
             Rect rect = rectList.get(i);
             getChildAt(i).layout(rect.left, rect.top, rect.right, rect.bottom);
         }
+    }
+
+
+    @Override
+    public LayoutParams generateLayoutParams(AttributeSet attrs) {
+        return new MarginLayoutParams(getContext(), attrs);
     }
 }
