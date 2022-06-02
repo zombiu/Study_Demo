@@ -16,6 +16,9 @@ import com.blankj.utilcode.util.LogUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * 内部加一个handle可以修改成 一个支持延时弹出的dialog
+ */
 public abstract class BaseDialogFragment extends DialogFragment {
 
     private BaseDialogViewModel baseDialogViewModel;
@@ -23,7 +26,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
 
     public BaseDialogFragment(FragmentActivity fragmentActivity) {
-        baseDialogViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(BaseDialogViewModel.class);
+        baseDialogViewModel = new ViewModelProvider(fragmentActivity, new ViewModelProvider.NewInstanceFactory()).get(BaseDialogViewModel.class);
 
         fragmentManager = fragmentActivity.getSupportFragmentManager();
         //初始化value
@@ -39,9 +42,18 @@ public abstract class BaseDialogFragment extends DialogFragment {
             } else {
                 //dismiss前 取消观察
                 baseDialogViewModel.getDialogLiveData().removeObservers(fragmentActivity);
-                dismiss();
+                baseDialogViewModel.getDialogLiveData().setValue(null);
+                realDismiss();
             }
         });
+    }
+
+    private void realDismiss() {
+        if (isAdded()) {
+            dismissAllowingStateLoss();
+        } else {
+            LogUtils.e("-->>", "dismiss fragment 还未attach");
+        }
     }
 
     private String getFragmentTag() {
