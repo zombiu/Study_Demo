@@ -1,5 +1,7 @@
 package com.example.study_customview.widget;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.OverScroller;
 
 import androidx.annotation.Nullable;
 
@@ -24,11 +27,18 @@ public class ScaleImageView extends View {
     private float smallScale;
     private int originalOffsetX;
     private int originalOffsetY;
+    // 滑动之后的offset
+    private int scrollOffsetX;
+    private int scrollOffsetY;
+
     private float factor = 1.5f;
     private Bitmap bitmap;
     private Paint paint = new Paint();
     // 各种手势的侦测器
     private GestureDetector gestureDetector = new GestureDetector(getContext(), new ScaleGestureListener());
+    // 支持惯性滑动
+    private OverScroller scroller = new OverScroller(getContext());
+    private FlingRunnable flingRunnable = new FlingRunnable();
 
     private ObjectAnimator animator = ObjectAnimator.ofFloat(this, "scaleRatio", 0, 1);
 
@@ -44,12 +54,35 @@ public class ScaleImageView extends View {
     }
 
     public ScaleImageView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs, 0);
+        this(context, attrs, 0);
     }
 
     public ScaleImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
+        init();
+    }
+
+    private void init() {
+        animator.addListener(new AnimatorListenerAdapter() {
+
+            @Override
+            public void onAnimationEnd(Animator animation, boolean isReverse) {
+                super.onAnimationEnd(animation, isReverse);
+                /*LogUtils.e("-->>动画结束1");
+                // 动画结束时 重置一下 滚动的偏移量
+                scrollOffsetX = 0;
+                scrollOffsetY = 0;*/
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                LogUtils.e("-->>动画结束");
+                // 动画结束时 重置一下 滚动的偏移量
+                scrollOffsetX = 0;
+                scrollOffsetY = 0;
+            }
+        });
     }
 
     @Override
@@ -62,7 +95,7 @@ public class ScaleImageView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 
         // 需要制定bitmap 宽高
-//        bitmap = ImageUtils.getBitmap(R.drawable.ic_avatar);
+//        bitmap = ImageKit.getBitmap(ConvertUtils.dp2px(200));
         bitmap = getBitMap(ConvertUtils.dp2px(200));
 
         boolean type = w / bitmap.getWidth() > h / bitmap.getHeight();
@@ -83,6 +116,7 @@ public class ScaleImageView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        canvas.translate(scrollOffsetX * scaleRatio, scrollOffsetY * scaleRatio);
         // 以view中心点为放缩原点，放缩倍数为 smallScale倍
         float ratio = smallScale + (bigScale - smallScale) * scaleRatio;
         canvas.scale(ratio, ratio, getWidth() / 2, getHeight() / 2);
@@ -137,8 +171,26 @@ public class ScaleImageView extends View {
             return false;
         }
 
+        /**
+         * @param e1
+         * @param e2
+         * @param distanceX 前一位置x坐标 - 现在位置x坐标
+         * @param distanceY 前一位置y坐标 - 现在位置y坐标
+         * @return 除了down方法中的返回值， 其它方法中的返回值 不会影响程序的行为
+         */
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            if (big) {
+                LogUtils.e("-->>可偏移的宽度=" + ((getWidth() - bitmap.getWidth()) / 2));
+                scrollOffsetX -= distanceX;
+                // 这里计算时 ，要把放大的系数算上
+                scrollOffsetX = (int) Math.min(scrollOffsetX, (bitmap.getWidth() * bigScale - getWidth()) / 2);
+                scrollOffsetX = (int) Math.max(scrollOffsetX, -(bitmap.getWidth() * bigScale - getWidth()) / 2);
+                scrollOffsetY -= distanceY;
+                scrollOffsetY = (int) Math.min(scrollOffsetY, (bitmap.getHeight() * bigScale - getHeight()) / 2);
+                scrollOffsetY = (int) Math.max(scrollOffsetY, -(bitmap.getHeight() * bigScale - getHeight()) / 2);
+                invalidate();
+            }
             return false;
         }
 
@@ -149,8 +201,27 @@ public class ScaleImageView extends View {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            return false;
+            if (big) {
+                // 开始坐标 一个用来辅助计算的坐标 有点不好理解
+                scroller.fling(scrollOffsetX, scrollOffsetY, (int) velocityX, (int) velocityY, (int) -(bitmap.getWidth() * bigScale - getWidth()) / 2, (int) (bitmap.getWidth() * bigScale - getWidth()) / 2,
+                        (int) -(bitmap.getHeight() * bigScale - getHeight()) / 2, (int) (bitmap.getHeight() * bigScale - getHeight()) / 2);
+                postOnAnimation(flingRunnable);
+            }
+            return true;
         }
     }
 
+    private class FlingRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            if (scroller.computeScrollOffset()) {
+                scrollOffsetX = scroller.getCurrX();
+                scrollOffsetY = scroller.getCurrY();
+                // 注意 这里需要进行刷新
+                invalidate();
+                postOnAnimation(this);
+            }
+        }
+    }
 }
