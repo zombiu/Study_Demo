@@ -7,6 +7,10 @@
     android:orientation="vertical"
     tools:context=".CustomViewActivity">
 
+    <com.example.study_customview.widget.ScaleImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <com.example.study_customview.widget.SquareImageView
         android:layout_width="400dp"
         android:layout_height="200dp"
