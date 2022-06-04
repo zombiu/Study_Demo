@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.OverScroller;
 
@@ -34,10 +35,12 @@ public class ScaleImageView extends View {
     private float factor = 1.5f;
     private Bitmap bitmap;
     private Paint paint = new Paint();
-    // 各种手势的侦测器
+    // 各种手势的探测器
     private GestureDetector gestureDetector = new GestureDetector(getContext(), new ScaleGestureListener());
-    // 支持惯性滑动
+    // 支持惯性滑动  跟Scroller的区别  OverScroller可以划过界 OverScroller松手时会有个初始速度
     private OverScroller scroller = new OverScroller(getContext());
+    // 支持多指触控的探测器
+    private ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(getContext(), new ScaleGestureDoctor());
     private FlingRunnable flingRunnable = new FlingRunnable();
 
     private ObjectAnimator animator = ObjectAnimator.ofFloat(this, "scaleRatio", 0, 1);
@@ -79,8 +82,8 @@ public class ScaleImageView extends View {
             public void onAnimationEnd(Animator animation) {
                 LogUtils.e("-->>动画结束");
                 // 动画结束时 重置一下 滚动的偏移量
-                scrollOffsetX = 0;
-                scrollOffsetY = 0;
+//                scrollOffsetX = 0;
+//                scrollOffsetY = 0;
             }
         });
     }
@@ -144,6 +147,10 @@ public class ScaleImageView extends View {
         public boolean onDoubleTap(MotionEvent e) {
             big = !big;
             if (big) {
+                // 双击时，计算如果以双击的地方为缩放点的偏移量
+                scrollOffsetX = (int) ((e.getX() - getWidth() / 2) * (1 - bigScale / smallScale));
+                scrollOffsetY = (int) ((e.getY() - getHeight() / 2) * (1 - bigScale / smallScale));
+//                resetScrollOffset();
                 animator.start();
             } else {
                 animator.reverse();
@@ -194,6 +201,13 @@ public class ScaleImageView extends View {
             return false;
         }
 
+        public void resetScrollOffset() {
+            scrollOffsetX = (int) Math.min(scrollOffsetX, (bitmap.getWidth() * bigScale - getWidth()) / 2);
+            scrollOffsetX = (int) Math.max(scrollOffsetX, -(bitmap.getWidth() * bigScale - getWidth()) / 2);
+            scrollOffsetY = (int) Math.min(scrollOffsetY, (bitmap.getHeight() * bigScale - getHeight()) / 2);
+            scrollOffsetY = (int) Math.max(scrollOffsetY, -(bitmap.getHeight() * bigScale - getHeight()) / 2);
+        }
+
         @Override
         public void onLongPress(MotionEvent e) {
 
@@ -202,7 +216,7 @@ public class ScaleImageView extends View {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             if (big) {
-                // 开始坐标 一个用来辅助计算的坐标 有点不好理解
+                // 开始坐标 一个用来辅助计算的坐标 有点不好理解 一般是中心点 这里使用的是中心点， 因为最开始 我们计算滑动偏移量时，就是以中心点为参考原点
                 scroller.fling(scrollOffsetX, scrollOffsetY, (int) velocityX, (int) velocityY, (int) -(bitmap.getWidth() * bigScale - getWidth()) / 2, (int) (bitmap.getWidth() * bigScale - getWidth()) / 2,
                         (int) -(bitmap.getHeight() * bigScale - getHeight()) / 2, (int) (bitmap.getHeight() * bigScale - getHeight()) / 2);
                 postOnAnimation(flingRunnable);
@@ -216,12 +230,33 @@ public class ScaleImageView extends View {
         @Override
         public void run() {
             if (scroller.computeScrollOffset()) {
+                // 将快滑时 计算出的滑动到的位置 赋值给偏移坐标
                 scrollOffsetX = scroller.getCurrX();
                 scrollOffsetY = scroller.getCurrY();
                 // 注意 这里需要进行刷新
                 invalidate();
                 postOnAnimation(this);
             }
+        }
+    }
+
+    private class ScaleGestureDoctor implements ScaleGestureDetector.OnScaleGestureListener {
+
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+
+            return false;
+        }
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector) {
+            return true;
+        }
+
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector) {
+
         }
     }
 }
