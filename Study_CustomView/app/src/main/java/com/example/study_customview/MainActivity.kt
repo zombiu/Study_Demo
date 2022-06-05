@@ -19,7 +19,9 @@ class MainActivity : AppCompatActivity() {
         objectAnimator.start()*/
 
         binding.tv1.setOnClickListener {
-            startActivity(Intent(this, CustomViewActivity::class.java))
+//            startActivity(Intent(this, CustomViewActivity::class.java))
+
+            startActivity(Intent(this, CustomScrollViewActivity::class.java))
         }
     }
 }

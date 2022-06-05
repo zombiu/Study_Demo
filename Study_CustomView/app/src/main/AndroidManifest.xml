@@ -13,6 +13,9 @@
             android:name=".CustomViewActivity"
             android:exported="false" />
         <activity
+            android:name=".CustomScrollViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
