@@ -10,7 +10,34 @@
     <com.example.study_customview.widget.CustomScrollImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
+        <com.example.study_customview.widget.CustomViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="1"
+            android:gravity="center"
+            android:textSize="50dp"
+            android:background="@android:color/holo_blue_light"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_red_light"
+            android:text="2"
+            android:gravity="center"
+            android:textSize="50dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_orange_light"
+            android:text="3"
+            android:gravity="center"
+            android:textSize="50dp"/>
+    </com.example.study_customview.widget.CustomViewPager>
 </androidx.appcompat.widget.LinearLayoutCompat>
