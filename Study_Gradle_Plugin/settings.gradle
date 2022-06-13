@@ -1,3 +1,7 @@
 // 'buildSrc' cannot be used as a project name as it is a reserved name ————buildSrc 不能配置到这里 项目会去自动识别的
 include ':app'
 rootProject.name = "Study_Gradle_Plugin"
+
+gradle.settingsEvaluated {
+    println "此hook可以获取配置完毕的setting对象"
+}

@@ -24,3 +24,14 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+// ext额外属性，Gradle域模型中所有增强对象都可以容纳额外的用户定义属性
+ext {
+    someThing = "1.0.3"
+}
+// 自定义一个task
+task printProperties {
+    doLast {
+        println "-->> ${rootProject.ext.someThing}"
+    }
+}
