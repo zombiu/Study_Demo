@@ -1,9 +1,13 @@
+import com.example.buildsrc.MyTestPlugin
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
 }
 
-apply plugin: Plugin2
+apply plugin: MyTestPlugin
+
+/*apply plugin: Plugin2
 
 class Plugin2 implements Plugin<Project> {
 
@@ -16,22 +20,22 @@ class Plugin2 implements Plugin<Project> {
         Task task = target.tasks.create('printExtConfig') {
             //通过 extConfig 属性，获取外部传递进来的 message 的具体内容。
             println("DemoPlugin message =" + target.extConfig.message)
-            // task 执行完后 会去执行 doLast
+            // task 执行完后 会去执行 doLast 这里可以拿到最新的 extension设置的值
             doLast {
                 println("custom plugin -->> doLast message=${extConfig.message}")
             }
 
         }
 
-        /*target.afterEvaluate {
+        *//*target.afterEvaluate {
             println("custom plugin -->> doLast message=${project.extConfig.message}")
-        }*/
+        }*//*
     }
 }
 
 class ExtConfig {
     String message = "this is old value"
-}
+}*/
 
 // 配置扩展
 extConfig {
@@ -68,7 +72,7 @@ android {
 }
 
 dependencies {
-
+    implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
