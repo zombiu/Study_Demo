@@ -21,7 +21,11 @@ class MainActivity : AppCompatActivity() {
         binding.tv1.setOnClickListener {
 //            startActivity(Intent(this, CustomViewActivity::class.java))
 
-            startActivity(Intent(this, CustomScrollViewActivity::class.java))
+//            startActivity(Intent(this, CustomScrollViewActivity::class.java))
+
+//            startActivity(Intent(this, NestedScrollActivity::class.java))
+
+            startActivity(Intent(this, TestScrollActivity::class.java))
         }
     }
 }

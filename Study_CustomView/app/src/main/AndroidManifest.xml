@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Study_CustomView">
         <activity
+            android:name=".TestScrollActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NestedScrollActivity"
+            android:exported="false" />
+        <activity
             android:name=".CustomViewActivity"
             android:exported="false" />
         <activity
