@@ -129,15 +129,19 @@ public class CustomScrollView extends FrameLayout {
                     ViewCompat.postInvalidateOnAnimation(this);
                 }*/
                 // 不使用scroller.springBack的回弹效果
-                smoothScrollTo(0, 0);
+//                smoothScrollTo(0, 0);
+                springBack(0, 0);
                 break;
             }
         }
         return true;
     }
 
-    private void springBack() {
-
+    private void springBack(int finalX, int finalY) {
+        // 开始位置是 已经滑到的当前位置，dx和dy表示需要滑动到的位置
+        int dy = finalY - getScrollY();
+        scroller.startScroll(getScrollX(), getScrollY(), 0, dy);
+        ViewCompat.postInvalidateOnAnimation(this);
     }
 
     private void smoothScrollTo(int finalX, int finalY) {
@@ -147,6 +151,7 @@ public class CustomScrollView extends FrameLayout {
     }
 
     private void smoothScrollBy(int dx, int dy) {
+        // 开始位置是 已经滑到的当前位置，dx和dy表示需要滑动到的位置
         scroller.startScroll(getScrollX(), prevScrollY, dx, dy);
         ViewCompat.postInvalidateOnAnimation(this);
     }
