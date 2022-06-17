@@ -15,6 +15,10 @@
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="visible">
 
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,6 +39,34 @@
 4.妇女产假、男方护理假、夫妻育儿假、独生子女陪护父母假请假需要哪些程序？
 
 答：根据实际情况，由本人或配偶申请，所在单位审核批准，假期结束后到所在单位人事部门销假。"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_launcher"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="三、关于男方护理假、夫妻育儿假、独生子女陪护父母假问题
+
+1.男方护理假的期限如何计算和确定？男方护理假期间享受哪些待遇？
+
+答：在妇女围产期和产假期间，男方可以享受总计十五天的护理假，不包含国家法定节假日、休息日和职业假。护理假的期限不按照生育子女数量进行叠加。护理假可以一次性使用，也可以分次使用。护理假期间的工资、奖金和其他福利待遇由用人单位照发。
+
+2.夫妻育儿假的期限如何计算和确定？育儿假期间享受哪些待遇？
+
+答：在子女三周岁内，夫妻双方每年（从子女出生之日起按照周年计算）各享受10天育儿假，育儿假不包含国家法定节假日、休息日、职业假。育儿假的期限不按照子女数量叠加享受。夫妻双方每年享受的育儿假应当在当年内使用，不能结转到下一年使用，可以一次性使用，也可以分次使用。育儿假期间的工资、奖金和其他福利待遇由用人单位照发。
+
+3.独生子女陪护父母假的期限如何计算和确定？陪护父母假期间享受哪些待遇？
+
+答：独生子女父母一方年满60周岁的，独生子女每年（从其父母一方满60周岁起按照周年计算）享受5天陪护父母假，不包含国家法定节假日、休息日、职业假。独生子女每年享受的陪护假应当在当年内使用，不能结转到下一年使用，可以一次性使用，也可以分次使用。陪护假期间的工资、奖金和其他福利待遇由用人单位照发。例如，独生子女父母中的一方在2021年12月1日时年满六十周岁，则2021年12月1日至2022年11月30日期间，独生子女可以享受五天陪护父母假。
+
+4.妇女产假、男方护理假、夫妻育儿假、独生子女陪护父母假请假需要哪些程序？
+
+答：根据实际情况，由本人或配偶申请，所在单位审核批准，假期结束后到所在单位人事部门销假。"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </com.example.study_customview.widget.CustomScrollView>
 
     <ScrollView

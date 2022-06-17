@@ -82,8 +82,22 @@ public class CustomScrollView extends FrameLayout {
                 final VelocityTracker velocityTracker = mVelocityTracker;
                 velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
                 int initialVelocity = (int) velocityTracker.getYVelocity();
-                LogUtils.e("-->>计算的速度=" + initialVelocity);
-                fling(-initialVelocity);
+                // 处理fling
+                if ((Math.abs(initialVelocity) >= mMinimumVelocity)) {
+                    LogUtils.e("-->>计算的速度=" + initialVelocity);
+                    // todo fling 结束 也需要处理一下回弹
+                    fling(-initialVelocity);
+                } else if (scroller.springBack(getScrollX(), getScrollY(), 0, 0, 0, 0)) {
+                    // 处理回弹
+                    ViewCompat.postInvalidateOnAnimation(this);
+                }
+                // startX 和startY很好解释，是起始坐标，minX，maxX，minY，maxY 这4个坐标构成了一个矩形
+                //该方法返回一个boolean,假如View移动到起始位置时，有部分或者全部位于矩形之外则返回true，反之返回false
+                // 如果我们在返回true时调用invalidate()方法那么View的computeScroll方法将被调用，View将会滚动，到什么位置停止？在View完全进入矩形的时候。
+                /*if (scroller.springBack(getScrollX(), getScrollY(), 0, 0, 0, 0)) {
+                    // 处理回弹
+                    ViewCompat.postInvalidateOnAnimation(this);
+                }*/
                 break;
             }
         }
@@ -95,9 +109,8 @@ public class CustomScrollView extends FrameLayout {
     public void computeScroll() {
         // 先判断mScroller滚动是否完成
         if (scroller.computeScrollOffset()) {
-            LogUtils.e("-->>滑动");
             // 这里调用View的scrollTo()完成实际的滚动
-            scrollTo(scroller.getCurrX(), scroller.getCurrY());
+            scrollTo(0, scroller.getCurrY());
             // 必须调用该方法，否则不一定能看到滚动效果
 //            invalidate();
             ViewCompat.postInvalidateOnAnimation(this);
@@ -108,7 +121,7 @@ public class CustomScrollView extends FrameLayout {
 
     public void fling(int velocityY) {
         if (getChildCount() > 0) {
-
+            // 以up时的 scrollX scrollY为开始坐标
             scroller.fling(getScrollX(), getScrollY(), // start
                     0, velocityY, // velocities
                     0, 0, // x
@@ -134,5 +147,10 @@ public class CustomScrollView extends FrameLayout {
     private void abortAnimatedScroll() {
         scroller.abortAnimation();
 //        stopNestedScroll(ViewCompat.TYPE_NON_TOUCH);
+    }
+
+    @Override
+    public boolean shouldDelayChildPressedState() {
+        return true;
     }
 }
