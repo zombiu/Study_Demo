@@ -1,6 +1,7 @@
 package com.example.study_customview.widget;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -56,6 +57,35 @@ public class CustomScrollView extends FrameLayout {
         }
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        /*if (getChildCount() > 0) {
+            final View child = getChildAt(0);
+            int widthPadding = 0;
+            int heightPadding = 0;
+            final int targetSdkVersion = getContext().getApplicationInfo().targetSdkVersion;
+            final FrameLayout.LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            *//*if (targetSdkVersion >= Build.VERSION_CODES.M) {
+                widthPadding = getPaddingLeft() + mPaddingRight + lp.leftMargin + lp.rightMargin;
+                heightPadding = mPaddingTop + mPaddingBottom + lp.topMargin + lp.bottomMargin;
+            } else {
+                widthPadding = mPaddingLeft + mPaddingRight;
+                heightPadding = mPaddingTop + mPaddingBottom;
+            }*//*
+
+            final int desiredHeight = getMeasuredHeight() - heightPadding;
+            if (child.getMeasuredHeight() < desiredHeight) {
+                final int childWidthMeasureSpec = getChildMeasureSpec(
+                        widthMeasureSpec, widthPadding, lp.width);
+                final int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
+                        desiredHeight, MeasureSpec.EXACTLY);
+                child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+            }
+        }*/
+
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -83,14 +113,14 @@ public class CustomScrollView extends FrameLayout {
                 velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
                 int initialVelocity = (int) velocityTracker.getYVelocity();
                 // 处理fling
-                if ((Math.abs(initialVelocity) >= mMinimumVelocity)) {
+                /*if ((Math.abs(initialVelocity) >= mMinimumVelocity)) {
                     LogUtils.e("-->>计算的速度=" + initialVelocity);
                     // todo fling 结束 也需要处理一下回弹
                     fling(-initialVelocity);
                 } else if (scroller.springBack(getScrollX(), getScrollY(), 0, 0, 0, 0)) {
                     // 处理回弹
                     ViewCompat.postInvalidateOnAnimation(this);
-                }
+                }*/
                 // startX 和startY很好解释，是起始坐标，minX，maxX，minY，maxY 这4个坐标构成了一个矩形
                 //该方法返回一个boolean,假如View移动到起始位置时，有部分或者全部位于矩形之外则返回true，反之返回false
                 // 如果我们在返回true时调用invalidate()方法那么View的computeScroll方法将被调用，View将会滚动，到什么位置停止？在View完全进入矩形的时候。
@@ -98,10 +128,27 @@ public class CustomScrollView extends FrameLayout {
                     // 处理回弹
                     ViewCompat.postInvalidateOnAnimation(this);
                 }*/
+                // 不使用scroller.springBack的回弹效果
+                smoothScrollTo(0, 0);
                 break;
             }
         }
         return true;
+    }
+
+    private void springBack() {
+
+    }
+
+    private void smoothScrollTo(int finalX, int finalY) {
+        int dx = finalX - scroller.getFinalX();
+        int dy = finalY - prevScrollY;
+        smoothScrollBy(dx, dy);
+    }
+
+    private void smoothScrollBy(int dx, int dy) {
+        scroller.startScroll(getScrollX(), prevScrollY, dx, dy);
+        ViewCompat.postInvalidateOnAnimation(this);
     }
 
 
@@ -140,7 +187,7 @@ public class CustomScrollView extends FrameLayout {
         } else {
             stopNestedScroll(ViewCompat.TYPE_NON_TOUCH);
         }*/
-        prevScrollY = getScrollY();
+//        prevScrollY = getScrollY();
         ViewCompat.postInvalidateOnAnimation(this);
     }
 
