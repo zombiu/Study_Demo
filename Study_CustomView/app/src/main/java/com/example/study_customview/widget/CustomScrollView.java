@@ -15,8 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.core.view.NestedScrollingParent;
 import androidx.core.view.NestedScrollingParent2;
 import androidx.core.view.ViewCompat;
+import androidx.core.widget.NestedScrollView;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.example.study_customview.utils.MeasureUtils;
 
 public class CustomScrollView extends FrameLayout {
     private OverScroller scroller;
@@ -27,6 +29,8 @@ public class CustomScrollView extends FrameLayout {
     private int mTouchSlop;
     private int mMinimumVelocity;
     private int mMaximumVelocity;
+
+    private boolean isScrolling;
 
     public CustomScrollView(Context context) {
         this(context, null);
@@ -85,6 +89,13 @@ public class CustomScrollView extends FrameLayout {
             }
         }*/
 
+        // 对子view进行测量
+        if (getChildCount() > 0) {
+//            int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec((1 << 30) - 1, MeasureSpec.AT_MOST);
+            int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+            // 对子view进行测量 宽度使用父view的宽度 高度不限制  todo 这里没有处理父布局padding 子布局margin时的情况
+            getChildAt(0).measure(widthMeasureSpec, childHeightMeasureSpec);
+        }
     }
 
     @Override
@@ -109,9 +120,9 @@ public class CustomScrollView extends FrameLayout {
             case MotionEvent.ACTION_UP: {
                 prevScrollY = getScrollY();
 
-                final VelocityTracker velocityTracker = mVelocityTracker;
+                /*final VelocityTracker velocityTracker = mVelocityTracker;
                 velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
-                int initialVelocity = (int) velocityTracker.getYVelocity();
+                int initialVelocity = (int) velocityTracker.getYVelocity();*/
                 // 处理fling
                 /*if ((Math.abs(initialVelocity) >= mMinimumVelocity)) {
                     LogUtils.e("-->>计算的速度=" + initialVelocity);
@@ -130,11 +141,50 @@ public class CustomScrollView extends FrameLayout {
                 }*/
                 // 不使用scroller.springBack的回弹效果
 //                smoothScrollTo(0, 0);
-                springBack(0, 0);
+
+                // 划到头了 继续划 需要回弹
+                if (getScrollY() < 0) {
+                    springBack(0, 0);
+                } else if (getScrollY() > getScrollRange()) {
+                    // 滑到尾了 继续划， 需要回弹
+                    springBack(0, getScrollRange());
+                } else {
+                    final VelocityTracker velocityTracker = mVelocityTracker;
+                    velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
+                    int initialVelocity = (int) velocityTracker.getYVelocity();
+                    // 处理fling
+                    if ((Math.abs(initialVelocity) >= mMinimumVelocity)) {
+                        LogUtils.e("-->>计算的速度=" + initialVelocity);
+                        // todo fling 结束 也需要处理一下回弹
+                        fling(-initialVelocity);
+                    } else if (scroller.springBack(getScrollX(), getScrollY(), 0, 0, 0, 0)) {
+                        // 处理回弹
+                        ViewCompat.postInvalidateOnAnimation(this);
+                    }
+                    isScrolling = true;
+                }
                 break;
             }
         }
         return true;
+    }
+
+    boolean needSpringBack() {
+        return getScrollY() < 0 || getScrollY() > getScrollRange();
+    }
+
+    int getScrollRange() {
+        int scrollRange = 0;
+        if (getChildCount() > 0) {
+            View child = getChildAt(0);
+            FrameLayout.LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            // view的实际高度 + margin
+            int childSize = child.getHeight() + lp.topMargin + lp.bottomMargin;
+            // 父view的高度 - padding
+            int parentSpace = getHeight() - getPaddingTop() - getPaddingBottom();
+            scrollRange = Math.max(0, childSize - parentSpace);
+        }
+        return scrollRange;
     }
 
     private void springBack(int finalX, int finalY) {
@@ -160,15 +210,56 @@ public class CustomScrollView extends FrameLayout {
     @Override
     public void computeScroll() {
         // 先判断mScroller滚动是否完成
-        if (scroller.computeScrollOffset()) {
+        /*if (scroller.computeScrollOffset()) {
             // 这里调用View的scrollTo()完成实际的滚动
             scrollTo(0, scroller.getCurrY());
             // 必须调用该方法，否则不一定能看到滚动效果
 //            invalidate();
             ViewCompat.postInvalidateOnAnimation(this);
             prevScrollY = scroller.getCurrY();
-        }
+        }*/
 
+        // 滑动
+        if (isScrolling) {
+            if (scroller.computeScrollOffset()) {
+                // 这里调用View的scrollTo()完成实际的滚动
+                scrollTo(0, scroller.getCurrY());
+                // 必须调用该方法，否则不一定能看到滚动效果
+//            invalidate();
+                ViewCompat.postInvalidateOnAnimation(this);
+                prevScrollY = scroller.getCurrY();
+                if (prevScrollY <= -300 || prevScrollY >= getScrollRange() + 300) {
+                    isScrolling = false;
+                    scroller.abortAnimation();
+
+                    // 划到头了 继续划 需要回弹
+                    if (getScrollY() < 0) {
+                        springBack(0, 0);
+                    } else if (getScrollY() > getScrollRange()) {
+                        // 滑到尾了 继续划， 需要回弹
+                        springBack(0, getScrollRange());
+                    }
+                }
+            } else {
+                // 划到头了 继续划 需要回弹
+                if (getScrollY() < 0) {
+                    springBack(0, 0);
+                } else if (getScrollY() > getScrollRange()) {
+                    // 滑到尾了 继续划， 需要回弹
+                    springBack(0, getScrollRange());
+                }
+            }
+        } else {
+            // 回弹
+            if (scroller.computeScrollOffset()) {
+                // 这里调用View的scrollTo()完成实际的滚动
+                scrollTo(0, scroller.getCurrY());
+                // 必须调用该方法，否则不一定能看到滚动效果
+//            invalidate();
+                ViewCompat.postInvalidateOnAnimation(this);
+                prevScrollY = scroller.getCurrY();
+            }
+        }
     }
 
     public void fling(int velocityY) {
