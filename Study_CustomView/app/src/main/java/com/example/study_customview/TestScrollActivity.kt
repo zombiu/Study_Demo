@@ -33,7 +33,7 @@ class TestScrollActivity : AppCompatActivity() {
     }
 
     private fun springBack() {
-        binding.recyclerView.smoothScrollBy(0, -500)
+//        binding.recyclerView.smoothScrollBy(0, -500)
         /*if (scroller.springBack(binding.recyclerView.getScrollX(), binding.recyclerView.getScrollY(), 0, 0, 0, 100)) {
             binding.recyclerView.invalidate();
         }*/

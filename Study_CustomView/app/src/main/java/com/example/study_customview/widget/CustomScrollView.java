@@ -1,7 +1,6 @@
 package com.example.study_customview.widget;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -9,16 +8,10 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 import android.widget.OverScroller;
-import android.widget.ScrollView;
 
-import androidx.annotation.NonNull;
-import androidx.core.view.NestedScrollingParent;
-import androidx.core.view.NestedScrollingParent2;
 import androidx.core.view.ViewCompat;
-import androidx.core.widget.NestedScrollView;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.example.study_customview.utils.MeasureUtils;
 
 public class CustomScrollView extends FrameLayout {
     private OverScroller scroller;
@@ -30,7 +23,7 @@ public class CustomScrollView extends FrameLayout {
     private int mMinimumVelocity;
     private int mMaximumVelocity;
 
-    private boolean isScrolling;
+    private boolean isFiling;
 
     public CustomScrollView(Context context) {
         this(context, null);
@@ -105,6 +98,7 @@ public class CustomScrollView extends FrameLayout {
         }
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: {
+                isFiling = false;
                 if (!scroller.isFinished()) {
                     abortAnimatedScroll();
                 }
@@ -114,6 +108,7 @@ public class CustomScrollView extends FrameLayout {
             }
             case MotionEvent.ACTION_MOVE: {
                 int offsetY = (int) (downY - event.getY() + prevScrollY);
+                // todo 为了用户体验 这里应该加一下 划过头之后的阻尼滑动
                 scrollTo(0, offsetY);
                 break;
             }
@@ -126,7 +121,7 @@ public class CustomScrollView extends FrameLayout {
                 // 处理fling
                 /*if ((Math.abs(initialVelocity) >= mMinimumVelocity)) {
                     LogUtils.e("-->>计算的速度=" + initialVelocity);
-                    // todo fling 结束 也需要处理一下回弹
+                    //  fling 结束 也需要处理一下回弹
                     fling(-initialVelocity);
                 } else if (scroller.springBack(getScrollX(), getScrollY(), 0, 0, 0, 0)) {
                     // 处理回弹
@@ -155,13 +150,13 @@ public class CustomScrollView extends FrameLayout {
                     // 处理fling
                     if ((Math.abs(initialVelocity) >= mMinimumVelocity)) {
                         LogUtils.e("-->>计算的速度=" + initialVelocity);
-                        // todo fling 结束 也需要处理一下回弹
+                        //  fling 结束 也需要处理一下回弹
                         fling(-initialVelocity);
                     } else if (scroller.springBack(getScrollX(), getScrollY(), 0, 0, 0, 0)) {
                         // 处理回弹
                         ViewCompat.postInvalidateOnAnimation(this);
                     }
-                    isScrolling = true;
+                    isFiling = true;
                 }
                 break;
             }
@@ -220,7 +215,7 @@ public class CustomScrollView extends FrameLayout {
         }*/
 
         // 滑动
-        if (isScrolling) {
+        if (isFiling) {
             if (scroller.computeScrollOffset()) {
                 // 这里调用View的scrollTo()完成实际的滚动
                 scrollTo(0, scroller.getCurrY());
@@ -229,7 +224,7 @@ public class CustomScrollView extends FrameLayout {
                 ViewCompat.postInvalidateOnAnimation(this);
                 prevScrollY = scroller.getCurrY();
                 if (prevScrollY <= -300 || prevScrollY >= getScrollRange() + 300) {
-                    isScrolling = false;
+                    isFiling = false;
                     scroller.abortAnimation();
 
                     // 划到头了 继续划 需要回弹
@@ -241,6 +236,7 @@ public class CustomScrollView extends FrameLayout {
                     }
                 }
             } else {
+                isFiling = false;
                 // 划到头了 继续划 需要回弹
                 if (getScrollY() < 0) {
                     springBack(0, 0);

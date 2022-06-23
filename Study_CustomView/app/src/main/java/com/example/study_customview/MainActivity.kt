@@ -4,6 +4,8 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.elvishew.xlog.LogLevel
+import com.elvishew.xlog.XLog
 import com.example.study_customview.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -13,6 +15,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        XLog.init(LogLevel.ALL)
+
+        XLog.e("-->>日志初始化")
         /*var objectAnimator = ObjectAnimator.ofInt(binding.cameraRotateView, "flipRotation", 360)
         objectAnimator.setDuration(2000)
         objectAnimator.startDelay = 2000
@@ -23,9 +28,11 @@ class MainActivity : AppCompatActivity() {
 
 //            startActivity(Intent(this, CustomScrollViewActivity::class.java))
 
-//            startActivity(Intent(this, NestedScrollActivity::class.java))
-
             startActivity(Intent(this, TestScrollActivity::class.java))
+        }
+
+        binding.btnNestedScroll.setOnClickListener {
+            startActivity(Intent(this, NestedScrollActivity::class.java))
         }
     }
 }
