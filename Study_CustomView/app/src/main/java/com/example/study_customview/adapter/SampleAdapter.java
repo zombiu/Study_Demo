@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SampleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<String> items = DataProvider.INSTANCE.getSampleDatas(50);
+    private List<String> items = DataProvider.INSTANCE.getSampleDatas(30);
     private LayoutInflater layoutInflater;
 
     public SampleAdapter(Context context) {

@@ -6,14 +6,23 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.OverScroller;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.NestedScrollingChildHelper;
+import androidx.core.view.NestedScrollingParent3;
+import androidx.core.view.NestedScrollingParentHelper;
 import androidx.core.view.ViewCompat;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.elvishew.xlog.XLog;
 
-public class CustomScrollView extends FrameLayout {
+import java.security.interfaces.ECKey;
+
+public class CustomScrollView extends FrameLayout implements NestedScrollingParent3 {
     private OverScroller scroller;
     private int downY;
     private int prevScrollY;
@@ -24,6 +33,9 @@ public class CustomScrollView extends FrameLayout {
     private int mMaximumVelocity;
 
     private boolean isFiling;
+
+    private NestedScrollingParentHelper mParentHelper;
+    private NestedScrollingChildHelper mChildHelper;
 
     public CustomScrollView(Context context) {
         this(context, null);
@@ -46,6 +58,8 @@ public class CustomScrollView extends FrameLayout {
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
         initVelocityTrackerIfNotExists();
+
+        mParentHelper = new NestedScrollingParentHelper(this);
     }
 
     private void initVelocityTrackerIfNotExists() {
@@ -108,11 +122,38 @@ public class CustomScrollView extends FrameLayout {
             }
             case MotionEvent.ACTION_MOVE: {
                 int offsetY = (int) (downY - event.getY() + prevScrollY);
+                int deltaY = (int) (downY - event.getY());
+                // 这里需要过滤一下 滑动临界值
+                if (Math.abs(deltaY) > mTouchSlop) {
+                    final ViewParent parent = getParent();
+                    if (parent != null) {
+                        parent.requestDisallowInterceptTouchEvent(true);
+                    }
+                    if (deltaY > 0) {
+                        deltaY -= mTouchSlop;
+                    } else {
+                        deltaY += mTouchSlop;
+                    }
+                }
+                // 这个是已经滑动的距离
+                final int oldY = getScrollY();
+                // 这个是可以滑动的范围
+                final int range = getScrollRange();
+                // 这个是这次手指移动应该滑动的距离
+                int newScrollY = oldY + deltaY;
                 // todo 为了用户体验 这里应该加一下 划过头之后的阻尼滑动
                 scrollTo(0, offsetY);
+
+                // 滚动完之后 再次交给自己的parent去滚动
+                // 计算这一次滑动 真实滑动了多少距离
+                final int scrolledDeltaY = getScrollY() - oldY;
+                // 手指滑动的距离 - 真实滑动的距离 = 剩下还有多少距离未滑动 可以交给父view去滑动
+                final int unconsumedY = deltaY - scrolledDeltaY;
+
                 break;
             }
             case MotionEvent.ACTION_UP: {
+                XLog.e("-->>MotionEvent.ACTION_UP scrollY=" + getScrollY() + " 滑动范围=" + getScrollRange());
                 prevScrollY = getScrollY();
 
                 /*final VelocityTracker velocityTracker = mVelocityTracker;
@@ -152,7 +193,7 @@ public class CustomScrollView extends FrameLayout {
                         LogUtils.e("-->>计算的速度=" + initialVelocity);
                         //  fling 结束 也需要处理一下回弹
                         fling(-initialVelocity);
-                    } else if (scroller.springBack(getScrollX(), getScrollY(), 0, 0, 0, 0)) {
+                    } else if (scroller.springBack(getScrollX(), getScrollY(), 0, 0, 0, getScrollRange())) {
                         // 处理回弹
                         ViewCompat.postInvalidateOnAnimation(this);
                     }
@@ -180,6 +221,16 @@ public class CustomScrollView extends FrameLayout {
             scrollRange = Math.max(0, childSize - parentSpace);
         }
         return scrollRange;
+    }
+
+    public void springBackOverScrollOffset(int offsetX, int offsetY) {
+        // 划到头了，继续划offsetY的距离后需要回弹
+        if (getScrollY() < 0 - offsetY) {
+            springBack(0, 0);
+        } else if (getScrollY() > getScrollRange() + offsetY) {
+            // 滑到尾了 继续划， 需要回弹
+            springBack(0, getScrollRange());
+        }
     }
 
     private void springBack(int finalX, int finalY) {
@@ -292,4 +343,120 @@ public class CustomScrollView extends FrameLayout {
     public boolean shouldDelayChildPressedState() {
         return true;
     }
+
+    @Override
+    public boolean onStartNestedScroll(@NonNull View child, @NonNull View target, int axes, int type) {
+        // 只支持竖向滑动
+        return (axes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
+    }
+
+    @Override
+    public void onNestedScrollAccepted(@NonNull View child, @NonNull View target, int axes, int type) {
+        // 接受嵌套滑动时，这里记录下信息
+        mParentHelper.onNestedScrollAccepted(child, target, axes, type);
+        // 如果此view可以当做嵌套滑动的child 这里需要开启嵌套滑动
+//        startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, type);
+    }
+
+    @Override
+    public void onStopNestedScroll(@NonNull View target, int type) {
+    }
+
+    @Override
+    public void onNestedScroll(@NonNull View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int type) {
+        onNestedScrollInternal(dyUnconsumed, type, null);
+    }
+
+    /**
+     * 注意 fling的时候 也会走到这个方法里
+     *
+     * @param target
+     * @param dxConsumed
+     * @param dyConsumed
+     * @param dxUnconsumed
+     * @param dyUnconsumed
+     * @param type
+     * @param consumed
+     */
+    @Override
+    public void onNestedScroll(@NonNull View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int type, @NonNull int[] consumed) {
+        onNestedScrollInternal(dyUnconsumed, type, consumed);
+    }
+
+    //    int dx = mLastMotionY - y;
+    @Override
+    public void onNestedPreScroll(@NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
+        // 如果滑过头了，需要父view先处理滑动 此时child 不能进行滑动了
+        if (getScrollY() < 0) {
+            onNestedScrollInternal(dy, type, consumed);
+        } else if (getScrollY() > getScrollRange()) {
+            onNestedScrollInternal(dy, type, consumed);
+        }
+
+    }
+
+    /**
+     * 在child fling 之前 父view先进行滑动
+     * CustomScrollView的逻辑就是 如果已经过度滑动了，那么就交给CustomScrollView进行处理
+     *
+     * @param target
+     * @param velocityX
+     * @param velocityY
+     * @return
+     */
+    @Override
+    public boolean onNestedPreFling(View target, float velocityX, float velocityY) {
+        if (getScrollY() < 0 || getScrollY() > getScrollRange()) {
+            return true;
+        }
+        return super.onNestedPreFling(target, velocityX, velocityY);
+    }
+
+    @Override
+    public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
+//        return super.onNestedFling(target, velocityX, velocityY, consumed);
+        /*if (isNestedScrollingEnabled() && mNestedScrollingParent != null) {
+            return mNestedScrollingParent.onNestedFling(this, velocityX, velocityY, consumed);
+        }*/
+        XLog.e("-->>onNestedFling： child已经fling完了 现在轮到parent进行fling了  scrollY=" + getScrollY());
+        if (getScrollY() <= -300 || getScrollY() >= getScrollRange() + 300) {
+            isFiling = false;
+            scroller.abortAnimation();
+
+            // 划到头了 继续划 需要回弹
+            if (getScrollY() < 0) {
+                springBack(0, 0);
+            } else if (getScrollY() > getScrollRange()) {
+                // 滑到尾了 继续划， 需要回弹
+                springBack(0, getScrollRange());
+            }
+        }
+        return true;
+    }
+
+    private void onNestedScrollInternal(int dyUnconsumed, int type, @Nullable int[] consumed) {
+        final int oldScrollY = getScrollY();
+        if (type == ViewCompat.TYPE_NON_TOUCH) {
+            XLog.e("-->>onNestedScrollInternal" + dyUnconsumed);
+            if (oldScrollY <= -300 || oldScrollY >= getScrollRange() + 300) {
+                isFiling = false;
+                scroller.abortAnimation();
+
+                springBackOverScrollOffset(0, 300);
+                return;
+            }
+        }
+
+        // 进行相对滑动
+        scrollBy(0, dyUnconsumed);
+        // 获取自己消费了多少的滑动距离
+        final int myConsumed = getScrollY() - oldScrollY;
+
+        if (consumed != null) {
+            consumed[1] += myConsumed;
+        }
+//        final int myUnconsumed = dyUnconsumed - myConsumed;
+//        mChildHelper.dispatchNestedScroll(0, myConsumed, 0, myUnconsumed, null, type, consumed);
+    }
+
 }
