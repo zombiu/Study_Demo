@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dp_15"
+            android:layout_marginTop="17dp"
+            android:text="启动游戏"
+            android:textColor="#FF484848"
+            android:textSize="17sp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_add_game_area"
+            android:layout_width="match_parent"
+            android:layout_height="123dp"
+            android:layout_below="@+id/title"
+            android:layout_marginBottom="19dp"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15"
+            android:background="@drawable/mod_addgame_btn_contour">
+
+            <Button
+                android:id="@+id/btn_add_game"
+                android:layout_width="90dp"
+                android:layout_height="27dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/dp_15"
+                android:layout_marginTop="32dp"
+                android:background="@mipmap/mod_addgame_btn" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_add_game"
+                android:layout_centerHorizontal="true"
+                android:text="启动游戏之后可以选择并使用工具" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_game_list"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_below="@+id/rl_add_game_area"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <View
+            android:id="@+id/v_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/dp10"
+            android:layout_below="@id/rv_game_list"
+            android:layout_marginTop="10dp"
+            android:background="#FFD5D5D5" />
+
+        <TextView
+            android:id="@+id/tv_recommend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/v_line"
+            android:layout_marginBottom="13dp"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15"
+            android:text="游戏推荐" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_recommend_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_recommend"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15">
+
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+</ScrollView>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp16"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="11dp"
+            android:text="最新"
+            android:textSize="18sp" />
+
+        <include
+            android:id="@+id/best_new"
+            layout="@layout/grid_layout" />
+        <View
+            android:id="@+id/space"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#ffcccccc"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp16"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:text="最热"
+            android:textSize="18sp" />
+
+        <include
+            android:id="@+id/best_hot"
+            layout="@layout/grid_layout" />
+        <!--<android.support.v7.widget.RecyclerView
+            android:id="@+id/app_activity_recommed_recview"
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:scrollbarSize="3dp"
+            android:scrollbars="horizontal"></android.support.v7.widget.RecyclerView>-->
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/item_head"
+        layout="@layout/recommend_item_normal" />
+    <!--<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <FrameLayout
+        android:id="@+id/framelayout_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp15">
+
+        <ImageView
+            android:id="@+id/webItem_show_imageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:contentDescription="icon"
+            android:src="@mipmap/ic_launcher" />
+
+        <com.haozhang.lib.SlantedTextView
+            android:id="@+id/webitem_tag_view"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="top|left"
+            android:gravity="center"
+            android:paddingLeft="6dp"
+            android:paddingTop="6dp"
+            android:visibility="gone"
+            app:slantedBackgroundColor="@color/holo_yellow_dark"
+            app:slantedLength="15dp"
+            app:slantedMode="left"
+            app:slantedText="MOD"
+            app:slantedTextColor="@android:color/white"
+            app:slantedTextSize="8sp" />
+    </FrameLayout>
+
+    &lt;!&ndash;<ImageView
+        android:id="@+id/image_top"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_toRightOf="@+id/framelayout_icon"
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/ic_launcher" />&ndash;&gt;
+
+    <TextView
+        android:id="@+id/item_name_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/framelayout_icon"
+        android:textSize="15sp"
+        android:textColor="#484848"
+        android:layout_marginLeft="12dp"
+        android:text="游戏名称" />
+    <TextView
+        android:id="@+id/item_text_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/framelayout_icon"
+        android:layout_below="@+id/item_name_textView"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="16dp"
+        android:text="模拟   139.5M"
+        android:textSize="12sp" />
+    <com.zhy.view.flowlayout.TagFlowLayout
+        android:id="@+id/flowlayout"
+        app:max_select="-1"
+        android:layout_toRightOf="@+id/framelayout_icon"
+        android:layout_below="@+id/item_text_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.zhy.view.flowlayout.TagFlowLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:text="安装"/>
+
+    </RelativeLayout>-->
+    <!--<FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_launcher"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="在僵尸末日世界生存"/>
+    </FrameLayout>-->
+</LinearLayout>
