@@ -1,6 +1,7 @@
 package com.example.study_customview
 
 import android.os.Bundle
+import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.study_customview.adapter.SampleAdapter
@@ -25,7 +26,8 @@ class NestedScrollActivity : AppCompatActivity() {
 
         /*binding.recyclerView.setOnTouchListener { v, event ->
             when (event.actionMasked) {
-                MotionEvent.ACTION_UP -> {
+                // down的时候 停止前一次滑动
+                MotionEvent.ACTION_DOWN -> {
 
                 }
                 else -> {}
