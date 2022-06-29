@@ -21,6 +21,12 @@ import androidx.core.view.ViewCompat;
 import com.blankj.utilcode.util.LogUtils;
 import com.elvishew.xlog.XLog;
 
+/**
+ * 现在有两种嵌套滚动:
+ * 手动触发-TYPE_TOUCH=0
+ * 代码触发-TYPE_NON_TOUCH=1
+ * nestedfling就被转换成了TYPE_NON_TOUCH类型的nestedscroll,间接的支持了嵌套fling的部分消费
+ */
 public class CustomScrollView extends FrameLayout implements NestedScrollingParent3, NestedScrollingChild3 {
     private OverScroller scroller;
     private int lastY;
@@ -149,7 +155,7 @@ public class CustomScrollView extends FrameLayout implements NestedScrollingPare
                     }
                     isBeginMove = true;
                 }
-
+                XLog.e("-->>MotionEvent.ACTION_MOVE ,接收的对象=" + this);
                 if (isBeginMove) {
                     // 这个是已经滑动的距离
                     final int oldY = getScrollY();
@@ -211,6 +217,7 @@ public class CustomScrollView extends FrameLayout implements NestedScrollingPare
                 break;
             }
             case MotionEvent.ACTION_UP: {
+                // todo 问题大概知道出在哪了  当这里的 getScrollY() = 0时， 计算的速度非常小  表现出来的效果就是滑动卡顿
                 XLog.e("-->>MotionEvent.ACTION_UP scrollY=" + getScrollY() + " 滑动范围=" + getScrollRange() + ",接收的对象=" + this);
                 prevScrollY = getScrollY();
 
@@ -248,9 +255,9 @@ public class CustomScrollView extends FrameLayout implements NestedScrollingPare
                     final VelocityTracker velocityTracker = mVelocityTracker;
                     velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
                     int initialVelocity = (int) velocityTracker.getYVelocity();
+                    LogUtils.e("-->>计算的速度=" + initialVelocity + " ,对象=" + this);
                     // 处理fling
                     if ((Math.abs(initialVelocity) > mMinimumVelocity)) {
-                        LogUtils.e("-->>计算的速度=" + initialVelocity + " ,对象=" + this);
                         //  fling 结束 也需要处理一下回弹
                         fling(-initialVelocity);
                     } else if (scroller.springBack(getScrollX(), getScrollY(), 0, 0, 0, getScrollRange())) {
@@ -263,10 +270,18 @@ public class CustomScrollView extends FrameLayout implements NestedScrollingPare
                 // 这次事件结束 进行善后处理
                 isBeginMove = false;
                 stopNestedScroll(ViewCompat.TYPE_TOUCH);
+                recycleVelocityTracker();
                 break;
             }
         }
         return true;
+    }
+
+    private void recycleVelocityTracker() {
+        if (mVelocityTracker != null) {
+            mVelocityTracker.clear();
+//            mVelocityTracker.recycle();
+        }
     }
 
     boolean needSpringBack() {
@@ -428,7 +443,7 @@ public class CustomScrollView extends FrameLayout implements NestedScrollingPare
         if (!scroller.isFinished()) {
             ViewCompat.postInvalidateOnAnimation(this);
         } else {
-            abortAnimatedScroll();
+           stopNestedScroll(ViewCompat.TYPE_NON_TOUCH);
         }
     }
 
@@ -524,7 +539,7 @@ public class CustomScrollView extends FrameLayout implements NestedScrollingPare
     //    int dx = mLastMotionY - y;
     @Override
     public void onNestedPreScroll(@NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
-        XLog.e("-->>type=" + type + ",dy=" + dy);
+        XLog.e("-->>onNestedPreScroll type=" + type + ",dy=" + dy + ",对象=" + this);
         // 如果滑过头了，需要父view先处理滑动 此时child 不能进行滑动了
         if (getScrollY() < 0) {
             onNestedScrollInternal(dy, type, consumed);
@@ -544,7 +559,7 @@ public class CustomScrollView extends FrameLayout implements NestedScrollingPare
      * @param velocityY
      * @return
      */
-    @Override
+    /*@Override
     public boolean onNestedPreFling(View target, float velocityX, float velocityY) {
         return super.onNestedPreFling(target, velocityX, velocityY);
     }
@@ -552,11 +567,11 @@ public class CustomScrollView extends FrameLayout implements NestedScrollingPare
     @Override
     public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
 //        return super.onNestedFling(target, velocityX, velocityY, consumed);
-        /*if (isNestedScrollingEnabled() && mNestedScrollingParent != null) {
+        *//*if (isNestedScrollingEnabled() && mNestedScrollingParent != null) {
             return mNestedScrollingParent.onNestedFling(this, velocityX, velocityY, consumed);
-        }*/
+        }*//*
         XLog.e("-->>onNestedFling： child已经fling完了 现在轮到parent进行fling了  scrollY=" + getScrollY());
-        /*if (getScrollY() <= -300 || getScrollY() >= getScrollRange() + 300) {
+        *//*if (getScrollY() <= -300 || getScrollY() >= getScrollRange() + 300) {
             isFiling = false;
             scroller.abortAnimation();
 
@@ -567,9 +582,9 @@ public class CustomScrollView extends FrameLayout implements NestedScrollingPare
                 // 滑到尾了 继续划， 需要回弹
                 springBack(0, getScrollRange());
             }
-        }*/
+        }*//*
         return true;
-    }
+    }*/
 
     private void onNestedScrollInternal(int dyUnconsumed, int type, @Nullable int[] consumed) {
         final int oldScrollY = getScrollY();
