@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -62,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
 
         String targetUrl = "file:///android_asset/web/test.html";
         binding.webView.loadUrl(targetUrl);
+
+        binding.btnDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     protected void openFileInput(ValueCallback<Uri[]> filePathCallback,
