@@ -1,0 +1,37 @@
+
+<!-- <label for="avatar">Choose a profile picture:</label>
+
+<input type="file"
+       id="avatar" name="avatar"
+       accept="image/png, image/jpeg" capture="camera"> -->
+
+
+<!DOCTYPE html>
+<!-- 测试拍照和选择图片 -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Flutter InAppWebView</title>
+    <link rel="stylesheet" href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="shortcut icon" href="favicon.ico">
+</head>
+<body class="text-center" style="background-color:#cccccc">
+    <div>
+        普通输入没有capture字段: <input type="file" name="uploadfile">&nbsp;&nbsp;
+    </div>
+
+    <div>
+        属性中带有capture:<input type="file" accept="image/*" capture>
+    </div>
+
+    <div>
+        属性中带有capture="user":<input accept="image/*" capture="user" id="imgFile" name="imgFile"  type="file">&nbsp;&nbsp;
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

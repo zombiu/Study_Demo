@@ -1,6 +1,7 @@
 package com.example.study_customview
 
 import android.os.Bundle
+import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.study_customview.adapter.SampleAdapter
@@ -25,7 +26,8 @@ class NestedScrollActivity : AppCompatActivity() {
 
         /*binding.recyclerView.setOnTouchListener { v, event ->
             when (event.actionMasked) {
-                MotionEvent.ACTION_UP -> {
+                // down的时候 停止前一次滑动
+                MotionEvent.ACTION_DOWN -> {
 
                 }
                 else -> {}
@@ -38,7 +40,7 @@ class NestedScrollActivity : AppCompatActivity() {
                 // 当触发up事件 并且没有fling时，会触发此状态
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     // 这里 对CustomScrollView 进行回弹处理
-                    binding.customScrollView.springBackOverScrollOffset(0, 0)
+//                    binding.customScrollView.springBackOverScrollOffset(0, 0)
                 }
                 /*else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
                     // fling最多超过可滑动距离300之后，进行回弹处理
