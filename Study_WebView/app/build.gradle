@@ -45,4 +45,7 @@ dependencies {
 
     def dialogx_version = "0.0.45.beta12"
     implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
+
+    implementation 'com.github.fishforest:EasyStorage:1.0.1'
+    implementation 'com.zhy.base:fileprovider:1.0.0'
 }

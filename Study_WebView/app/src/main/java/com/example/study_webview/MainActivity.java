@@ -18,8 +18,11 @@ import android.webkit.WebView;
 
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.GsonUtils;
+import com.blankj.utilcode.util.JsonUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.example.study_webview.databinding.ActivityMainBinding;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     protected ActivityMainBinding binding;
@@ -35,6 +38,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         initView();
+        String filePath = getFilesDir() + File.separator + "yx_demo.apk";
+        File file = new File(filePath);
+        LogUtils.e("-->>file=" + file);
+        // FileProvider 本质上起了一个映射表的作用
+        Uri uriForFile = AppFileProvider.getUriForFile(this, getPackageName() + ".fileprovider", file);
+
+//        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+        LogUtils.e("-->>uri=" + uriForFile);
+
+//        EasyFileProvider.fillIntent(this, new File(filePath), intent, true);
     }
 
     private void initView() {
@@ -43,12 +57,13 @@ public class MainActivity extends AppCompatActivity {
         settings.setLoadWithOverviewMode(true);
         settings.setJavaScriptEnabled(true);
         binding.webView.setWebChromeClient(new WebChromeClient() {
+
             @Override
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
                 String[] acceptTypes = fileChooserParams.getAcceptTypes();
                 LogUtils.e("-->>" + GsonUtils.toJson(acceptTypes));
                 Log.e("-->>", GsonUtils.toJson(fileChooserParams));
-//                openFileInput(filePathCallback, false, true, "image/*");
+                openFileInput(filePathCallback, false, true, "image/*");
 
                 // 文件选择
                 /*Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -56,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);*/
 
                 filePathCallback5 = filePathCallback;
-                chooseFile(MainActivity.this, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
+//                chooseFile(MainActivity.this, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
                 return true;
             }
         });
@@ -89,7 +104,13 @@ public class MainActivity extends AppCompatActivity {
 //                    startActivityForResult(intent, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
                     startActivityForResult(Intent.createChooser(intent, "File Chooser"), FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
                 } catch (ActivityNotFoundException e) {
-                    filePathCallback5 = null;
+                    e.printStackTrace();
+                    LogUtils.e("-->>Activity未找到 " + e.getMessage());
+                    // 无法处理也要回调给H5，否则H5页面无法继续响应用户
+                    if (filePathCallback5 != null) {
+                        filePathCallback5.onReceiveValue(null);
+                        filePathCallback5 = null;
+                    }
                 }
             }
         } else {
@@ -110,27 +131,28 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FILECHOOSER_RESULTCODE_FOR_ANDROID_5) {
+            // todo 可能需要把数据返回的整个代码块进行 try catch
             if (resultCode == Activity.RESULT_OK) {
                 if (filePathCallback5 != null) {
                     LogUtils.e("-->>" + GsonUtils.toJson(data));
                     // 数据存储在data里面
                     Uri picUri = data.getData();
-                    String path = UriUtils.getFileAbsolutePath(getApplicationContext(),picUri);
+                    String path = UriUtils.getFileAbsolutePath(getApplicationContext(), picUri);
                     LogUtils.e("-->>" + path);
                     LogUtils.e("-->>" + GsonUtils.toJson(data) + " , " + picUri);
-                    Uri[] photoUris = null;
-                    // TODO 获取所选图片的Uri数组
 
-                    // TODO 是否需要对所有图片作压缩处理？
-                    filePathCallback5.onReceiveValue(photoUris);
-                    filePathCallback5 = null;
+                    if (picUri != null) {
+                        Uri[] photoUris = new Uri[]{picUri};
+                        filePathCallback5.onReceiveValue(photoUris);
+                        filePathCallback5 = null;
+                        return;
+                    }
                 }
-            } else {
-                // 用户取消选择，也要回调给前端
-                if (filePathCallback5 != null) {
-                    filePathCallback5.onReceiveValue(null);
-                    filePathCallback5 = null;
-                }
+            }
+            // 用户取消选择，也要回调给前端null 否则页面会阻塞住
+            if (filePathCallback5 != null) {
+                filePathCallback5.onReceiveValue(null);
+                filePathCallback5 = null;
             }
         }
     }

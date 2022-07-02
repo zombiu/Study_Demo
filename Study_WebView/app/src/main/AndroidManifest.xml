@@ -24,6 +24,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- android:authorities 标识ContentProvider的唯一性，可以自己任意定义，最好是全局唯一的。 这里使用包名+fileprovider的方式构造authorities-->
+        <provider
+            android:name=".AppFileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/app_file_paths"></meta-data>
+        </provider>
+
     </application>
 
 </manifest>
