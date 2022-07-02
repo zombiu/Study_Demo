@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--root-path 标签表示要给根目录下的子目录取别名(包括内部存储、自带外部存储、扩展外部存储，统称用"/"表示)，
+    path 属性表示需要被更改的目录名，其值为:"."，表示不区分目录，name 属性表示将path 目录更改后的别名。-->
+    <root-path name="myroot" path="." />
+    <external-path name="sdcard" path="."/>
+    <external-files-path name="external_files" path="." />
+    <external-cache-path name="external_cache" path="." />
+    <files-path name="files" path="." />
+    <cache-path name="cache" path="." />
+    <!--格式为：content://authorities/定义的name属性/文件的相对路径，即name隐藏了可存储的文件夹路径-->
+    <!-- cache-path为对应项的根路径 path为对应项根路径下的路径 name表示为path设置的别名 -->
+</paths>
+
+
+<!--1、external-path-&#45;&#45;Environment.getExternalStorageDirectory()，如/storage/emulated/0/fish
+    2、external-files-path-&#45;&#45;ContextCompat.getExternalFilesDirs(context, null)。
+    3、external-cache-path-&#45;&#45;ContextCompat.getExternalCacheDirs(context)。
+    4、files-path-&#45;&#45;context.getFilesDir()。
+    5、cache-path-&#45;&#45;context.getCacheDir()。-->
+
+
+

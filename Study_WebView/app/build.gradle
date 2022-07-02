@@ -42,4 +42,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation 'com.blankj:utilcodex:1.30.6'
+
+    implementation 'com.github.fishforest:EasyStorage:1.0.1'
+    implementation 'com.zhy.base:fileprovider:1.0.0'
 }
