@@ -1,13 +1,16 @@
 package com.example.study_webview;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,15 +24,20 @@ import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.JsonUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.example.study_webview.databinding.ActivityMainBinding;
+import com.example.study_webview.databinding.DialogSelectorBinding;
+import com.fish.easystoragelib.fileprovider.EasyFileProvider;
 
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     protected ActivityMainBinding binding;
+    private DialogSelectorBinding dialogSelectorBinding;
 
     public static final int FILECHOOSER_RESULTCODE = 5173;
     public static final int FILECHOOSER_RESULTCODE_FOR_ANDROID_5 = 5174;
     private ValueCallback<Uri[]> filePathCallback5;
+
+    private File outputImageFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +56,10 @@ public class MainActivity extends AppCompatActivity {
 
         LogUtils.e("-->>uri=" + uriForFile);
 
-//        EasyFileProvider.fillIntent(this, new File(filePath), intent, true);
+        Intent intent = new Intent();
+        EasyFileProvider.fillIntent(this, new File(filePath), intent, true);
+
+//        FileProvider7
     }
 
     private void initView() {
@@ -82,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         binding.btnDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                showDialog();
             }
         });
     }
@@ -154,6 +165,18 @@ public class MainActivity extends AppCompatActivity {
                 filePathCallback5.onReceiveValue(null);
                 filePathCallback5 = null;
             }
+        } else if (RequestCode.OPEN_FILE_PICKER == requestCode) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri imageUri = data.getData();
+                binding.imageView.setImageURI(imageUri);
+            }
+        } else if (RequestCode.OPEN_CAMERA == requestCode) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (outputImageFile != null) {
+                    Uri uri = Uri.fromFile(outputImageFile);
+                    binding.imageView.setImageURI(uri);
+                }
+            }
         }
     }
 
@@ -177,11 +200,64 @@ public class MainActivity extends AppCompatActivity {
         openDirChooseFile(activity, requestCode, mimeTypes);
     }
 
+    /*public void takePhotoNoCompress(View view) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            String filename = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA)
+                    .format(new Date()) + ".png";
+            File file = new File(Environment.getExternalStorageDirectory(), filename);
+            mCurrentPhotoPath = file.getAbsolutePath();
+
+            Uri fileUri = FileProvider7.getUriForFile(this, file);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+            startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PHOTO);
+        }
+    }*/
+
+
     public class MimeType {
         public static final String JPG = "image/jpeg";
         public static final String BMP = "image/bmp";
         public static final String PNG = "image/png";
         public static final String TXT = "text/plain";
         public static final String PDF = "application/pdf";
+    }
+
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        dialogSelectorBinding = DialogSelectorBinding.inflate(getLayoutInflater());
+//        View view = getLayoutInflater().inflate(R.layout.dialog_selector, null);
+        builder.setView(dialogSelectorBinding.getRoot());
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialogSelectorBinding.openFileSelector.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                openDirChooseFile(MainActivity.this, RequestCode.OPEN_FILE_PICKER, null);
+            }
+        });
+
+        dialogSelectorBinding.openCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                outputImageFile = new File(getExternalCacheDir(), System.currentTimeMillis() + ".jpg");
+                if (outputImageFile.exists()) {
+                    outputImageFile.delete();
+                }
+                Uri imageUri = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    imageUri = FileProvider.getUriForFile(MainActivity.this, getPackageName() + ".fileprovider", outputImageFile);
+                } else {
+                    imageUri = Uri.fromFile(outputImageFile);
+                }
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(intent, RequestCode.OPEN_CAMERA);
+            }
+        });
     }
 }

@@ -47,5 +47,5 @@ dependencies {
     implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 
     implementation 'com.github.fishforest:EasyStorage:1.0.1'
-    implementation 'com.zhy.base:fileprovider:1.0.0'
+//    implementation 'com.zhy.base:fileprovider:1.0.0'
 }

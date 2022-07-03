@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+   <TextView
+       android:id="@+id/open_file_selector"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:textSize="25dp"
+       android:gravity="center"
+       android:paddingVertical="8dp"
+       android:text="选择文件"/>
+
+    <TextView
+        android:id="@+id/open_image_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:paddingVertical="8dp"
+        android:text="选择图片"/>
+
+    <TextView
+        android:id="@+id/open_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:paddingVertical="8dp"
+        android:text="打开相机"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
