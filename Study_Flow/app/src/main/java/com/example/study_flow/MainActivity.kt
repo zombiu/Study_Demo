@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.study_flow.databinding.ActivityMainBinding
 import com.example.study_flow.utils.observeIn
 import com.example.study_flow.viewmodel.RoomViewModel
@@ -37,23 +39,43 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         setContentView(binding.root)
 
         /*lifecycleScope.launchWhenStarted {
+            // 末端操作符都是suspend函数，所以需要运行在协程作用域中。
             roomViewModel.getFlow2().collect {
                 Log.e("-->>","接收到的数据1 ${it}")
             }
+            // onEach：在上游每次emit前调用
             roomViewModel.getFlow2().onEach {
                 Log.e("-->>observeIn","接收到的数据 ${it}")
             }.observeIn(this@MainActivity)
-        }
-
-        lifecycleScope.launchWhenStarted {
-            roomViewModel.getFlow2().collect {
-                Log.e("-->>","接收到的数据2 ${it}")
-            }
-            *//*roomViewModel.getFlow2().onEach {
-                Log.e("-->>observeIn","接收到的数据 ${it}")
-            }.observeIn(this@MainActivity)*//*
         }*/
 
+        lifecycleScope.launchWhenStarted {
+            roomViewModel.getFlow3().collect {
+                Log.e("-->>","接收到的数据2 ${it}")
+            }
+            /*roomViewModel.getFlow3().onEach {
+                Log.e("-->>observeIn","接收到的数据 ${it}")
+            }.observeIn(this@MainActivity)*/
+
+            // lifecycle-runtime-ktx 2.4.0以上才有 repeatOnLifecycle函数
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // 处于STARTED状态时会开始收集流，并且在RESUMED状态时保持收集，最终在Fragment进入STOPPED状态时结束收集过程
+                roomViewModel.getFlow3().collect {
+                    Log.e("-->>","接收到的数据3 ${it}")
+                }
+            }
+        }
+
+
+
+
+
+
+        /*lifecycleScope.launchWhenStarted {
+            roomViewModel.getFlow2().onEach {
+                Log.e("-->>observeIn","接收到的数据 ${it}")
+            }.collect()
+        }*/
 
 
         binding.tv1.setOnClickListener {

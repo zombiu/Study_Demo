@@ -56,4 +56,8 @@ class RoomViewModel : ViewModel() {
     fun getFlow2(): Flow<Int> {
         return Repository.getFlow2()
     }
+
+    fun getFlow3(): Flow<Int> {
+        return Repository.getFlow3()
+    }
 }
