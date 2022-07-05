@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else if (RequestCode.OPEN_CAMERA == requestCode) {
             if (resultCode == Activity.RESULT_OK) {
+                LogUtils.e("-->>" + GsonUtils.toJson(data));
                 if (outputImageFile != null) {
                     Uri uri = Uri.fromFile(outputImageFile);
                     binding.imageView.setImageURI(uri);

@@ -53,7 +53,8 @@ class MainActivity : AppCompatActivity() {
         }
         findViewById<View>(R.id.show_tv).setOnClickListener {
 //            showTipDialog()
-            showViewDialog()
+//            showViewDialog()
+            showNoTokenDialog()
         }
 
         binding.rootView.setOnTouchListener { v, event ->
