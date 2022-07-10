@@ -34,5 +34,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnNestedScroll.setOnClickListener {
             startActivity(Intent(this, NestedScrollActivity::class.java))
         }
+
+        binding.btnDrawTable.setOnClickListener {
+            startActivity(Intent(this, CircleTableActivity::class.java))
+        }
     }
 }

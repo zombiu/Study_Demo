@@ -37,4 +37,12 @@
         app:layout_constraintTop_toTopOf="parent"
         android:text="嵌套滑动"/>
 
+    <Button
+        android:id="@+id/btn_draw_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_nested_scroll"
+        android:text="绘制图表"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
