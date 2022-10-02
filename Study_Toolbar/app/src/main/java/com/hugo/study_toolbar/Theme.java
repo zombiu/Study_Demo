@@ -33,11 +33,14 @@ public class Theme {
      */
     public static Drawable getRoundRectSelectorDrawable(int color) {
         if (Build.VERSION.SDK_INT >= 21) {
+            // 这个是按下状态
             Drawable maskDrawable = createRoundRectDrawable(ConvertUtils.dp2px(3), 0xffffffff);
-            ColorStateList colorStateList = new ColorStateList(
-                    new int[][]{StateSet.WILD_CARD},
-                    new int[]{(color & 0x00ffffff) | 0x19000000}
-            );
+            // 第一个参数是二维数组,数组的第一级个数和后面的颜色是一一对应
+//            ColorStateList colorStateList = new ColorStateList(new int[][]{{-android.R.attr.state_enable},{android.R.attr.state_enable}}, new int[]{Color.RED,Color.BLUE});
+            // 这个是普通状态
+            //StateSet.WILD_CARD表示非所有状态，也就是正常状态下的drawable
+            //有一点需要注意的是，StateSet.WILD_CARD的drawable必须要放在最后
+            ColorStateList colorStateList = new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{(color & 0x00ffffff) | 0x19000000});
             // mask 直译过来有遮罩的意思，它会限定水波纹的范围
             return new RippleDrawable(colorStateList, null, maskDrawable);
         } else {
