@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
@@ -56,10 +57,7 @@ public class Theme {
         if (Build.VERSION.SDK_INT >= 21 && isRipple) {
             Drawable maskDrawable = createRoundRectDrawable(ConvertUtils.dp2px(10), 0xffffffff);
             Drawable contentDrawable = createRoundRectDrawable(ConvertUtils.dp2px(10), normalColor);
-            ColorStateList colorStateList = new ColorStateList(
-                    new int[][]{StateSet.WILD_CARD},
-                    new int[]{pressedColor}
-            );
+            ColorStateList colorStateList = new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{pressedColor});
             // mask 直译过来有遮罩的意思，它会限定水波纹的范围
             return new RippleDrawable(colorStateList, contentDrawable, maskDrawable);
         } else {
@@ -85,6 +83,14 @@ public class Theme {
         return defaultDrawable;
     }
 
+    public static Drawable createGradientDrawable(int fillColor, int roundRadius, int strokeWidth, int strokeColor) {
+        GradientDrawable gd = new GradientDrawable();
+        gd.setColor(fillColor);
+        gd.setCornerRadius(roundRadius);
+        gd.setStroke(strokeWidth, strokeColor);
+        return gd;
+    }
+
     /*-------------------------------------------------------------*/
 
     /**
@@ -101,10 +107,7 @@ public class Theme {
         if (Build.VERSION.SDK_INT >= 21) {
             //白色maskDrawable
             Drawable maskDrawable = new ColorDrawable(0xffffffff);
-            ColorStateList colorStateList = new ColorStateList(
-                    new int[][]{StateSet.WILD_CARD},
-                    new int[]{color}
-            );
+            ColorStateList colorStateList = new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{color});
             RippleDrawable rippleDrawable = new RippleDrawable(colorStateList, null, maskDrawable);
             return rippleDrawable;
         } else {

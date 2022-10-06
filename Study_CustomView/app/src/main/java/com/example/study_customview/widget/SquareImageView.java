@@ -5,6 +5,8 @@ import android.util.AttributeSet;
 
 import androidx.annotation.Nullable;
 
+import com.blankj.utilcode.util.ConvertUtils;
+
 public class SquareImageView extends androidx.appcompat.widget.AppCompatImageView {
     public SquareImageView(Context context) {
         this(context, null);
@@ -24,6 +26,7 @@ public class SquareImageView extends androidx.appcompat.widget.AppCompatImageVie
         int measuredWidth = getMeasuredWidth();
         int measuredHeight = getMeasuredHeight();
         int size = Math.min(measuredWidth, measuredHeight);
+        ConvertUtils
         setMeasuredDimension(size, size);
     }
 }

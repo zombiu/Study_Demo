@@ -4,15 +4,20 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.*
+import android.view.View.OnClickListener
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuItemCompat
+import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ScreenUtils
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.hugo.study_toolbar.databinding.ActivityMainBinding
 
@@ -55,10 +60,7 @@ class MainActivity : AppCompatActivity() {
 
 //        binding.tv1.background = Theme.getRoundRectSelectorDrawable(R.color.design_default_color_error)
         binding.tv1.background = Theme.getRoundRectSelectorDrawable(
-            10,
-            ContextCompat.getColor(this, android.R.color.darker_gray),
-            ContextCompat.getColor(this, android.R.color.holo_red_light),
-            false
+            10, ContextCompat.getColor(this, android.R.color.darker_gray), ContextCompat.getColor(this, android.R.color.holo_red_light), false
         )
         binding.tv1.setOnClickListener {
             LogUtils.e("-->>点击了tv1")
@@ -66,6 +68,62 @@ class MainActivity : AppCompatActivity() {
 
         var img = "https://t7.baidu.com/it/u=2621658848,3952322712&fm=193&f=GIF"
         Glide.with(this).load(img).into(binding.iv1)
+
+
+        binding.tvDialogConfirm.setOnClickListener {
+            var build = AlertDialog.Builder(this)
+            var dialogView = View.inflate(this, R.layout.dialog_confirm_layout, null)
+            build.setView(dialogView)
+            var dialog = build.create()
+            dialog.show()
+            var window = dialog.window
+            window!!.setBackgroundDrawableResource(android.R.color.transparent)
+            var params = window.attributes
+            params.width = ScreenUtils.getScreenWidth() - ConvertUtils.dp2px(40f)
+            window.attributes = params
+
+            var tv_cancel: View = dialogView.findViewById(R.id.tv_cancel)
+            tv_cancel.setOnClickListener {
+
+            }
+
+            var tv_confirm: View = dialogView.findViewById(R.id.tv_confirm)
+            tv_confirm.setOnClickListener {
+
+            }
+        }
+
+        binding.tvBottomDialog.setOnClickListener {
+            /*val bottomSheetDialog = BottomSheetDialog(this)
+            bottomSheetDialog.setContentView(R.layout.dialog_choose_call)
+            bottomSheetDialog.show()
+            var bottom: View? = bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+            if (bottom != null) {
+                bottom.setBackgroundResource(android.R.color.transparent)
+            }*/
+            var bottomListDialog = BottomListDialog(this)
+            bottomListDialog.setTitle("set标题")
+            bottomListDialog.addItem("第一项") {
+                LogUtils.e("-->>第一项")
+                bottomListDialog.dismiss()
+            }
+
+            bottomListDialog.addItem("第二项", object : OnClickListener {
+                override fun onClick(v: View?) {
+                    LogUtils.e("-->>第二项")
+                    bottomListDialog.dismiss()
+                }
+
+            })
+            bottomListDialog.addItem("第三项", object : OnClickListener {
+                override fun onClick(v: View?) {
+                    LogUtils.e("-->>第三项")
+                    bottomListDialog.dismiss()
+                }
+
+            })
+            bottomListDialog.show()
+        }
     }
 
     var expandListener: MenuItem.OnActionExpandListener = object : MenuItem.OnActionExpandListener {
@@ -147,13 +205,11 @@ class MainActivity : AppCompatActivity() {
         centeredTitleTextView.setGravity(Gravity.CENTER)
         // 标题字体风格
         centeredTitleTextView.setTextAppearance(
-            this,
-            R.style.TextAppearance_AppCompat_Widget_ActionBar_Title
+            this, R.style.TextAppearance_AppCompat_Widget_ActionBar_Title
         )
 
         var lp = Toolbar.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
         );
         lp.gravity = Gravity.CENTER;
         centeredTitleTextView.setLayoutParams(lp);

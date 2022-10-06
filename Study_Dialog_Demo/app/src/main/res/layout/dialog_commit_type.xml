@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/follow_guide_cv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_155"
+        app:cardBackgroundColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:cardCornerRadius="@dimen/dp_15">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/close_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_alignParentEnd="true"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+
+            <TextView
+                android:id="@+id/nickname_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#333333"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginTop="@dimen/dp_37"
+                android:layout_centerHorizontal="true"
+                android:textStyle="bold"
+                tools:text="米糊糊" />
+
+            <TextView
+                android:id="@+id/follow_hint_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nickname_tv"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:textSize="@dimen/sp_14"
+                android:textColor="#999999"
+                android:text="关注TA，可在说吧「关注的人」里看到TA的内容"/>
+
+            <TextView
+                android:id="@+id/follow_btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_below="@id/follow_hint_tv"
+                android:gravity="center"
+                android:background="@drawable/bg_common_5da39d_btn"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginStart="@dimen/dp_32"
+                android:layout_marginEnd="@dimen/dp_32"
+                android:text="确定"/>
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
