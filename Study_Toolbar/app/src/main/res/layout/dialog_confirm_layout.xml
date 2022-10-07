@@ -24,7 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="这是标题哦" />
+            android:text="这是标题哦" />
 
         <TextView
             android:id="@+id/tv_content"
@@ -37,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
-            tools:text="这个是内容哦这个是内容哦这个是内容哦这个是内容哦这个是内容哦这个是内容哦这个是内容哦" />
+            android:text="这个是内容哦这个是内容哦这个是内容哦这个是内容哦这个是内容哦这个是内容哦这个是内容哦" />
 
         <TextView
             android:id="@+id/tv_cancel"

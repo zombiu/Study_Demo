@@ -8,15 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.ArrayList
-import java.util.HashMap
 
 @SuppressLint("MissingInflatedId")
-class BottomListDialog(context: Context) : BottomSheetDialog(context) {
+class CommonSheetDialog(context: Context) : BottomSheetDialog(context) {
     private var hashMap = LinkedHashMap<String, OnClickListener>(4)
 
     init {

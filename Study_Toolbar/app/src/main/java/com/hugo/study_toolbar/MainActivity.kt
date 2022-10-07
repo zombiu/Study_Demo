@@ -17,9 +17,9 @@ import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ScreenUtils
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.hugo.study_toolbar.databinding.ActivityMainBinding
+import com.hugo.study_toolbar.ui.SelecteActivity
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -101,28 +101,32 @@ class MainActivity : AppCompatActivity() {
             if (bottom != null) {
                 bottom.setBackgroundResource(android.R.color.transparent)
             }*/
-            var bottomListDialog = BottomListDialog(this)
-            bottomListDialog.setTitle("set标题")
-            bottomListDialog.addItem("第一项") {
+            var commonSheetDialog = CommonSheetDialog(this)
+            commonSheetDialog.setTitle("set标题")
+            commonSheetDialog.addItem("第一项") {
                 LogUtils.e("-->>第一项")
-                bottomListDialog.dismiss()
+                commonSheetDialog.dismiss()
             }
 
-            bottomListDialog.addItem("第二项", object : OnClickListener {
+            commonSheetDialog.addItem("第二项", object : OnClickListener {
                 override fun onClick(v: View?) {
                     LogUtils.e("-->>第二项")
-                    bottomListDialog.dismiss()
+                    commonSheetDialog.dismiss()
                 }
 
             })
-            bottomListDialog.addItem("第三项", object : OnClickListener {
+            commonSheetDialog.addItem("第三项", object : OnClickListener {
                 override fun onClick(v: View?) {
                     LogUtils.e("-->>第三项")
-                    bottomListDialog.dismiss()
+                    commonSheetDialog.dismiss()
                 }
 
             })
-            bottomListDialog.show()
+            commonSheetDialog.show()
+        }
+
+        binding.btnSelect.setOnClickListener {
+            SelecteActivity.go(this)
         }
     }
 
