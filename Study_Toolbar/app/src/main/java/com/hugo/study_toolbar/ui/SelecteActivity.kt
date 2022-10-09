@@ -159,7 +159,8 @@ class SelecteActivity : AppCompatActivity() {
                     iv_select.setBackgroundResource(0)
                 }
                 itemView.setOnClickListener {
-                    onItemEventListener?.onItemClick(itemView, position)
+                    LogUtils.e("-->> ${absoluteAdapterPosition} ${layoutPosition}  ${adapterPosition}")
+                    onItemEventListener?.onItemClick(itemView, absoluteAdapterPosition)
                 }
             }
 
