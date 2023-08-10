@@ -10,7 +10,8 @@ class MyTestPlugin implements Plugin<Project> {
         println("custom plugin -->>this is a plugin in the file 'build.gradle'...")
         //定义 扩展，并且与 ExtConfig 进行绑定。
         ExtConfig extConfig = project.extensions.create('extConfig', ExtConfig.class)
-        // 创建了一个 task  printExtConfig   执行对应task 使用命令 gradlew printExtConfig  后面是task名
+        // 创建了一个 task  printExtConfig
+        // 执行对应task 使用命令 gradlew printExtConfig  后面是task名
         Task task = project.tasks.create('printExtConfig') {
             //通过 extConfig 属性，获取外部传递进来的 message 的具体内容。
             println("DemoPlugin message =" + project.extConfig.message)
@@ -18,7 +19,16 @@ class MyTestPlugin implements Plugin<Project> {
             doLast {
                 println("custom plugin -->> doLast message=${extConfig.message} count=${extConfig.count}")
             }
-
+            doFirst {
+                println("custom plugin -->> doFirst message=${extConfig.message} count=${extConfig.count}")
+            }
+        }
+        // 使用命令 gradlew CustomTask
+        project.tasks.register("CustomTask", CustomTask) { task1 ->
+            taskName = "我是传入的Task Name"
+            doLast {
+                println("custom task -->> doLast taskName=${task1.taskName}")
+            }
         }
     }
 }
