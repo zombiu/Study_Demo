@@ -40,6 +40,7 @@ class ExtConfig {
 // 配置扩展
 extConfig {
     message = "this is new value"
+    count 10
 }
 
 android {
