@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.ArrayList
 
@@ -19,8 +20,9 @@ class CommonSheetDialog(context: Context) : BottomSheetDialog(context) {
 
     init {
         setContentView(R.layout.dialog_choose_call)
-        behavior.isDraggable = false
-        var bottom: View? = findViewById(R.id.design_bottom_sheet)
+        // 用来禁止拖拽  低版本比如1.0 不能访问
+//        behavior.isDraggable = false
+        var bottom: View? = findViewById(com.google.android.material.R.id.design_bottom_sheet)
         bottom?.setBackgroundResource(android.R.color.transparent)
 
         var iv_close: ImageView? = findViewById<ImageView>(R.id.iv_close)
@@ -29,6 +31,9 @@ class CommonSheetDialog(context: Context) : BottomSheetDialog(context) {
         iv_close?.setOnClickListener {
             dismiss()
         }
+        //R.id.design_bottom_sheet基本是固定的,不用担心后面API的更改
+        var behavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(bottom!!);
+        behavior.setHideable(false);//此处设置表示禁止BottomSheetBehavior的执行
     }
 
     override fun show() {
