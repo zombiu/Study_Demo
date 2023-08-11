@@ -12,7 +12,12 @@ class MyTestPlugin implements Plugin<Project> {
         ExtConfig extConfig = project.extensions.create('extConfig', ExtConfig.class)
         // 创建了一个 task  printExtConfig
         // 执行对应task 使用命令 gradlew printExtConfig  后面是task名
-        Task task = project.tasks.create('printExtConfig') {
+        Task task = project.tasks.create('printExtConfig') { Task it ->
+            it.configure {
+                description = "我是printExtConfig的描述"
+                // 通过group属性调整 task显示在idea右侧gradle哪个分组里
+                group = "help"
+            }
             //通过 extConfig 属性，获取外部传递进来的 message 的具体内容。
             println("DemoPlugin message =" + project.extConfig.message)
             // task 执行完后 会去执行 doLast 这里可以拿到最新的 extension设置的值
@@ -29,6 +34,12 @@ class MyTestPlugin implements Plugin<Project> {
             doLast {
                 println("custom task -->> doLast taskName=${task1.taskName}")
             }
+        }
+        // 使用命令 gradlew CopyTask
+        project.tasks.register("CopyTask", CopyTask) {
+            from = project.files("from")
+            to = project.layout.projectDirectory.dir("to")
+            println("copy task -->> from=${from.getAsPath()}")
         }
     }
 }
