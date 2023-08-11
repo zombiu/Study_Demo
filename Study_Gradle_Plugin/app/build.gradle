@@ -4,7 +4,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
 }
-
+apply plugin: com.dorongold.gradle.tasktree.TaskTreePlugin
 apply plugin: MyTestPlugin
 
 /*apply plugin: Plugin2

@@ -4,6 +4,9 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven{
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.0"
@@ -11,6 +14,9 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        // 查看Task 依赖关系插件
+        // 在命令行中执行：gradlew <任务名> taskTree --no-repeat 命令即可查看 比如 gradlew build taskTree --no-repeat
+        classpath "gradle.plugin.com.dorongold.plugins:task-tree:1.5"
     }
 }
 
@@ -20,8 +26,9 @@ allprojects {
         jcenter()
     }
 }
-
+// 创建了一个clean的task Task创建的时候可以通过 type: SomeType 指定Type，Type其实就是告诉Gradle，这个新建的Task对象会从哪个基类Task派生
 task clean(type: Delete) {
+    // 配置删除目录
     delete rootProject.buildDir
 }
 
