@@ -4,7 +4,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven{
+        maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
@@ -41,4 +41,8 @@ task printProperties {
     doLast {
         println "-->> ${rootProject.ext.someThing}"
     }
+}
+// 注意：创建的 task 里面没有 action 。task 本质上又是由一组被顺序执行的 Action 对象构成，Action其实是一段代码块，类似于Java中的方法
+task hello {
+    // 这是配置当前task的闭包 在配置阶段就会执行
 }

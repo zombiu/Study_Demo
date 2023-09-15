@@ -83,3 +83,25 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
+
+// Task 执行实战：计算 build 执行期间的耗时
+def startBuildTime, endBuildTime
+// 1、在 Gradle 配置阶段完成之后进行操作，
+// 以此保证要执行的 task 配置完毕
+this.afterEvaluate { Project project ->
+    // 2、找到当前 project 下第一个执行的 task，即 preBuild task
+    def preBuildTask = project.tasks.getByName("preBuild")
+    preBuildTask.doFirst {
+        // 3、获取第一个 task 开始执行时刻的时间戳
+        startBuildTime = System.currentTimeMillis()
+    }
+    // 4、找到当前 project 下最后一个执行的 task，即 build task
+    def buildTask = project.tasks.getByName("build")
+    buildTask.doLast {
+        // 5、获取最后一个 task 执行完成前一瞬间的时间戳
+        endBuildTime = System.currentTimeMillis()
+        // 6、输出 build 执行期间的耗时
+        println "Current project execute time is ${endBuildTime - startBuildTime}"
+    }
+}
+
