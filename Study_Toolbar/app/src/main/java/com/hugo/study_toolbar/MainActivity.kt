@@ -128,6 +128,10 @@ class MainActivity : AppCompatActivity() {
         binding.btnSelect.setOnClickListener {
             SelecteActivity.go(this)
         }
+
+        binding.btnClipDrawable.setOnClickListener {
+            ClipDrawableActivity.go(this)
+        }
     }
 
     var expandListener: MenuItem.OnActionExpandListener = object : MenuItem.OnActionExpandListener {

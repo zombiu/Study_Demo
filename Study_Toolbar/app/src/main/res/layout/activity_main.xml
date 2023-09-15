@@ -88,4 +88,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="单选列表"/>
+
+    <Button
+        android:id="@+id/btn_clip_drawable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ClipDrawableActivity"/>
 </LinearLayout>
