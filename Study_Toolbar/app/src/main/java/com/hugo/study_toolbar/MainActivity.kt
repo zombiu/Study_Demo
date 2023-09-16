@@ -132,6 +132,10 @@ class MainActivity : AppCompatActivity() {
         binding.btnClipDrawable.setOnClickListener {
             ClipDrawableActivity.go(this)
         }
+
+        binding.btnTab.setOnClickListener {
+            SimpleTabActivity.go(this)
+        }
     }
 
     var expandListener: MenuItem.OnActionExpandListener = object : MenuItem.OnActionExpandListener {

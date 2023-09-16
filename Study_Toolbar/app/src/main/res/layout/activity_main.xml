@@ -90,6 +90,12 @@
         android:text="单选列表"/>
 
     <Button
+        android:id="@+id/btn_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="tablayout"/>
+
+    <Button
         android:id="@+id/btn_clip_drawable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

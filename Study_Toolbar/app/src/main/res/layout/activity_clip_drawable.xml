@@ -21,4 +21,22 @@
         android:layout_below="@id/iv_show"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/iv_sound_wave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/progressbar_layer"
+        android:layout_below="@+id/seekbar"/>
+    
+    <com.hugo.study_toolbar.widget.SoundWaveView
+        android:id="@+id/sound_wave_view"
+        android:background="@drawable/bg_blue_corner_10dp"
+        android:paddingVertical="6dp"
+        android:paddingStart="6dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginHorizontal="20dp"
+        android:layout_below="@+id/iv_sound_wave"
+        android:layout_width="match_parent"
+        android:layout_height="42dp" />
 </RelativeLayout>
