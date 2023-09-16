@@ -30,6 +30,7 @@ public class SoundWaveView extends FrameLayout {
 
     private ObjectAnimator waveAnimator;
     private Drawable clipDrawable;
+    private AnimatorListenerAdapter animatorListenerAdapter;
 
     public SoundWaveView(@NonNull Context context) {
         this(context, null);
@@ -61,21 +62,35 @@ public class SoundWaveView extends FrameLayout {
             @Override
             public void onAnimationStart(Animator animation) {
                 LogUtils.e("-->>", "onAnimationStart");
+                if (animatorListenerAdapter != null) {
+                    animatorListenerAdapter.onAnimationStart(animation);
+                }
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
                 LogUtils.e("-->>", "onAnimationEnd");
+                iv_control.setImageResource(R.drawable.ic_pause_black);
+                close();
+                if (animatorListenerAdapter != null) {
+                    animatorListenerAdapter.onAnimationEnd(animation);
+                }
             }
 
             @Override
             public void onAnimationPause(Animator animation) {
                 LogUtils.e("-->>", "onAnimationPause");
+                if (animatorListenerAdapter != null) {
+                    animatorListenerAdapter.onAnimationPause(animation);
+                }
             }
 
             @Override
             public void onAnimationResume(Animator animation) {
                 LogUtils.e("-->>", "onAnimationResume");
+                if (animatorListenerAdapter != null) {
+                    animatorListenerAdapter.onAnimationResume(animation);
+                }
 
             }
 
@@ -138,5 +153,9 @@ public class SoundWaveView extends FrameLayout {
         waveAnimator.cancel();
         clipDrawable.setLevel(0);
         LogUtils.e("-->>", "active=" + waveAnimator.isStarted());
+    }
+
+    public void setAnimatorListenerAdapter(AnimatorListenerAdapter animatorListenerAdapter) {
+        this.animatorListenerAdapter = animatorListenerAdapter;
     }
 }
