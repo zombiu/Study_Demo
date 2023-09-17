@@ -13,11 +13,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.LogUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListAdapter extends BaseAdapter {
-    private List<Drawable> mDrawableList = new ArrayList<>();
+    private List<ItemEntity> mDrawableList = new ArrayList<>();
     private int mLength = 0;
     private LayoutInflater mInflater;
     private Context mContext;
@@ -26,8 +28,9 @@ public class ListAdapter extends BaseAdapter {
     private int mFirstTop, mFirstPosition;
     private boolean isScrollDown;
 
-    public ListAdapter(Context context, ListView listView, List<Drawable> drawables, int length) {
-        mDrawableList.addAll(drawables);
+    public ListAdapter(Context context, ListView listView, List<ItemEntity> drawables, int length) {
+//        mDrawableList.addAll(drawables);
+        mDrawableList = drawables;
         mLength = length;
         mInflater = LayoutInflater.from(context);
         mContext = context;
@@ -59,12 +62,17 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mLength;
+        return mDrawableList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mDrawableList.get(position % mDrawableList.size());
+//        return mDrawableList.get(position % mDrawableList.size());
+        return mDrawableList.get(position);
+    }
+
+    public void setNewData(List<ItemEntity> data) {
+        mDrawableList = data;
     }
 
     @Override
@@ -87,19 +95,20 @@ public class ListAdapter extends BaseAdapter {
         }
 
         //清除当前显示区域中所有item的动画
-        for (int i=0;i<mListView.getChildCount();i++){
+        /*for (int i = 0; i < mListView.getChildCount(); i++) {
             View view = mListView.getChildAt(i);
             view.clearAnimation();
-        }
+        }*/
         //然后给当前item添加上动画
         if (isScrollDown) {
-            convertView.startAnimation(animation);
+//            convertView.startAnimation(animation);
         }
         convertView.setTag(holder);
 
-        holder.mImageView.setImageDrawable(mDrawableList.get(position % mDrawableList.size()));
-        holder.mTextView.setText(position + "");
-
+        ItemEntity itemEntity = mDrawableList.get(position);
+        holder.mImageView.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_launcher));
+        holder.mTextView.setText(itemEntity.id + "");
+        LogUtils.e("执行getView");
         return convertView;
     }
 
