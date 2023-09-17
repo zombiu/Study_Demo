@@ -69,7 +69,7 @@ public class SoundWaveView extends FrameLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                LogUtils.e("-->>", "onAnimationEnd");
+                LogUtils.e("-->>", "onAnimationEnd " + animation.isStarted());
                 iv_control.setImageResource(R.drawable.ic_pause_black);
                 close();
                 if (animatorListenerAdapter != null) {

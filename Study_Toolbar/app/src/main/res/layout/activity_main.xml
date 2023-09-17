@@ -100,4 +100,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ClipDrawableActivity"/>
+
+    <Button
+        android:id="@+id/btn_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ListView动画"/>
 </LinearLayout>

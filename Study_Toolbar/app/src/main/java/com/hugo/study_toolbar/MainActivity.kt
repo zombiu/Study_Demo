@@ -136,6 +136,10 @@ class MainActivity : AppCompatActivity() {
         binding.btnTab.setOnClickListener {
             SimpleTabActivity.go(this)
         }
+
+        binding.btnListview.setOnClickListener {
+            ListViewAnimationActivity.go(this)
+        }
     }
 
     var expandListener: MenuItem.OnActionExpandListener = object : MenuItem.OnActionExpandListener {
