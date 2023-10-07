@@ -19,6 +19,7 @@ import com.blankj.utilcode.util.ScreenUtils
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.hugo.study_toolbar.databinding.ActivityMainBinding
+import com.hugo.study_toolbar.ui.DiffUtilActivity
 import com.hugo.study_toolbar.ui.SelecteActivity
 
 class MainActivity : AppCompatActivity() {
@@ -139,6 +140,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnListview.setOnClickListener {
             ListViewAnimationActivity.go(this)
+        }
+
+        binding.btnDiffUtil.setOnClickListener {
+            DiffUtilActivity.go(this)
         }
     }
 

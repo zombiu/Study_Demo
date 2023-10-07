@@ -106,4 +106,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ListView动画"/>
+
+    <Button
+        android:id="@+id/btn_diff_util"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="diff_util"/>
 </LinearLayout>
