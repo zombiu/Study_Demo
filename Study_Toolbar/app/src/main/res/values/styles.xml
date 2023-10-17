@@ -38,4 +38,38 @@
         <item name="android:minHeight">13dip</item>
         <item name="android:maxHeight">13dip</item>
     </style>
+
+    <style name="AnimTop">
+        <!--进入动画-->
+        <item name="android:windowEnterAnimation">@anim/dialog_top_in</item>
+        <!--退出动画-->
+        <item name="android:windowExitAnimation">@anim/dialog_top_out</item>
+    </style>
+
+    <style name="CustomDialog" parent="@android:style/Theme.Dialog">
+<!--        <item name="android:windowBackground">@color/white</item>-->
+<!--        <item name="android:backgroundDimEnabled">false</item>&lt;!&ndash;activity不变暗&ndash;&gt;-->
+<!--        <item name="android:background">@color/transparent</item>-->
+        <item name="android:windowEnterAnimation">@anim/dialog_top_in</item>
+        <item name="android:windowExitAnimation">@anim/dialog_top_out</item>
+    </style>
+
+    <style name="MyDialogTheme" parent="@style/ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Dialog.FullScreen" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
 </resources>

@@ -1,5 +1,8 @@
 package com.hugo.study_toolbar
 
+import android.Manifest
+import android.animation.LayoutTransition
+import android.app.StatusBarManager
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -21,6 +24,8 @@ import com.google.android.material.card.MaterialCardView
 import com.hugo.study_toolbar.databinding.ActivityMainBinding
 import com.hugo.study_toolbar.ui.DiffUtilActivity
 import com.hugo.study_toolbar.ui.SelecteActivity
+import com.hugo.study_toolbar.widget.PermissionDialog
+import im.yixin.b.qiye.common.util.PermissionKit
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -67,8 +72,8 @@ class MainActivity : AppCompatActivity() {
             LogUtils.e("-->>点击了tv1")
         }
 
-        var img = "https://t7.baidu.com/it/u=2621658848,3952322712&fm=193&f=GIF"
-        Glide.with(this).load(img).into(binding.iv1)
+//        var img = "https://t7.baidu.com/it/u=2621658848,3952322712&fm=193&f=GIF"
+//        Glide.with(this).load(img).into(binding.iv1)
 
 
         binding.tvDialogConfirm.setOnClickListener {
@@ -144,6 +149,15 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnDiffUtil.setOnClickListener {
             DiffUtilActivity.go(this)
+        }
+
+        binding.btnPermission.setOnClickListener {
+            DialogActivity.go(this)
+        }
+
+        binding.btnAnimateLayoutChanges.setOnClickListener {
+            binding.llAnimateLayoutChanges.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+            binding.btnAnimateLayoutChanges.text = "binding.btnAnimateLayoutChanges"
         }
     }
 

@@ -112,4 +112,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="diff_util"/>
+
+    <Button
+        android:id="@+id/btn_permission"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="权限合规"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/ll_animate_layout_changes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:layout_gravity="center_horizontal">
+        <Button
+            android:id="@+id/btn_animate_layout_changes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="animate"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </LinearLayout>

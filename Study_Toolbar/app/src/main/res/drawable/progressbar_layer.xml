@@ -2,12 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@android:id/background">
-        <bitmap android:src="@drawable/ic_sound_wave_def" />
+        <bitmap android:src="@drawable/bg_corner_10dp" />
     </item>
 
     <item android:id="@android:id/progress">
         <clip>
-            <bitmap android:src="@drawable/ic_sound_wave_process" />
+            <bitmap android:src="@drawable/bg_blue_corner_10dp" />
         </clip>
     </item>
 
