@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
  * 50--30 + 10--50--20 + 20--50--10 + 30--50
  * 很有帮助
  *
+ * 每个item的宽度+outRect.left + outRect.right= 总宽度 都是一样大小
+ * 各列的间距相等，即前列的right + 后列的left = 列间距；
  */
 public class GridSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
