@@ -8,6 +8,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
+ * 用来设置最左、最右item贴边，中间item平分空白区域
+ * 例如 recyclerView宽度320dp  有4列，默认每个item分到的宽度就是80dp
+ * item默认宽度是50dp， 但是要求第0和第3列 贴边，0和1，1和2，2和3 中间的空白部分均分 ，也就是说中间的空间每个要求是40
+ * 50--40--50--40--50--40--50
+ * 但是因为 默认每个item分到的宽度就是80dp
+ *
+ * 50--30 + 10--50--30 + 10--50--30 + 10--50
  * 很有帮助
  *
  */
