@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * 50--40--50--40--50--40--50
  * 但是因为 默认每个item分到的宽度就是80dp
  * 剩余30dp的分配空间，要保证每个 item   outRect.left + outRect.right = 30dp的空白空间
- * 50--30 + 10--50--20 + 10--50--20 + 10--50
+ * 50--30 + 10--50--20 + 20--50--10 + 30--50
  * 很有帮助
  *
  */
