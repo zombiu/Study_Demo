@@ -131,4 +131,12 @@
             android:layout_height="wrap_content"
             android:text="animate"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
+    <android.widget.TextClock
+        android:id="@+id/textClock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="normal"
+        android:format24Hour="HH:mm:ss"
+        tools:text="18:33:41"/>
 </LinearLayout>
