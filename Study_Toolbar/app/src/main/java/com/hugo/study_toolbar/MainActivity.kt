@@ -175,7 +175,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         getMenuInflater().inflate(R.menu.menu_main, menu)
         var searchItem = menu!!.findItem(R.id.action_search)
         Log.e("-->>", "onCreateOptionsMenu " + searchItem.itemId)

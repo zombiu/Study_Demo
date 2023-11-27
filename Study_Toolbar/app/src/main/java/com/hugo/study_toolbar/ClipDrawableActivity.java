@@ -30,8 +30,8 @@ public class ClipDrawableActivity extends AppCompatActivity {
         setContentView(R.layout.activity_clip_drawable);
 
         SeekBar mSeekbar = findViewById(R.id.seekbar);
-        ImageView mImageShow = findViewById(R.id.iv_show);
-        TextView tv_info = findViewById(R.id.tv_info);
+        final ImageView mImageShow = findViewById(R.id.iv_show);
+        final TextView tv_info = findViewById(R.id.tv_info);
 
         iv_sound_wave = findViewById(R.id.iv_sound_wave);
 

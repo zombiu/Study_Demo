@@ -64,7 +64,7 @@ public class ListViewAnimationActivity extends AppCompatActivity {
         });
     }
 
-    private void deleteCell(View v, int position) {
+    private void deleteCell(View v, final int position) {
 //        itemEntities.remove(position);
 //        LogUtils.e("size=" + itemEntities.size());
 //        adapter.notifyDataSetChanged();

@@ -23,28 +23,28 @@ public class TreeUtils {
     }
 
     // 父 子 孙 任务 如果 我只有父和孙 任务 我这个怎么处理
-    public static List<Item> buildTree(List<Item> items) {
-        List<Item> root = new ArrayList<>();
-
-        for (Item item : items) {
-            // root里面保存的必然是 没有父任务的 根任务
-            if (item.parentId == 0) {
-                root.add(item);
-            } else {
-                // parentId 不等于0时， 就说明是parentId父任务的子任务
-                // 不存在就put
-                childrenMap.putIfAbsent(item.parentId, new ArrayList<>());
-                //  父id 对应 子item list
-                childrenMap.get(item.parentId).add(item);
-            }
-        }
-
-//        buildTreeRecursively(root, childrenMap);
-
-        // 在这里 对root 按规则(比如 时间戳) 进行排序
-        sortTree(root, Collections.reverseOrder()); // 按照时间戳倒序排序
-        return root;
-    }
+//    public static List<Item> buildTree(List<Item> items) {
+//        List<Item> root = new ArrayList<>();
+//
+//        for (Item item : items) {
+//            // root里面保存的必然是 没有父任务的 根任务
+//            if (item.parentId == 0) {
+//                root.add(item);
+//            } else {
+//                // parentId 不等于0时， 就说明是parentId父任务的子任务
+//                // 不存在就put
+//                childrenMap.putIfAbsent(item.parentId, new ArrayList<Item>());
+//                //  父id 对应 子item list
+//                childrenMap.get(item.parentId).add(item);
+//            }
+//        }
+//
+////        buildTreeRecursively(root, childrenMap);
+//
+//        // 在这里 对root 按规则(比如 时间戳) 进行排序
+//        sortTree(root, Collections.reverseOrder()); // 按照时间戳倒序排序
+//        return root;
+//    }
 
     private static void buildTreeRecursively(List<Item> parentItems, Map<Integer, List<Item>> childrenMap) {
         for (Item item : parentItems) {
