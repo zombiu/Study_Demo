@@ -70,6 +70,9 @@ class MainActivity : AppCompatActivity() {
         )
         binding.tv1.setOnClickListener {
             LogUtils.e("-->>点击了tv1")
+            // 很奇怪 跳转页面时崩溃  全局异常处理捕获不到
+            ClipDrawableActivity.go(this)
+            throw IllegalThreadStateException("异常测试")
         }
 
 //        var img = "https://t7.baidu.com/it/u=2621658848,3952322712&fm=193&f=GIF"
