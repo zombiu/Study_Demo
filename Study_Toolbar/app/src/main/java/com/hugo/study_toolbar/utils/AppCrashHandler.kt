@@ -24,6 +24,7 @@ object AppCrashHandler : Thread.UncaughtExceptionHandler {
         defaultUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler(this)
         logPath = getPath()
+        collectBaseInfo()
     }
 
 
@@ -33,7 +34,6 @@ object AppCrashHandler : Thread.UncaughtExceptionHandler {
             defaultUncaughtExceptionHandler?.uncaughtException(t, e)
         } else {
             thread {
-                collectBaseInfo()
                 saveErrorInfo(e)
             }
         }
@@ -57,7 +57,8 @@ object AppCrashHandler : Thread.UncaughtExceptionHandler {
     }
 
     private fun saveErrorInfo(e: Throwable) {
-        val stringBuffer = StringBuffer()
+        val formattedTime: String = formatTime("yyyy-MM-dd-HH:mm:ss.SSS")
+        val stringBuffer = StringBuffer(formattedTime)
         infoMap.forEach { (key, value) ->
             stringBuffer.append("$key == $value")
         }
@@ -74,8 +75,8 @@ object AppCrashHandler : Thread.UncaughtExceptionHandler {
         try {
             var file = File(logPath + File.separator + getLogName())
             LogUtils.e("-->>", file.absoluteFile)
-            // 创建一个空文件,如果父文件夹或者祖先文件夹不存在，就会抛出异常
             file.parentFile.mkdirs()
+            // 创建一个空文件,如果父文件夹或者祖先文件夹不存在，就会抛出异常
             file.createNewFile()
             val fw = BufferedWriter(FileWriter(file.absoluteFile, true))
             fw.write(stringBuffer.toString())
@@ -84,21 +85,27 @@ object AppCrashHandler : Thread.UncaughtExceptionHandler {
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
-
+        Log.e(TAG, "time:$formattedTime")
         Log.e(TAG, "error -- ${stringBuffer.toString()}")
     }
 
     private fun getLogName(): String {
-//        val currentTime = Date() // 获取当前时间
-//        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
-//        val formattedTime: String = dateFormat.format(currentTime)
+//        val formattedTime: String = formatTime("yyyy-MM-dd-HH:mm:ss.SSS")
         var formattedTime = System.currentTimeMillis()
         return "$formattedTime.log"
     }
 
+    private fun formatTime(format: String): String {
+        val currentTime = Date() // 获取当前时间
+        val dateFormat = SimpleDateFormat(format)
+        val formattedTime: String = dateFormat.format(currentTime)
+        return formattedTime
+    }
+
     private fun getPath(): String {
 //        var externalCacheDirs = ContextCompat.getExternalCacheDirs(context!!)[0]
-        var s = context!!.externalCacheDir!!.absolutePath + File.separator + "log" + File.separator + "crash"
+        var s =
+            context!!.externalCacheDir!!.absolutePath + File.separator + "log" + File.separator + "crash"
         var file = File(s)
         file.mkdirs()
         return file.absolutePath
