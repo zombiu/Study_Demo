@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         )
         binding.tv1.setOnClickListener {
             LogUtils.e("-->>点击了tv1")
-            // 很奇怪 跳转页面时崩溃  全局异常处理捕获不到
+            // 很奇怪 跳转页面时崩溃 有的手机 全局异常处理捕获不到 比如 OPPO Reno4 5g
             ClipDrawableActivity.go(this)
             throw IllegalThreadStateException("异常测试")
         }
