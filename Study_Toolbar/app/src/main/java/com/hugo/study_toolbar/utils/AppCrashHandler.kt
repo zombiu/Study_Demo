@@ -1,30 +1,106 @@
 package com.hugo.study_toolbar.utils
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.core.content.ContextCompat
+import com.blankj.utilcode.util.LogUtils
+import java.io.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.HashMap
+import kotlin.concurrent.thread
 
 object AppCrashHandler : Thread.UncaughtExceptionHandler {
     private const val TAG = "AppCrashHandler"
+    var defaultUncaughtExceptionHandler: Thread.UncaughtExceptionHandler? = null
+    var infoMap: HashMap<String, String> = HashMap()
 
     private var context: Context? = null
+    var logPath: String? = null
 
     fun init(context: Context) {
         this.context = context
+        defaultUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler(this)
+        logPath = getPath()
     }
 
 
-    override fun uncaughtException(t: Thread, e: Throwable) {
-        Log.e(TAG, "thread name ${t.name} throw error ${e.message}")
-
-    }
-
-    /*companion object {
-
-        private const val TAG = "AppCrashHandler"
-
-        val instance: AppCrashHandler by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-            AppCrashHandler()
+    override fun uncaughtException(t: Thread, e: Throwable?) {
+        Log.e(TAG, "thread name ${t.name} throw error ${e?.message}")
+        if (e == null) {
+            defaultUncaughtExceptionHandler?.uncaughtException(t, e)
+        } else {
+            thread {
+                collectBaseInfo()
+                saveErrorInfo(e)
+            }
         }
-    }*/
+    }
+
+    private fun collectBaseInfo() {
+        //获取包信息
+        val packageManager = context?.packageManager
+        packageManager?.let {
+            try {
+                val packageInfo =
+                    it.getPackageInfo(context?.packageName ?: "", PackageManager.GET_ACTIVITIES)
+                val versionName = packageInfo.versionName
+                val versionCode = packageInfo.versionCode
+                infoMap["versionName"] = versionName
+                infoMap["versionCode"] = versionCode.toString()
+            } catch (e: Exception) {
+
+            }
+        }
+    }
+
+    private fun saveErrorInfo(e: Throwable) {
+        val stringBuffer = StringBuffer()
+        infoMap.forEach { (key, value) ->
+            stringBuffer.append("$key == $value")
+        }
+
+        val stringWriter = StringWriter()
+        val printWriter = PrintWriter(stringWriter)
+        //获取到堆栈信息
+        e.printStackTrace(printWriter)
+        printWriter.close()
+        //转换异常信息
+        val errorStackInfo = stringWriter.toString()
+        stringBuffer.append(errorStackInfo)
+
+        try {
+            var file = File(logPath + File.separator + getLogName())
+            LogUtils.e("-->>", file.absoluteFile)
+            // 创建一个空文件,如果父文件夹或者祖先文件夹不存在，就会抛出异常
+            file.parentFile.mkdirs()
+            file.createNewFile()
+            val fw = BufferedWriter(FileWriter(file.absoluteFile, true))
+            fw.write(stringBuffer.toString())
+            fw.flush()
+            fw.close()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+
+        Log.e(TAG, "error -- ${stringBuffer.toString()}")
+    }
+
+    private fun getLogName(): String {
+//        val currentTime = Date() // 获取当前时间
+//        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+//        val formattedTime: String = dateFormat.format(currentTime)
+        var formattedTime = System.currentTimeMillis()
+        return "$formattedTime.log"
+    }
+
+    private fun getPath(): String {
+//        var externalCacheDirs = ContextCompat.getExternalCacheDirs(context!!)[0]
+        var s = context!!.externalCacheDir!!.absolutePath + File.separator + "log" + File.separator + "crash"
+        var file = File(s)
+        file.mkdirs()
+        return file.absolutePath
+    }
 }
