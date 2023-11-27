@@ -74,7 +74,7 @@ object AppCrashHandler : Thread.UncaughtExceptionHandler {
 
         try {
             var file = File(logPath + File.separator + getLogName())
-            LogUtils.e("-->>", file.absoluteFile)
+            LogUtils.e("-->>", file.absolutePath)
             file.parentFile.mkdirs()
             // 创建一个空文件,如果父文件夹或者祖先文件夹不存在，就会抛出异常
             file.createNewFile()
