@@ -2,6 +2,7 @@ package com.hugo.study_toolbar.utils
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Process
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.blankj.utilcode.util.LogUtils
@@ -36,6 +37,10 @@ object AppCrashHandler : Thread.UncaughtExceptionHandler {
             thread {
                 saveErrorInfo(e)
             }
+            // 必须sleep 否则崩溃信息可能来不及输出
+            Thread.sleep(2000)
+            Process.killProcess(Process.myPid())
+            System.exit(0)
         }
     }
 
