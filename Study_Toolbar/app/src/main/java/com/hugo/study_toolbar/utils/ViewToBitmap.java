@@ -37,6 +37,8 @@ public class ViewToBitmap {
     }
 
     public static Bitmap saveViewAsBitmap2(View view) {
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
         view.setDrawingCacheEnabled(true);
         //启用DrawingCache并创建位图
         view.buildDrawingCache() ;
