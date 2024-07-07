@@ -24,6 +24,7 @@ import com.google.android.material.card.MaterialCardView
 import com.hugo.study_toolbar.databinding.ActivityMainBinding
 import com.hugo.study_toolbar.ui.DiffUtilActivity
 import com.hugo.study_toolbar.ui.SelecteActivity
+import com.hugo.study_toolbar.utils.MemoryUtils
 import com.hugo.study_toolbar.widget.PermissionDialog
 import im.yixin.b.qiye.common.util.PermissionKit
 
@@ -31,6 +32,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var centeredTitleTextView: TextView
     var showBackIcon = true
+    var testList = ArrayList<ByteArray>()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
@@ -152,6 +156,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnDiffUtil.setOnClickListener {
             DiffUtilActivity.go(this)
+
+            MemoryUtils.getProcessRealMemory()
+
+            MemoryUtils.getAppPss()
         }
 
         binding.btnPermission.setOnClickListener {
@@ -161,6 +169,18 @@ class MainActivity : AppCompatActivity() {
         binding.btnAnimateLayoutChanges.setOnClickListener {
             binding.llAnimateLayoutChanges.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
             binding.btnAnimateLayoutChanges.text = "binding.btnAnimateLayoutChanges"
+        }
+
+        binding.btnMemoryGrow.setOnClickListener {
+//            我说怎么之前 点击了 内存显示没有增加 原来是需要对 数组初始化
+            var byteArr = ByteArray(1024 * 1024 * 5) {
+                0
+            }
+            testList.add(byteArr)
+            LogUtils.e("-->>${byteArr.size}")
+
+           MemoryUtils.getDebugMemState()
+
         }
     }
 
@@ -176,6 +196,7 @@ class MainActivity : AppCompatActivity() {
             // Do something when expanded
             return true // Return true to expand action view
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

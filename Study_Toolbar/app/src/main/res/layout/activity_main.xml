@@ -146,4 +146,10 @@
 <!--        android:layout_height="wrap_content"-->
 <!--        android:text="耗时方法"/>-->
 
+    <Button
+        android:id="@+id/btn_memory_grow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="增加10m内存"/>
+
 </LinearLayout>
