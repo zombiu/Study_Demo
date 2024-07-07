@@ -19,6 +19,8 @@ public class ClipDrawableActivity extends AppCompatActivity {
     private ImageView iv_sound_wave;
     private SoundWaveView sound_wave_view;
 
+    public static Context contextOL = null;
+
     public static void go(Context context) {
         Intent intent = new Intent(context, ClipDrawableActivity.class);
         context.startActivity(intent);
@@ -61,6 +63,8 @@ public class ClipDrawableActivity extends AppCompatActivity {
 
             }
         });
+
+        contextOL = this;
     }
 
     private void handleSoundWaveProgress(SeekBar seekBar, int progress) {
