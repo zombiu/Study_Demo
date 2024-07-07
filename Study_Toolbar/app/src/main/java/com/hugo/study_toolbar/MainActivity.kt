@@ -173,7 +173,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnMemoryGrow.setOnClickListener {
 //            我说怎么之前 点击了 内存显示没有增加 原来是需要对 数组初始化
-            var byteArr = ByteArray(1024 * 1024 * 5) {
+            var byteArr = ByteArray(1024 * 1024 * 1) {
                 0
             }
             testList.add(byteArr)
