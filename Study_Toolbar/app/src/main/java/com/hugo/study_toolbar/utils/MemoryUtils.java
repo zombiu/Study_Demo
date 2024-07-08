@@ -30,6 +30,7 @@ public class MemoryUtils {
 //
 //原文链接：https://blog.csdn.net/xiaobaaidaba123/article/details/123299035
 
+//    获取应用整体虚拟内存使用情况
     public static long getProcessRealMemory() {
 //        获取虚拟内存信息 adb shell cat /proc/18558/status
         String memFilePath = "/proc/" + android.os.Process.myPid() + "/status";
@@ -121,7 +122,7 @@ public class MemoryUtils {
 
 /*-------------------------------------------------------------------------------------------------------*/
 
-//    线上内存数据获取
+//    线上内存数据获取 应用 Java内存使用情况 不包含 native内存
     public static void getRuntimeMemory() {
 //        通过Runtime接口获取运行时内存（JVM消耗，不包括Native）
         long maxMem = Runtime.getRuntime().maxMemory(); //当前虚拟机可用的最大内存
@@ -130,7 +131,7 @@ public class MemoryUtils {
         long currentMemUsage = totalMem - freeMem; // 当前虚拟机内存占用量
     }
 
-
+//    线上 获取应用Java、Native、Graphics 物理内存使用情况
     public static void getDebugMemState() {
 
         Debug.MemoryInfo memoryInfo = new Debug.MemoryInfo();
